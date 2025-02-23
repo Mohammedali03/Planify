@@ -1,6 +1,17 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
 body {
-  font-family: "Roboto", serif;
+  @apply font-sans;
+}
+
+.shine {
+  animation: shine 5s linear infinite;
+}
+@keyframes shine {
+  0% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: -100%;
+  }
 }
