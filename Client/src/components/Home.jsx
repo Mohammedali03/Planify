@@ -4,15 +4,21 @@ import NavBar from "./NavBar";
 import Hero from "./Hero";
 import Reveal from "./Reveal";
 import Features from "./Features";
+import Stats from "./Stats";
 
 const Home = () => {
   return (
     <div className="bg-white">
       <NavBar />
-      <Hero />
-      <Reveal>
-        <Features />
-      </Reveal>
+      <main>
+        <Hero />
+        <Reveal>
+          <Features />
+        </Reveal>
+        <Reveal>
+          <Stats />
+        </Reveal>
+      </main>
     </div>
   );
 };
