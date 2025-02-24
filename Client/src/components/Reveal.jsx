@@ -5,7 +5,7 @@ const Reveal = ({ children }) => {
   const controls = useAnimation();
   const ref = useRef();
 
-  const inView = useInView(ref, { once: true, amount: 0.15 });
+  const inView = useInView(ref, { once: true, amount: 0.2 });
 
   useEffect(() => {
     if (inView) {
