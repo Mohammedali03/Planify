@@ -31,7 +31,6 @@ const NavBar = () => {
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
           >
             <span className="sr-only">Open main menu</span>
-            Open
             <Bars3Icon aria-hidden="true" className="size-6" />
           </button>
         </div>
@@ -73,7 +72,6 @@ const NavBar = () => {
             >
               <span className="sr-only">Close menu</span>
               <XMarkIcon aria-hidden="true" className="size-6" />
-              close
             </button>
           </div>
           <div className="mt-6 flow-root">
