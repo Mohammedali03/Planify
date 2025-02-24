@@ -5,7 +5,7 @@ const Reveal = ({ children }) => {
   const controls = useAnimation();
   const ref = useRef();
 
-  const inView = useInView(ref, { once: true, amount: 0.3 });
+  const inView = useInView(ref, { once: true, amount: 0.15 });
 
   useEffect(() => {
     if (inView) {
@@ -22,7 +22,7 @@ const Reveal = ({ children }) => {
       }}
       initial="hidden"
       animate={controls}
-      transition={{ duration: 1, delay: 0.25 }}
+      transition={{ duration: 1.2, delay: 0.25 }}
     >
       {children}
     </motion.div>
