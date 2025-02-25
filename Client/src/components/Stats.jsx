@@ -37,8 +37,8 @@ const Stats = () => {
           className="relative left-[calc(50%-11rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
         />
       </div>
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 lg:text-center dark:text-white">
-        <h2 className="mx-auto max-w-2xl dark:text-white text-4xl lg:w-fit lg:m-0 lg:text-5xl font-semibold text-[#101828]">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 lg:text-center text-white">
+        <h2 className="mx-auto max-w-2xl text-white text-4xl lg:w-fit lg:m-0 lg:text-5xl font-semibold text-[#101828]">
           Our mission
         </h2>
         <div className="mt-6 max-w-2xl mx-auto flex flex-col lg:m-0 lg:max-w-full lg:flex-row lg:items-center lg:justify-between ">

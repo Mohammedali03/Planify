@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Link } from "react-router-dom";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import Logo from "./Logo";
 
 const navigation = [
   { name: "Features" },
@@ -20,9 +21,7 @@ const NavBar = () => {
         className="flex items-center justify-between p-6 lg:px-8"
       >
         <div className="flex lg:flex-1">
-          <div className="flex items-center text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
-            Planify
-          </div>
+          <Logo />
         </div>
         <div className="flex lg:hidden">
           <button
@@ -46,12 +45,12 @@ const NavBar = () => {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end ">
-          <a
-            href="#"
+          <Link
+            to="/signup"
             className="text-sm/6 font-semibold text-gray-900 hover:underline"
           >
             Sign up <span aria-hidden="true">&rarr;</span>
-          </a>
+          </Link>
         </div>
       </nav>
       <Dialog
@@ -62,9 +61,7 @@ const NavBar = () => {
         <div className="fixed inset-0 z-50" />
         <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
-            <div className="flex items-center text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
-              Planify
-            </div>
+            <Logo />
             <button
               type="button"
               onClick={() => setMobileMenuOpen(false)}
@@ -81,7 +78,8 @@ const NavBar = () => {
                   <Link
                     key={item.name}
                     to={item.href}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                    className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 
+                    duration-300 hover:text-indigo-600 hover:bg-indigo-100"
                   >
                     {item.name}
                   </Link>
@@ -90,7 +88,8 @@ const NavBar = () => {
               <div className="py-6">
                 <Link
                   to="/signup"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900
+                  duration-300 hover:bg-indigo-100 hover:text-indigo-600"
                 >
                   Sign up
                 </Link>
