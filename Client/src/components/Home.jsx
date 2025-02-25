@@ -5,7 +5,7 @@ import Hero from "./Hero";
 import Reveal from "./Reveal";
 import Features from "./Features";
 import Stats from "./Stats";
-import Logo from "./Logo";
+import Banner from "./Banner";
 
 const Home = () => {
   return (
@@ -19,8 +19,10 @@ const Home = () => {
         <Reveal>
           <Stats />
         </Reveal>
+        <Reveal>
+          <Banner />
+        </Reveal>
       </main>
-      <Logo />
     </div>
   );
 };
