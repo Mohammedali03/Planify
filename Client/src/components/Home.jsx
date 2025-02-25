@@ -6,6 +6,7 @@ import Reveal from "./Reveal";
 import Features from "./Features";
 import Stats from "./Stats";
 import Banner from "./Banner";
+import About from "./About";
 
 const Home = () => {
   return (
@@ -21,6 +22,9 @@ const Home = () => {
         </Reveal>
         <Reveal>
           <Banner />
+        </Reveal>
+        <Reveal>
+          <About />
         </Reveal>
       </main>
     </div>
