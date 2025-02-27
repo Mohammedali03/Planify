@@ -1,5 +1,3 @@
-import React from "react";
-
 import NavBar from "./NavBar";
 import Hero from "./Hero";
 import Reveal from "./Reveal";
@@ -7,6 +5,7 @@ import Features from "./Features";
 import Stats from "./Stats";
 import Banner from "./Banner";
 import About from "./About";
+import WorkWith from "./WorkWith";
 
 const Home = () => {
   return (
@@ -25,6 +24,9 @@ const Home = () => {
         </Reveal>
         <Reveal>
           <About />
+        </Reveal>
+        <Reveal>
+          <WorkWith />
         </Reveal>
       </main>
     </div>
