@@ -7,6 +7,7 @@ import About from "./About";
 import WorkWith from "./WorkWith";
 import Testimonials from "./Testimonials";
 import CTA from "./CTA";
+import Footer from "./Footer";
 
 const Home = () => {
   return (
@@ -21,6 +22,7 @@ const Home = () => {
         <WorkWith />
         <Testimonials />
         <CTA />
+        <Footer />
       </main>
     </div>
   );

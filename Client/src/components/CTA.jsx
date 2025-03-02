@@ -5,7 +5,7 @@ import Reveal from "./Reveal";
 const CTA = () => {
   return (
     <div className="bg-white">
-      <div className="relative isolate overflow-hidden bg-gray-900 shadow-2xl sm:px-16">
+      <div className="relative overflow-hidden isolate bg-gray-900 sm:px-16">
         <svg
           viewBox="0 0 1024 1024"
           aria-hidden="true"
@@ -29,19 +29,18 @@ const CTA = () => {
         </svg>
         <Reveal>
           <div className="py-24 px-6 mx-auto text-center lg:mx-0">
-            <h2 className="text-4xl md:text-5xl [text-wrap:balance] font-semibold tracking-tight text-balance text-white">
+            <h2 className="text-4xl md:text-5xl [text-wrap:balance] font-semibold text-balance text-white">
               Boost your productivity today
             </h2>
             <p className="mt-6 text-lg/8 text-pretty text-gray-300">
               Organize your studies and boost productivity with our app. Track
               progress and achieve goals easily. Start now!
             </p>
-            <div className="mt-10 gap-x-6 lg:justify-start">
+            <div className="mt-10">
               <Link
                 to="/signup"
                 className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900
-                shadow-xs hover:bg-gray-100 focus-visible:outline-2
-                focus-visible:outline-offset-2 focus-visible:outline-white"
+                hover:bg-gray-200 duration-300"
               >
                 Get started
               </Link>
