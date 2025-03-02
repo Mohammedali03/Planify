@@ -5,6 +5,7 @@ import {
   ClipboardDocumentCheckIcon,
   ClockIcon,
 } from "@heroicons/react/24/outline";
+import Reveal from "./Reveal";
 const features = [
   {
     name: "Progress tracking",
@@ -61,37 +62,41 @@ const Features = () => {
               className="relative left-[calc(50%-11rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
             />
           </div>
-          <h2 className="text-base/7 font-semibold text-indigo-600">
-            Features
-          </h2>
-          <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl lg:text-balance">
-            Everything you need to master your studies
-          </p>
-          <p className="mt-6 text-lg/8 text-gray-600">
-            Stay organized, focused and motivated with tools designed to help
-            you achieve your goals
-          </p>
+          <Reveal>
+            <h2 className="text-base/7 font-semibold text-indigo-600">
+              Features
+            </h2>
+            <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl lg:text-balance">
+              Everything you need to master your studies
+            </p>
+            <p className="mt-6 text-lg/8 text-gray-600">
+              Stay organized, focused and motivated with tools designed to help
+              you achieve your goals
+            </p>
+          </Reveal>
         </div>
-        <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
-          <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
-            {features.map((feature) => (
-              <div key={feature.name} className="relative pl-16">
-                <dt className="text-base/7 font-semibold text-gray-900">
-                  <div className="absolute top-0 left-0 flex size-10 items-center justify-center rounded-lg bg-indigo-600">
-                    <feature.icon
-                      aria-hidden="true"
-                      className="size-6 text-white"
-                    />
-                  </div>
-                  {feature.name}
-                </dt>
-                <dd className="mt-2 text-base/7 text-gray-600">
-                  {feature.description}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
+        <Reveal>
+          <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
+            <div className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
+              {features.map((feature) => (
+                <div key={feature.name} className="relative pl-16">
+                  <dt className="text-base/7 font-semibold text-gray-900">
+                    <div className="absolute top-0 left-0 flex size-10 items-center justify-center rounded-lg bg-indigo-600">
+                      <feature.icon
+                        aria-hidden="true"
+                        className="size-6 text-white"
+                      />
+                    </div>
+                    {feature.name}
+                  </dt>
+                  <dd className="mt-2 text-base/7 text-gray-600">
+                    {feature.description}
+                  </dd>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
       </div>
     </div>
   );

@@ -1,15 +1,18 @@
 import React from "react";
 import image from "../images/banner-image.jpg";
+import Reveal from "./Reveal";
 
 const Banner = () => {
   return (
-    <div className="bg-white relative w-full py-24 sm:py-36 lg:px-8">
-      <img
-        src={image}
-        alt="study banner"
-        className="w-full lg:rounded-3xl"
-        loading="lazy"
-      />
+    <div className="bg-white relative w-full py-16 sm:py-24 lg:px-8">
+      <Reveal>
+        <img
+          src={image}
+          alt="study banner"
+          className="w-full lg:rounded-3xl"
+          loading="lazy"
+        />
+      </Reveal>
     </div>
   );
 };

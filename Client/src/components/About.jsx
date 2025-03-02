@@ -1,4 +1,5 @@
 import React from "react";
+import Reveal from "./Reveal";
 
 const values = [
   {
@@ -35,7 +36,7 @@ const values = [
 
 const About = () => {
   return (
-    <section className="bg-white dark:bg-[#121212] relative isolate pt-14 pb-24 sm:pt-32 sm:pb-32 ">
+    <section className="bg-white dark:bg-[#121212] relative isolate pt-7 pb-24 sm:pt-32 sm:pb-32 ">
       <div
         aria-hidden="true"
         className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -49,30 +50,34 @@ const About = () => {
         />
       </div>
       <div className="mx-auto max-w-7xl px-6 lg:px-8 lg:text-center text-white">
-        <h2 className="max-w-2xl dark:text-white text-4xl lg:w-fit lg:m-0 lg:text-5xl text-start font-semibold text-[#101828]">
-          Our Values
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400 mt-6 font-semibold text-lg lg:text-start lg:max-w-[640px]">
-          At <span className="text-indigo-600">Planify</span>, we believe in
-          empowering students to achieve their academic goals through
-          organization, collaboration, and continuous growth. Our values guide
-          everything we do, ensuring that our app helps you study smarter, not
-          harder
-        </p>
-        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-10 mt-6">
-          {values.map((value) => {
-            return (
-              <li key={value.title} className="mt-10 text-start mb-5">
-                <h3 className="font-semibold dark:text-gray-300 text-gray-900">
-                  {value.title}
-                </h3>
-                <p className="text-gray-600 mt-1 dark:text-gray-400">
-                  {value.description}
-                </p>
-              </li>
-            );
-          })}
-        </ul>
+        <Reveal>
+          <h2 className="max-w-2xl dark:text-white text-4xl lg:w-fit lg:m-0 lg:text-5xl text-start font-semibold text-[#101828]">
+            Our Values
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mt-6 font-semibold text-lg lg:text-start lg:max-w-[640px]">
+            At <span className="text-indigo-600">Planify</span>, we believe in
+            empowering students to achieve their academic goals through
+            organization, collaboration, and continuous growth. Our values guide
+            everything we do, ensuring that our app helps you study smarter, not
+            harder
+          </p>
+        </Reveal>
+        <Reveal>
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-10 mt-6">
+            {values.map((value) => {
+              return (
+                <li key={value.title} className="mt-10 text-start mb-5">
+                  <h3 className="font-semibold dark:text-gray-300 text-gray-900">
+                    {value.title}
+                  </h3>
+                  <p className="text-gray-600 mt-1 dark:text-gray-400">
+                    {value.description}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        </Reveal>
       </div>
     </section>
   );

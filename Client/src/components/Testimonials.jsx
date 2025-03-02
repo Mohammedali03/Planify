@@ -1,6 +1,7 @@
 import React from "react";
 import avatar from "../images/avatar.jpeg";
 import { motion } from "framer-motion";
+import Reveal from "./Reveal";
 
 const testimonials = [
   {
@@ -73,51 +74,57 @@ const Testimonials = () => {
     <section className="bg-white isolate relative mb-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
-          <h2 className="text-base/7 font-semibold text-indigo-600">
-            Testimonials
-          </h2>
-          <p
-            className="mt-2 text-4xl font-semibold
+          <Reveal>
+            <h2 className="text-base/7 font-semibold text-indigo-600">
+              Testimonials
+            </h2>
+            <p
+              className="mt-2 text-4xl font-semibold
             tracking-tight text-pretty text-gray-900
             sm:text-5xl lg:text-balance"
-          >
-            What our amazing community says
-          </p>
-        </div>
-        <div
-          className="mt-16 sm:mt-20 mx-auto 
-          grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-        >
-          {testimonials.map((item, index) => (
-            <motion.figure
-              key={index}
-              className="text-sm leading-6 rounded-2xl
-                p-8 bg-[#f8f8f8] text-gray-900 size-fit"
-              whileHover={{
-                scale: 1.05,
-                rotate: 1.5,
-                boxShadow: "0px 15px 25px rgba(0, 0, 0, 0.12)",
-              }}
-              transition={{ type: "spring", stiffness: 200, damping: 10 }}
             >
-              <blockquote className="text-gray-900 leading-7">
-                <p>"{item.comment}"</p>
-              </blockquote>
-              <figcaption className="flex items-center gap-6 mt-6">
-                <img
-                  src={avatar}
-                  alt="avatar"
-                  className="size-10 bg-[#f8f8f8] rounded-full"
-                  loading="lazy"
-                />
-                <div>
-                  <div className="font-semibold text-gray-900">{item.name}</div>
-                  <div className="text-gray-500">{item.username}</div>
-                </div>
-              </figcaption>
-            </motion.figure>
-          ))}
+              What our amazing community says
+            </p>
+          </Reveal>
         </div>
+        <Reveal>
+          <div
+            className="mt-16 sm:mt-20 mx-auto 
+          grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+          >
+            {testimonials.map((item, index) => (
+              <motion.figure
+                key={index}
+                className="text-sm leading-6 rounded-2xl
+                p-8 bg-[#f8f8f8] text-gray-900 size-fit"
+                whileHover={{
+                  scale: 1.05,
+                  rotate: 1.5,
+                  boxShadow: "0px 15px 25px rgba(0, 0, 0, 0.12)",
+                }}
+                transition={{ type: "spring", stiffness: 200, damping: 10 }}
+              >
+                <blockquote className="text-gray-900 leading-7">
+                  <p>"{item.comment}"</p>
+                </blockquote>
+                <figcaption className="flex items-center gap-6 mt-6">
+                  <img
+                    src={avatar}
+                    alt="avatar"
+                    className="size-10 bg-[#f8f8f8] rounded-full"
+                    loading="lazy"
+                  />
+                  <div>
+                    <div className="font-semibold text-gray-900">
+                      {item.name}
+                    </div>
+                    <div className="text-gray-500">{item.username}</div>
+                  </div>
+                </figcaption>
+              </motion.figure>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );
