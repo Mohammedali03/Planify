@@ -1,12 +1,12 @@
 import NavBar from "./NavBar";
 import Hero from "./Hero";
-import Reveal from "./Reveal";
 import Features from "./Features";
 import Stats from "./Stats";
 import Banner from "./Banner";
 import About from "./About";
 import WorkWith from "./WorkWith";
 import Testimonials from "./Testimonials";
+import CTA from "./CTA";
 
 const Home = () => {
   return (
@@ -14,24 +14,13 @@ const Home = () => {
       <NavBar />
       <main>
         <Hero />
-        <Reveal>
-          <Features />
-        </Reveal>
-        <Reveal>
-          <Stats />
-        </Reveal>
-        <Reveal>
-          <Banner />
-        </Reveal>
-        <Reveal>
-          <About />
-        </Reveal>
-        <Reveal>
-          <WorkWith />
-        </Reveal>
-        <Reveal>
-          <Testimonials />
-        </Reveal>
+        <Features />
+        <Stats />
+        <Banner />
+        <About />
+        <WorkWith />
+        <Testimonials />
+        <CTA />
       </main>
     </div>
   );
