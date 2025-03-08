@@ -10,40 +10,47 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    // Define relationships
+
+    // A user can have multiple study rooms
+    public function rooms()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(Room::class);
+    }
+
+    // A user can have multiple backgrounds
+    public function backgrounds()
+    {
+        return $this->hasMany(Background::class);
+    }
+
+    // A user can have multiple sounds
+    public function sounds()
+    {
+        return $this->hasMany(Sound::class);
+    }
+
+    // A user can have multiple study sessions
+    public function roomSessions()
+    {
+        return $this->hasMany(RoomSession::class);
     }
 }
+
