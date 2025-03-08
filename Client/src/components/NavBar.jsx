@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
-import { Link } from "react-router-dom";
+import { Link } from "react-scroll";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Logo from "./Logo";
+import { useNavigate } from "react-router-dom";
 
 const navigation = [
-  { name: "Features" },
-  { name: "Stats" },
-  { name: "About" },
-  { name: "Testimonials" },
+  { name: "Features", link: "features" },
+  { name: "Stats", link: "stats" },
+  { name: "About", link: "about" },
+  { name: "Testimonials", link: "testimonials" },
 ];
 
 const NavBar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <header className="absolute inset-x-0 top-0 z-50">
@@ -35,22 +37,27 @@ const NavBar = () => {
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
           {navigation.map((item) => (
-            <a
+            <Link
               key={item.name}
-              href={item.href}
-              className="text-sm/6 font-semibold text-gray-900"
+              duration={500}
+              to={item.link}
+              smooth={true}
+              offset={-50}
+              spy={true}
+              activeClass="active"
+              className="text-sm/6 cursor-pointer font-semibold text-gray-900"
             >
               {item.name}
-            </a>
+            </Link>
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end ">
-          <Link
-            to="/signup"
-            className="text-sm/6 font-semibold text-gray-900 hover:underline"
+          <button
+            onClick={() => navigate("/signup")}
+            className="text-sm/6 font-semibold cursor-pointer text-gray-900 hover:underline"
           >
             Sign up <span aria-hidden="true">&rarr;</span>
-          </Link>
+          </button>
         </div>
       </nav>
       <Dialog
@@ -77,22 +84,27 @@ const NavBar = () => {
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
-                    to={item.href}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 
+                    to={item.link}
+                    className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900
                     duration-300 hover:text-indigo-600 hover:bg-indigo-100"
+                    smooth={true}
+                    offset={-50}
+                    spy={true}
+                    activeClass="active"
+                    duration={500}
                   >
                     {item.name}
                   </Link>
                 ))}
               </div>
               <div className="py-6">
-                <Link
-                  to="/signup"
+                <button
+                  onClick={() => navigate("/signup")}
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900
                   duration-300 hover:bg-indigo-100 hover:text-indigo-600"
                 >
                   Sign up
-                </Link>
+                </button>
               </div>
             </div>
           </div>

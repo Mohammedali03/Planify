@@ -15,12 +15,20 @@ const Home = () => {
       <NavBar />
       <main>
         <Hero />
-        <Features />
-        <Stats />
+        <div id="features">
+          <Features />
+        </div>
+        <div id="stats">
+          <Stats />
+        </div>
         <Banner />
-        <About />
+        <div id="about">
+          <About />
+        </div>
         <WorkWith />
-        <Testimonials />
+        <div id="testimonials">
+          <Testimonials />
+        </div>
         <CTA />
         <Footer />
       </main>
