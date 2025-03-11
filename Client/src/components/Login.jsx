@@ -1,8 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 import Logo from "./Logo";
 import { Link } from "react-router-dom";
+import { useAuth } from "./AuthProvider";
+
+const validateForm = (formData) => {
+  const errors = {};
+
+  if (!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+    errors.email = true;
+  }
+  if (formData.password.length < 8) {
+    errors.password = true;
+  }
+
+  return errors;
+};
 
 const Login = () => {
+  const { login, user } = useAuth();
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+
+    setData({ ...data, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const errors = validateForm(data);
+    setErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await login(data);
+    } catch (error) {
+      console.error("Login failed", error);
+    } finally {
+      setLoading(false);
+    }
+
+    console.log(user);
+  };
+
   return (
     <>
       <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -16,7 +67,7 @@ const Login = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -29,13 +80,15 @@ const Login = () => {
                   id="email"
                   name="email"
                   type="email"
-                  required
-                  autoComplete="email"
+                  onChange={handleChange}
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 
                   outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2
                   focus:outline-indigo-600 sm:text-sm/6"
                 />
               </div>
+              {errors.email && (
+                <div className="error">Invalid email address</div>
+              )}
             </div>
 
             <div>
@@ -59,9 +112,8 @@ const Login = () => {
                 <input
                   id="password"
                   name="password"
+                  onChange={handleChange}
                   type="password"
-                  required
-                  autoComplete="current-password"
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900
                    outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 
                    focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -70,13 +122,23 @@ const Login = () => {
             </div>
 
             <div>
-              <button
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3
+              {loading ? (
+                <button
+                  className="flex w-full justify-center rounded-md bg-indigo-400 px-3
+               py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-800 focus-visible:outline-2 
+               focus-visible:outline-offset-2 focus-visible:outline-indigo-600 duration-300 cursor-pointer"
+                >
+                  Login...
+                </button>
+              ) : (
+                <button
+                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3
                  py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-800 focus-visible:outline-2 
                  focus-visible:outline-offset-2 focus-visible:outline-indigo-600 duration-300 cursor-pointer"
-              >
-                Login
-              </button>
+                >
+                  Login
+                </button>
+              )}
             </div>
           </form>
 

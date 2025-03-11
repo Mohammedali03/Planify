@@ -1,8 +1,88 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "./Logo";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const validateForm = (formData) => {
+  const errors = {};
+
+  if (!formData.firstName.trim()) {
+    errors.firstName = true;
+  }
+  if (!formData.lastName.trim()) {
+    errors.lastName = true;
+  }
+  if (!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+    errors.email = true;
+  }
+  if (formData.password.length < 8) {
+    errors.password = true;
+  }
+
+  return errors;
+};
 
 const Signup = () => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const location = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData({ ...formData, [name]: value });
+
+    if (errors[name]) {
+      const updatedErrors = { ...errors };
+      delete updatedErrors[name];
+      setErrors(updatedErrors);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const errors = validateForm(formData);
+    setErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+
+    // Set loading to true when submission starts
+    setLoading(true);
+
+    try {
+      const response = await submitFormData(formData);
+      console.log(response.data);
+      setLoading(false);
+      setSuccessMessage("Signup successful! Redirecting to login...");
+      setTimeout(() => location("/login"), 2000);
+    } catch (error) {
+      console.error("an error has occured", error);
+      setLoading(false);
+      setErrorMessage("There was an error processing your request.");
+    }
+  };
+
+  const submitFormData = async (data) => {
+    const response = await axios.post(
+      "http://localhost:8000/api/register",
+      data
+    );
+    return response;
+  };
+
   return (
     <>
       <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -16,7 +96,7 @@ const Signup = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
                 htmlFor="first-name"
@@ -27,15 +107,20 @@ const Signup = () => {
               <div className="mt-2">
                 <input
                   id="first-name"
-                  name="first-name"
+                  name="firstName"
                   type="text"
-                  required
-                  autoComplete="first-name"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 
-                  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 
-                  focus:outline-indigo-600 sm:text-sm/6"
+                  className={` ${
+                    errors.firstName ? "outline-red-500" : "outline-gray-300"
+                  } 
+                      block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 
+                  -outline-offset-1  placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 
+                  focus:outline-indigo-600 sm:text-sm/6`}
+                  onChange={handleChange}
                 />
               </div>
+              {errors.firstName && (
+                <div className="error">First name is required</div>
+              )}
             </div>
 
             <div>
@@ -48,15 +133,19 @@ const Signup = () => {
               <div className="mt-2">
                 <input
                   id="last-name"
-                  name="last-name"
+                  name="lastName"
                   type="text"
-                  required
-                  autoComplete="last-name"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1
-                  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2
-                  focus:outline-indigo-600 sm:text-sm/6"
+                  className={` ${
+                    errors.lastName ? "outline-red-500" : "outline-gray-300"
+                  } block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1
+                  -outline-offset-1 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2
+                  focus:outline-indigo-600 sm:text-sm/6`}
+                  onChange={handleChange}
                 />
               </div>
+              {errors.lastName && (
+                <div className="error">Last name is required</div>
+              )}
             </div>
 
             <div>
@@ -71,13 +160,17 @@ const Signup = () => {
                   id="email"
                   name="email"
                   type="email"
-                  required
-                  autoComplete="email"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 
-                  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 
-                  focus:outline-indigo-600 sm:text-sm/6"
+                  className={`${
+                    errors.email ? "outline-red-500" : "outline-gray-300"
+                  } block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 
+                  -outline-offset-1  placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 
+                  focus:outline-indigo-600 sm:text-sm/6`}
+                  onChange={handleChange}
                 />
               </div>
+              {errors.email && (
+                <div className="error">Invalid email address</div>
+              )}
             </div>
 
             <div>
@@ -94,23 +187,39 @@ const Signup = () => {
                   id="password"
                   name="password"
                   type="password"
-                  required
-                  autoComplete="current-password"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 
-                  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 
-                  focus:outline-indigo-600 sm:text-sm/6"
+                  className={`${
+                    errors.password ? "outline-red-500" : "outline-gray-300"
+                  } block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 
+                  -outline-offset-1 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 
+                  focus:outline-indigo-600 sm:text-sm/6`}
+                  onChange={handleChange}
                 />
               </div>
+              {errors.password && (
+                <div className="error">
+                  Password must contain at least 8 characters
+                </div>
+              )}
             </div>
 
             <div>
-              <button
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 
+              {loading ? (
+                <button
+                  className="flex w-full justify-center rounded-md bg-indigo-400 px-3 py-1.5 text-sm/6 
                 font-semibold text-white shadow-xs hover:bg-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 
                 focus-visible:outline-indigo-600 duration-300 cursor-pointer"
-              >
-                Sign in
-              </button>
+                >
+                  Sign in...
+                </button>
+              ) : (
+                <button
+                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 
+              font-semibold text-white shadow-xs hover:bg-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 
+              focus-visible:outline-indigo-600 duration-300 cursor-pointer"
+                >
+                  Sign in
+                </button>
+              )}
             </div>
           </form>
 
