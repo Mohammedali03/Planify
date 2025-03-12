@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "./Logo";
 import { Link } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 const validateForm = (formData) => {
   const errors = {};
@@ -9,7 +10,8 @@ const validateForm = (formData) => {
   if (!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
     errors.email = true;
   }
-  if (formData.password.length < 8) {
+
+  if (formData.password === "") {
     errors.password = true;
   }
 
@@ -17,7 +19,7 @@ const validateForm = (formData) => {
 };
 
 const Login = () => {
-  const { login, user } = useAuth();
+  const { login, user, errorMessage } = useAuth();
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -29,6 +31,12 @@ const Login = () => {
     const { value, name } = e.target;
 
     setData({ ...data, [name]: value });
+
+    if (errors[name]) {
+      const updatedErrors = { ...errors };
+      delete updatedErrors[name];
+      setErrors(updatedErrors);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -50,13 +58,33 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
-
-    console.log(user);
   };
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   return (
     <>
-      <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className=" relative flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        {errorMessage ? (
+          <div
+            className={`${
+              errorMessage ? "block" : "hidden"
+            } absolute top-5 left-1/2 w-[90%] md:w-[80%] lg:w-[50%] -translate-x-1/2 rounded-md 
+         bg-red-500 text-white p-4`}
+          >
+            <div className="relative">
+              <ExclamationTriangleIcon className="h-5 w-5 mr-2 inline-block" />
+              <span className="font-semibold">
+                Login failed: <br />
+                {errorMessage}
+              </span>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
         <div className="sm:mx-auto sm:w-full sm:max-w-sm flex flex-col items-center">
           <Link to="/">
             <Logo className="cursor-pointer" />
@@ -65,7 +93,6 @@ const Login = () => {
             Sign in to your account
           </h2>
         </div>
-
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -81,9 +108,11 @@ const Login = () => {
                   name="email"
                   type="email"
                   onChange={handleChange}
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 
-                  outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2
-                  focus:outline-indigo-600 sm:text-sm/6"
+                  className={`${
+                    errors.email ? "outline-red-500" : " outline-gray-300"
+                  } block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 
+                  placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2
+                  focus:outline-indigo-600 sm:text-sm/6`}
                 />
               </div>
               {errors.email && (
@@ -100,12 +129,12 @@ const Login = () => {
                   Password
                 </label>
                 <div className="text-sm">
-                  <a
-                    href="#"
+                  <Link
+                    to="/forgot-password"
                     className="font-semibold text-indigo-600 hover:text-indigo-500"
                   >
                     Forgot password?
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="mt-2">
@@ -114,11 +143,16 @@ const Login = () => {
                   name="password"
                   onChange={handleChange}
                   type="password"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900
+                  className={`${
+                    errors.password ? "outline-red-500" : " outline-gray-300"
+                  } block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900
                    outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 
-                   focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                   focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6`}
                 />
               </div>
+              {errors.password && (
+                <div className="error">Password is required</div>
+              )}
             </div>
 
             <div>

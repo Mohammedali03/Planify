@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -7,18 +8,30 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
 
+  const navigate = useNavigate();
+
+  // Handlig results messages
+  const [errorMessage, setErrorMessage] = useState("");
+
   const login = async (data) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/login",
+        "http://localhost:8000/api/login",
         data
       );
       const token = response.data.token;
       setToken(token);
+
       localStorage.setItem("token", response.data.token);
       fetchUser(token);
+      navigate("/");
     } catch (error) {
       console.error("Login failed", error);
+
+      setErrorMessage(
+        error.response?.data?.message ||
+          "Invalid credentials. Please try again."
+      );
     }
   };
 
@@ -61,7 +74,7 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, errorMessage }}>
       {children}
     </AuthContext.Provider>
   );
