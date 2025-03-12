@@ -29,11 +29,12 @@ const Sidebar = () => {
           <div className="px-3">
             <Logo />
           </div>
-          <ul className="flex flex-col mt-8 gap-3">
+          <div className="flex flex-col mt-8 gap-3">
             {links.map(({ link, name, icon: Icon }) => {
               return (
-                <li
-                  key={link.name}
+                <Link
+                  key={name}
+                  to={link}
                   className={`${
                     location.pathname === link ? "bg-indigo-400 text-white" : ""
                   } flex items-center gap-3 p-3 hover:cursor-pointer
@@ -41,13 +42,11 @@ const Sidebar = () => {
                   rounded-md duration-300 transition-all`}
                 >
                   <Icon className="w-6 h-6" />
-                  <Link to={link} className="font-medium">
-                    {name}
-                  </Link>
-                </li>
+                  <span className="font-medium">{name}</span>
+                </Link>
               );
             })}
-          </ul>
+          </div>
         </div>
         <div
           className="flex gap-3 p-3 
@@ -55,7 +54,9 @@ const Sidebar = () => {
             rounded-md duration-300 transition-all mt-auto"
         >
           <Cog8ToothIcon className="w-6 h-6" />
-          <Link className="font-medium">Settings</Link>
+          <Link className="font-medium" to="/settings">
+            Settings
+          </Link>
         </div>
       </div>
     </div>
