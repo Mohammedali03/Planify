@@ -7,11 +7,11 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
-  // Handlig results messages
-  const [errorMessage, setErrorMessage] = useState("");
+  const isAuthenticated = !!token;
 
   const login = async (data) => {
     try {
@@ -23,8 +23,8 @@ export const AuthProvider = ({ children }) => {
       setToken(token);
 
       localStorage.setItem("token", response.data.token);
-      fetchUser(token);
-      navigate("/");
+      await fetchUser(token);
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login failed", error);
 
@@ -62,6 +62,7 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       setToken(null);
       localStorage.removeItem("token");
+      navigate("/login");
     } catch (error) {
       console.error("Logout failed", error);
     }
@@ -74,7 +75,9 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, errorMessage }}>
+    <AuthContext.Provider
+      value={{ user, token, isAuthenticated, login, logout, errorMessage }}
+    >
       {children}
     </AuthContext.Provider>
   );
