@@ -7,3 +7,10 @@ body {
 .error {
   @apply text-sm text-red-500 mt-1;
 }
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 50px;
+  @apply bg-indigo-500;
+}
