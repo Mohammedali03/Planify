@@ -1,6 +1,5 @@
 import React from "react";
 import Sidebar from "./Sidebar";
-import Header from "./Header";
 import { Outlet } from "react-router-dom";
 
 const Layout = () => {
@@ -9,13 +8,10 @@ const Layout = () => {
       <div className="w-64">
         <Sidebar />
       </div>
-      <div className="flex-1 flex flex-col">
-        <Header />
 
-        <main className="p-4 flex-1 overflow-y-auto">
-          <Outlet />
-        </main>
-      </div>
+      <main className="h-full w-full flex-1 overflow-y-auto">
+        <Outlet />
+      </main>
     </div>
   );
 };
