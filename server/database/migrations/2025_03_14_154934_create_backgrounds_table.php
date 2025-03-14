@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Background belongs to a user
             $table->string('name');
-            $table->string('image_path'); // Store file path
+            $table->string('image_path');
             $table->timestamps();
         });
     }
