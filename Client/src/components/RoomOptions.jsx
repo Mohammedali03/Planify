@@ -72,7 +72,7 @@ const RoomOptions = ({
     },
   ];
   return (
-    <ul className="options flex items-center bg-white gap-4 p-2 rounded text-black absolute right-5 top-3">
+    <ul className="options relative flex items-center bg-white gap-3 p-2 rounded text-black">
       {options.map((option) => (
         <li
           key={option.name}

@@ -5,9 +5,7 @@ const Logo = () => {
   const location = useLocation();
   return (
     <div
-      className={`flex items-center ${
-        location.pathname === "/study-room" ? "md:text-sm" : " xl:text-2xl"
-      } text-sm 
+      className={`flex items-center text-2xl
        font-bold text-transparent
      bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600`}
     >

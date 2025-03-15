@@ -1,9 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import RoomOptions from "./RoomOptions";
+import { useOutletContext } from "react-router-dom";
 
 const StudyRoom = () => {
   const ref = useRef(null);
   const [isFull, setIsFull] = useState(false);
+
+  // Retrieve data from outlet context
+  const { setIsOpen } = useOutletContext();
 
   function toggleFullScreen() {
     if (!document.fullscreenElement) {
@@ -37,12 +41,35 @@ const StudyRoom = () => {
       className="study-room relative bg-cover bg-center h-screen bg-[url('./images/pexels-juanpphotoandvideo-877971.jpg')]"
     >
       <div className="absolute w-full h-full bg-black opacity-30"></div>
-      <RoomOptions
-        isFull={isFull}
-        toggleFullScreen={toggleFullScreen}
-        handleBackgrounds={handleBackgrounds}
-        handleSounds={handleSounds}
-      />
+      <div className="flex items-center justify-between p-2">
+        <div
+          className="relative p-2 bg-white gap-4 rounded text-black"
+          onClick={() => setIsOpen(true)}
+        >
+          <div className="rounded p-2 hover:cursor-pointer hover:bg-indigo-200 hover:text-indigo-600  duration-300">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6 cursor-pointer"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          </div>
+        </div>
+        <RoomOptions
+          isFull={isFull}
+          toggleFullScreen={toggleFullScreen}
+          handleBackgrounds={handleBackgrounds}
+          handleSounds={handleSounds}
+        />
+      </div>
     </div>
   );
 };

@@ -7,6 +7,7 @@ import {
   CheckCircleIcon,
   TrophyIcon,
   Cog8ToothIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 
 const links = [
@@ -16,21 +17,23 @@ const links = [
   { name: "Leaderboard", link: "/leaderboard", icon: TrophyIcon },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ setIsOpen }) => {
   const location = useLocation();
 
   return (
     <div
-      className={` py-4 md:p-4 bg-white dark:bg-[#222222]
-      dark:text-white w-fit ${
-        location.pathname === "/study-room" ? "w-fit px-2" : "lg:w-full px-2"
-      } h-full
-      border-r border-gray-200 dark:border-gray-800 flex flex-col`}
+      className=" flex flex-col p-3 bg-white dark:bg-[#222222]
+      dark:text-white w-full h-full
+      border-r border-gray-200 dark:border-gray-800"
     >
       <div className="flex flex-col justify-between flex-1">
         <div>
-          <div>
+          <div className="flex justify-between items-center w-full">
             <Logo />
+            <XMarkIcon
+              className="size-6 lg:hidden"
+              onClick={() => setIsOpen(false)}
+            />
           </div>
           <div className="flex flex-col items-center lg:items-start mt-8 gap-3">
             {links.map(({ link, name, icon: Icon }) => {
@@ -39,39 +42,29 @@ const Sidebar = () => {
                   key={name}
                   to={link}
                   className={`${
-                    location.pathname === link ? "bg-indigo-400 text-white" : ""
-                  } flex items-center gap-3 p-3 hover:cursor-pointer
-                  hover:text-white hover:bg-indigo-500
+                    location.pathname === link
+                      ? "bg-indigo-500 text-white hover:bg-indigo-400"
+                      : "hover:bg-indigo-200 hover:text-indigo-600 dark:hover:bg-indigo-500 dark:hover:text-white"
+                  } flex items-center w-full gap-3 p-3 hover:cursor-pointer
+                  
                   rounded-md duration-300 transition-all`}
                 >
-                  <Icon className="w-fit h-6" />
-                  <span
-                    className={`${
-                      location.pathname === "/study-room" ? "hidden" : "inline"
-                    } font-medium`}
-                  >
-                    {name}
-                  </span>
+                  <Icon className="w-6 h-6" />
+                  <span className="font-medium">{name}</span>
                 </Link>
               );
             })}
           </div>
         </div>
-        <div
+        <Link
+          to="/settings"
           className="flex gap-3 p-3 
            text-red-600 hover:cursor-pointer hover:bg-red-600 hover:text-white 
             rounded-md duration-300 transition-all mt-auto"
         >
-          <Cog8ToothIcon className="w-fit h-6" />
-          <Link
-            className={`${
-              location.pathname === "/study-room" ? "hidden" : "inline"
-            } font-medium`}
-            to="/settings"
-          >
-            Settings
-          </Link>
-        </div>
+          <Cog8ToothIcon className="size-6" />
+          <span className={`font-medium`}>Settings</span>
+        </Link>
       </div>
     </div>
   );
