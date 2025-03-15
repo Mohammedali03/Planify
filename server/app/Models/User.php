@@ -35,11 +35,9 @@ class User extends Authenticatable
         return $this->hasMany(Room::class);
     }
 
-    // A user can have multiple backgrounds
-    public function backgrounds()
-    {
-        return $this->hasMany(Background::class);
-    }
+  public function goals(){
+    return $this->hasMany(Goal::class);
+  }
 
     // A user can have multiple sounds
     public function sounds()
