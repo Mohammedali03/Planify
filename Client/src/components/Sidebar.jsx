@@ -21,15 +21,18 @@ const Sidebar = () => {
 
   return (
     <div
-      className="p-4 bg-white dark:bg-[#222222] dark:text-white w-full h-full
-      border-r border-gray-200 dark:border-gray-800 flex flex-col"
+      className={` py-4 md:p-4 bg-white dark:bg-[#222222]
+      dark:text-white w-fit ${
+        location.pathname === "/study-room" ? "w-fit px-2" : "lg:w-full px-2"
+      } h-full
+      border-r border-gray-200 dark:border-gray-800 flex flex-col`}
     >
       <div className="flex flex-col justify-between flex-1">
         <div>
-          <div className="px-3">
+          <div>
             <Logo />
           </div>
-          <div className="flex flex-col mt-8 gap-3">
+          <div className="flex flex-col items-center lg:items-start mt-8 gap-3">
             {links.map(({ link, name, icon: Icon }) => {
               return (
                 <Link
@@ -41,8 +44,14 @@ const Sidebar = () => {
                   hover:text-white hover:bg-indigo-500
                   rounded-md duration-300 transition-all`}
                 >
-                  <Icon className="w-6 h-6" />
-                  <span className="font-medium">{name}</span>
+                  <Icon className="w-fit h-6" />
+                  <span
+                    className={`${
+                      location.pathname === "/study-room" ? "hidden" : "inline"
+                    } font-medium`}
+                  >
+                    {name}
+                  </span>
                 </Link>
               );
             })}
@@ -53,8 +62,13 @@ const Sidebar = () => {
            text-red-600 hover:cursor-pointer hover:bg-red-600 hover:text-white 
             rounded-md duration-300 transition-all mt-auto"
         >
-          <Cog8ToothIcon className="w-6 h-6" />
-          <Link className="font-medium" to="/settings">
+          <Cog8ToothIcon className="w-fit h-6" />
+          <Link
+            className={`${
+              location.pathname === "/study-room" ? "hidden" : "inline"
+            } font-medium`}
+            to="/settings"
+          >
             Settings
           </Link>
         </div>
