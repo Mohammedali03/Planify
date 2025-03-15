@@ -15,7 +15,12 @@ Route::post('/logout', [AuthController::class, 'logout']);
 
 //Goals
 
-Route::get('/goals', [GoalsController::class, 'index']);
+// Route::get('/goals', [GoalsController::class, 'index']);
+// Route::post('/goals', [GoalsController::class, 'store']);
+// Route::get('/goals/{goal}', [GoalsController::class, 'show']);
+
+Route::apiResource('goals', GoalsController::class);
+Route::post('goals/{goal}/complete',[GoalsController::class,'complete']);
 //ROOM
 Route::get('/rooms', [RoomController::class, 'index']);
 // Route::post('/rooms', [RoomController::class, 'store']);
