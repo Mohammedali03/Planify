@@ -22,7 +22,7 @@ const Sidebar = ({ setIsOpen }) => {
 
   return (
     <div
-      className=" flex flex-col p-3 bg-white dark:bg-[#222222]
+      className="flex flex-col p-3 bg-white dark:bg-[#222222]
       dark:text-white w-full h-full
       border-r border-gray-200 dark:border-gray-800"
     >
@@ -30,8 +30,11 @@ const Sidebar = ({ setIsOpen }) => {
         <div>
           <div className="flex justify-between items-center w-full">
             <Logo />
+            {/* Show XMarkIcon only on mobile or when sidebar is open on /study-room */}
             <XMarkIcon
-              className="size-6 lg:hidden"
+              className={`size-6 cursor-pointer ${
+                location.pathname === "/study-room" ? "block" : "lg:hidden"
+              }`}
               onClick={() => setIsOpen(false)}
             />
           </div>
@@ -48,6 +51,7 @@ const Sidebar = ({ setIsOpen }) => {
                   } flex items-center w-full gap-3 p-3 hover:cursor-pointer
                   
                   rounded-md duration-300 transition-all`}
+                  onClick={() => setIsOpen(false)} // Close sidebar on link click
                 >
                   <Icon className="w-6 h-6" />
                   <span className="font-medium">{name}</span>
@@ -61,6 +65,7 @@ const Sidebar = ({ setIsOpen }) => {
           className="flex gap-3 p-3 
            text-red-600 hover:cursor-pointer hover:bg-red-600 hover:text-white 
             rounded-md duration-300 transition-all mt-auto"
+          onClick={() => setIsOpen(false)} // Also close sidebar on settings click
         >
           <Cog8ToothIcon className="size-6" />
           <span className={`font-medium`}>Settings</span>
