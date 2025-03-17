@@ -1,5 +1,5 @@
                             to do server side
- --**SIDE BAR
+ --**SIDE BAR (PENDING)
 
         ++ dashboard
 
@@ -14,15 +14,24 @@ ________________________________________________________________________________
 
 -------------------------------------------------------------------------------------------------------------
 ___________________________________________________________________________________________________________
- --**STUDDY ROOM
-        ++ personell timer
+ --**STUDDY ROOM  (WORKING ON IT)
+        ++ personell timer //  DONE
     
-        ++ session goals
+        ++ session goals // DONE
     
-        ++ background videos
+        ++ background videos // WORKING ON IT
     
-        ++ background sounds 
+        ++ background sounds // WORKING ON IT
     
-        ++ motivationel  Quote
+        ++ motivationel  Quote // PENDING 
     
-        ++ studdy stats
+        ++ studdy stats // PENDING
+_____________________________________________________________________________________________________________
+
+-------------------------------------------------------------------------------------------------------------
+___________________________________________________________________________________________________________
+
+ --**ADJUSTING PROFILE (PENDING)
+         ++ upgrading user migration
+         ++ adding user profile picture
+         
