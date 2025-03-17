@@ -29,26 +29,15 @@ class User extends Authenticatable
 
     // Define relationships
 
-    // A user can have multiple study rooms
-    public function rooms()
-    {
-        return $this->hasMany(Room::class);
-    }
 
   public function goals(){
     return $this->hasMany(Goal::class);
   }
 
-    // A user can have multiple sounds
-    public function sounds()
-    {
-        return $this->hasMany(Sound::class);
-    }
+  public function timers(){
+    return $this->hasMany(Timer::class);
+  }
 
-    // A user can have multiple study sessions
-    public function roomSessions()
-    {
-        return $this->hasMany(RoomSession::class);
-    }
+    
 }
 

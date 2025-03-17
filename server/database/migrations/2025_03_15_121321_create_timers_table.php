@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('room_sessions', function (Blueprint $table) {
+        Schema::create('timers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('room_id')->constrained()->onDelete('cascade');
-            $table->integer('duration')->default(0); // In seconds
-            $table->timestamp('started_at')->nullable();
-            $table->timestamp('ended_at')->nullable();
+            $table->integer('duration');
+            $table->integer('time_left')->nullable();
+            $table->integer('time_spent')->nullable();
+            $table->enum('status', ['running', 'paused', 'ended'])->default('running');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('room_sessions');
+        Schema::dropIfExists('timers');
     }
 };

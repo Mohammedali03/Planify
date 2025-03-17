@@ -4,6 +4,7 @@ use App\Http\Controllers\GoalsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StudySessionController;
+use App\Http\Controllers\TimerController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -21,18 +22,15 @@ Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::apiResource('goals', GoalsController::class);
 Route::post('goals/{goal}/complete',[GoalsController::class,'complete']);
-//ROOM
-Route::get('/rooms', [RoomController::class, 'index']);
-// Route::post('/rooms', [RoomController::class, 'store']);
-// Route::post('/rooms/{room}/start', [RoomController::class, 'startSession']);
-// Route::post('/rooms/{room}/pause', [RoomController::class, 'pauseSession']);
-// Route::post('/rooms/{room}/end', [RoomController::class, 'endSession']);
+
+//Timer
+
+Route::post('timer/start',[TimerController::class,'start']);
+Route::post('timer/pause/{pause}',[TimerController::class,'pause']);
+Route::post('timer/end/{end?}',[TimerController::class,'end']);
 
 
-Route::post('/sessions/{id}/start', [StudySessionController::class, 'start']);
-Route::post('/sessions/{id}/pause', [StudySessionController::class, 'pause']);
-Route::post('/sessions/{id}/resume', [StudySessionController::class, 'resume']);
-Route::post('/sessions/{id}/end', [StudySessionController::class, 'end']);
+
 });
 
 
