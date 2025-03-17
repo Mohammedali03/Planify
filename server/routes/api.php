@@ -1,10 +1,9 @@
 <?php
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\GoalsController;
+use App\Http\Controllers\User\AuthController;
+use App\Http\Controllers\Room\GoalsController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RoomController;
-use App\Http\Controllers\StudySessionController;
-use App\Http\Controllers\TimerController;
+use App\Http\Controllers\Room\TimerController;
+use App\Models\Timer;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -25,9 +24,21 @@ Route::post('goals/{goal}/complete',[GoalsController::class,'complete']);
 
 //Timer
 
-Route::post('timer/start',[TimerController::class,'start']);
-Route::post('timer/pause/{pause}',[TimerController::class,'pause']);
-Route::post('timer/end/{end?}',[TimerController::class,'end']);
+Route::group(['prefix'=>'timer' ],function(){
+    Route::controller(TimerController::class)->group(function(){
+        Route::post('start','start');
+        Route::post('pause/{pause}','pause');
+        Route::post('end/{end?}','end');
+    });
+
+    // Route::get('status',[TimerController::class,'status']);
+    // Route::post('start',[TimerController::class,'start']);
+    // Route::post('pause/{pause}',[TimerController::class,'pause']);
+    // Route::post('end/{end?}',[TimerController::class,'end']);
+});
+// Route::post('timer/start',[TimerController::class,'start']);
+// Route::post('timer/pause/{pause}',[TimerController::class,'pause']);
+// Route::post('timer/end/{end?}',[TimerController::class,'end']);
 
 
 

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Room;
 
+use App\Http\Controllers\Controller;
 use App\Models\Timer;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,6 @@ class TimerController extends Controller
             // $time_spent = $find->duration - $find->time_left;
             $find->update([
                 'status'=>'running',
-
             ]);
 
             return response()->json([
@@ -72,7 +72,7 @@ class TimerController extends Controller
                 'message'=>'no running timer found'
             ],404);
         }
-        
+
             if (!$end){
                  $timer->update([
                     'status'=>'ended',
