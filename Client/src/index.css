@@ -14,3 +14,13 @@ body {
   border-radius: 50px;
   @apply bg-indigo-500;
 }
+.timer {
+  left: 509px;
+  top: 150px;
+  width: 360px;
+  min-width: 360px;
+  max-width: calc(1353px);
+  border-radius: 7px;
+  box-shadow: 0 0 4px rgba(131, 131, 131, 0.25);
+  background: #fcfcfc;
+}

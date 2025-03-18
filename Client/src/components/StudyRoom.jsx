@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import RoomOptions from "./RoomOptions";
 import { useOutletContext } from "react-router-dom";
+import RoomFeatures from "./RoomFeatures";
 
 const StudyRoom = () => {
   const ref = useRef(null);
@@ -38,15 +39,16 @@ const StudyRoom = () => {
   return (
     <div
       ref={ref}
-      className="study-room relative bg-cover bg-center h-screen bg-[url('./images/pexels-juanpphotoandvideo-877971.jpg')]"
+      className="study-room relative bg-cover bg-center h-screen 
+      bg-[url('./images/pexels-juanpphotoandvideo-877971.jpg')]"
     >
-      <div className="absolute w-full h-full bg-black opacity-30"></div>
       <div className="flex items-center justify-between p-2">
-        <div
-          className="relative p-2 bg-white gap-4 rounded text-black"
-          onClick={() => setIsOpen(true)}
-        >
-          <div className="rounded p-2 hover:cursor-pointer hover:bg-indigo-200 hover:text-indigo-600  duration-300">
+        <div className="relative p-[6px] bg-white gap-4 rounded text-black">
+          <div
+            className="flex items-center flex-col rounded p-[6px] hover:cursor-pointer
+             hover:bg-indigo-200 hover:text-indigo-600  duration-300"
+            onClick={() => setIsOpen(true)}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -70,6 +72,7 @@ const StudyRoom = () => {
           handleSounds={handleSounds}
         />
       </div>
+      <RoomFeatures />
     </div>
   );
 };
