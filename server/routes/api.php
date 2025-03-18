@@ -29,6 +29,7 @@ Route::group(['prefix'=>'timer' ],function(){
         Route::post('start','start');
         Route::post('pause/{pause}','pause');
         Route::post('end/{end?}','end');
+        Route::delete('delete','delete');
     });
 
     // Route::get('status',[TimerController::class,'status']);

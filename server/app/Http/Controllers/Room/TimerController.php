@@ -95,4 +95,17 @@ class TimerController extends Controller
         ],201);
 
     }
+
+    public function delete(){
+        $timer = auth()->user()->timers()->where('status','!=','ended')->first();
+        if(!$timer){
+            return response()->json([
+                'message'=>'no running timer found'
+            ],404);
+        }
+        $timer->delete();
+        return response()->json([
+            'message'=>'timer deleted successfully'
+        ],201);
+    }
 }
