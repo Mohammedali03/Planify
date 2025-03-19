@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import Timer from "./Timer";
 
-const RoomFeatures = () => {
+const RoomFeatures = ({ ref }) => {
   const [showTimer, setShowTimer] = useState(false);
   return (
     <div className="w-fit p-[6px] rounded-md flex flex-col items-center gap-[10px] ml-2 bg-[#fcfcfc]">
@@ -28,7 +28,7 @@ const RoomFeatures = () => {
         </svg>
         <span className="text-xs hover:text-indigo-600">Timer</span>
       </div>
-      {showTimer && <Timer setShowTimer={setShowTimer} />}
+      {showTimer && <Timer ref={ref} setShowTimer={setShowTimer} />}
     </div>
   );
 };

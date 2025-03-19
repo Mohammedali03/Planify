@@ -39,7 +39,7 @@ const StudyRoom = () => {
   return (
     <div
       ref={ref}
-      className="study-room relative bg-cover bg-center h-screen 
+      className="study-room overflow-hidden relative bg-cover bg-center h-screen 
       bg-[url('./images/pexels-juanpphotoandvideo-877971.jpg')]"
     >
       <div className="flex items-center justify-between p-2">
@@ -72,7 +72,7 @@ const StudyRoom = () => {
           handleSounds={handleSounds}
         />
       </div>
-      <RoomFeatures />
+      <RoomFeatures ref={ref} />
     </div>
   );
 };

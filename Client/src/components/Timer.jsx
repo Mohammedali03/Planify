@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-const Timer = ({ setShowTimer }) => {
+const Timer = ({ setShowTimer, ref }) => {
   const [time, setTime] = useState(30 * 60); // Initial time in seconds (30 minutes)
   const [isActive, setIsActive] = useState(false);
   const [start, setStart] = useState(false);
   const [inputValue, setInputValue] = useState(0);
   const [showPomo, setShowPomo] = useState(false);
+  const [lastDuration, setLastDuration] = useState(0);
 
   useEffect(() => {
     let interval;
@@ -22,6 +24,20 @@ const Timer = ({ setShowTimer }) => {
     return () => clearInterval(interval);
   }, [isActive, time]);
 
+  useEffect(() => {
+    const handleUnload = () => {
+      axios
+        .post("http://localhost:8000/api/timer/end")
+        .catch((error) => console.error("Error sending end request:", error));
+    };
+
+    window.addEventListener("beforeunload", handleUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, []);
+
   // Convert time to MM:SS format
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -31,17 +47,63 @@ const Timer = ({ setShowTimer }) => {
       .padStart(2, "0")}`;
   };
 
-  const handleStart = () => {
-    setStart(true);
-    setIsActive(!isActive);
+  // Start the timer
+  const handleStart = async () => {
+    if (!isActive) {
+      try {
+        const res = await axios.post(
+          "http://localhost:8000/api/timer/start",
+          {
+            duration: time,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        // Timer starts
+        setStart(true);
+        setIsActive(true);
+        console.log(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      try {
+        const res = await axios.post(
+          `http://localhost:8000/api/timer/pause/${time}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        console.log(res.data);
+        setIsActive(false);
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
 
-  const handleReset = () => {
-    // Stop the timer
-    setIsActive(false);
-
-    // Reset the timer to 30 minutes
-    setTime(30 * 60);
+  const handleReset = async () => {
+    try {
+      const res = await axios.delete("http://localhost:8000/api/timer/delete", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(res.data);
+      // Stop the timer
+      setIsActive(false);
+      // Reset the timer to the last duration
+      setTime(lastDuration);
+    } catch (e) {
+      console.error("Error resetting timer", e);
+    }
   };
 
   const handleSave = () => {
@@ -52,14 +114,19 @@ const Timer = ({ setShowTimer }) => {
     let clampedValue = numericValue;
     if (numericValue < 20) {
       clampedValue = 20;
+      setLastDuration(20);
     } else if (numericValue > 200) {
       clampedValue = 200;
+      setLastDuration(200);
     }
 
     // Update the input value state if it was clamped
     if (clampedValue !== numericValue) {
       setInputValue(clampedValue.toString());
     }
+
+    // Save last duration if user wants to reset
+    setLastDuration(clampedValue * 60);
 
     // Update timer value
     setTime(clampedValue * 60);
@@ -74,8 +141,23 @@ const Timer = ({ setShowTimer }) => {
     setStart(false);
   };
 
-  const handleEnd = () => {
-    console.log("session ended");
+  const handleEnd = async () => {
+    try {
+      const res = await axios.post(
+        `http://localhost:8000/api/timer/end/${time}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log(res.data);
+      setIsActive(false);
+      setTime(lastDuration);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const actions = [
@@ -156,7 +238,7 @@ const Timer = ({ setShowTimer }) => {
 
   return (
     <div className="timer flex z-90 absolute h-auto rounded-md flex-col items-stretch overflow-hidden">
-      <div className="flex py-2 px-4 items-center justify-between border-b border-[#e9e9e9]">
+      <div className="flex py-2 px-4 items-center justify-between border-b border-[#e9e9e9] ">
         <span className="flex-0 text-sm text-[#4e4e4e] font-medium">
           Personal
         </span>
@@ -225,6 +307,7 @@ const Timer = ({ setShowTimer }) => {
           id="pomo"
           min={20}
           max={200}
+          step={5}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           className="border border-[#e9e9e9] rounded-md p-2
