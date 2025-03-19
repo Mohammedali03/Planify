@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const Timer = ({ setShowTimer, ref }) => {
-  const [time, setTime] = useState(30 * 60); // Initial time in seconds (30 minutes)
+  const [time, setTime] = useState(20 * 60); // Initial time in seconds (30 minutes)
   const [isActive, setIsActive] = useState(false);
   const [start, setStart] = useState(false);
-  const [inputValue, setInputValue] = useState(0);
+  const [inputValue, setInputValue] = useState(20);
   const [showPomo, setShowPomo] = useState(false);
   const [lastDuration, setLastDuration] = useState(0);
 
@@ -25,10 +25,16 @@ const Timer = ({ setShowTimer, ref }) => {
   }, [isActive, time]);
 
   useEffect(() => {
-    const handleUnload = () => {
-      axios
-        .post("http://localhost:8000/api/timer/end")
-        .catch((error) => console.error("Error sending end request:", error));
+    const handleUnload = (event) => {
+      fetch("http://localhost:8000/api/timer/end", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ time }), // Send remaining time if needed
+        keepalive: true, // Ensures the request is sent before the page unloads
+      });
     };
 
     window.addEventListener("beforeunload", handleUnload);
@@ -36,7 +42,7 @@ const Timer = ({ setShowTimer, ref }) => {
     return () => {
       window.removeEventListener("beforeunload", handleUnload);
     };
-  }, []);
+  }, [time]);
 
   // Convert time to MM:SS format
   const formatTime = (time) => {
@@ -49,60 +55,67 @@ const Timer = ({ setShowTimer, ref }) => {
 
   // Start the timer
   const handleStart = async () => {
-    if (!isActive) {
-      try {
-        const res = await axios.post(
-          "http://localhost:8000/api/timer/start",
-          {
-            duration: time,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+    if (time >= 1200 && time <= 12000) {
+      if (!isActive) {
+        try {
+          const res = await axios.post(
+            "http://localhost:8000/api/timer/start",
+            {
+              duration: time,
             },
-          }
-        );
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
 
-        // Timer starts
-        setStart(true);
-        setIsActive(true);
-        console.log(res.data);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      try {
-        const res = await axios.post(
-          `http://localhost:8000/api/timer/pause/${time}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        console.log(res.data);
-        setIsActive(false);
-      } catch (error) {
-        console.error(error);
+          // Timer starts
+          setStart(true);
+          setIsActive(true);
+          console.log(res.data);
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        try {
+          const res = await axios.post(
+            `http://localhost:8000/api/timer/pause/${time}`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          console.log(res.data);
+          setIsActive(false);
+        } catch (error) {
+          console.error(error);
+        }
       }
     }
   };
 
   const handleReset = async () => {
-    try {
-      const res = await axios.delete("http://localhost:8000/api/timer/delete", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      console.log(res.data);
-      // Stop the timer
-      setIsActive(false);
-      // Reset the timer to the last duration
-      setTime(lastDuration);
-    } catch (e) {
-      console.error("Error resetting timer", e);
+    if (isActive) {
+      try {
+        const res = await axios.delete(
+          "http://localhost:8000/api/timer/delete",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        console.log(res.data);
+        // Stop the timer
+        setIsActive(false);
+
+        setTime(lastDuration);
+      } catch (e) {
+        console.error("Error resetting timer", e);
+      }
     }
   };
 
