@@ -9,10 +9,7 @@ class Sound extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'name', 'file_path'];
+    protected $fillable = ['name', 'file_path'];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    
 }
