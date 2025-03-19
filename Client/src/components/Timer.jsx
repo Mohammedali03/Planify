@@ -26,7 +26,7 @@ const Timer = ({ setShowTimer, ref }) => {
 
   useEffect(() => {
     const handleUnload = (event) => {
-      fetch("http://localhost:8000/api/timer/end", {
+      fetch(`http://localhost:8000/api/timer/end/${time}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
