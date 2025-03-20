@@ -1,8 +1,12 @@
 <?php
+
+use App\Http\Controllers\Room\FavoriteController;
 use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\Room\GoalsController;
+use App\Http\Controllers\Room\ImageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Room\TimerController;
+use App\Http\Controllers\Room\VideoController;
 use App\Models\Timer;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -31,12 +35,28 @@ Route::group(['prefix'=>'timer' ],function(){
         Route::post('end/{end?}','end');
         Route::delete('delete','delete');
     });
-
+});
     // Route::get('status',[TimerController::class,'status']);
     // Route::post('start',[TimerController::class,'start']);
     // Route::post('pause/{pause}',[TimerController::class,'pause']);
     // Route::post('end/{end?}',[TimerController::class,'end']);
-});
+
+
+    //background and favorites
+
+    Route::group(['prefix'=>'background' ],function(){
+        //images
+        Route::get('images',[ImageController::class,'images']);
+
+        //videos
+        Route::get('videos',[VideoController::class,'videos']);
+
+        //favorites
+        Route::get('favorites',[FavoriteController::class,'index']);
+        Route::post('favorites/{id}/section/{section}',[FavoriteController::class,'store']);
+        Route::delete('favorites/{id}',[FavoriteController::class,'delete']);
+    });
+
 // Route::post('timer/start',[TimerController::class,'start']);
 // Route::post('timer/pause/{pause}',[TimerController::class,'pause']);
 // Route::post('timer/end/{end?}',[TimerController::class,'end']);
