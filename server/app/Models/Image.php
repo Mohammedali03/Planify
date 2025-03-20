@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
 
 class Image extends Model
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory;
 
-    protected $fillable = ['user_id', 'name', 'image_path'];
+    protected $fillable = [ 'name', 'image_path','section'];
 
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
+    public function favorites(){
+        return $this->morphMany(Favorite::class,'favoritable');
     }
+    
 }
 
