@@ -24,3 +24,9 @@ body {
   box-shadow: 0 0 4px rgba(131, 131, 131, 0.25);
   background: #fcfcfc;
 }
+.backgrounds > div::-webkit-scrollbar-thumb {
+  @apply bg-white w-0;
+}
+/* .study-room {
+  background-image: url("./images/lights.avif") !important;
+} */

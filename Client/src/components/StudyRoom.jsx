@@ -2,10 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 import RoomOptions from "./RoomOptions";
 import { useOutletContext } from "react-router-dom";
 import RoomFeatures from "./RoomFeatures";
+import lights from "../images/lights.avif";
 
 const StudyRoom = () => {
   const ref = useRef(null);
   const [isFull, setIsFull] = useState(false);
+  const [background, setBackground] = useState(lights);
+
+  const [showBackgrounds, setShowBackgrounds] = useState(false);
 
   // Retrieve data from outlet context
   const { setIsOpen } = useOutletContext();
@@ -30,7 +34,7 @@ const StudyRoom = () => {
   }, []);
 
   function handleBackgrounds() {
-    alert("not created yet");
+    setShowBackgrounds(!showBackgrounds);
   }
   function handleSounds() {
     alert("not created yet");
@@ -39,8 +43,8 @@ const StudyRoom = () => {
   return (
     <div
       ref={ref}
-      className="study-room overflow-hidden relative bg-cover bg-center h-screen 
-      bg-[url('./images/pexels-juanpphotoandvideo-877971.jpg')]"
+      className="study-room overflow-hidden relative bg-cover bg-center h-screen"
+      style={{ backgroundImage: `url(${background})` }}
     >
       <div className="flex items-center justify-between p-2">
         <div className="relative p-[6px] bg-white gap-4 rounded text-black">
@@ -70,9 +74,15 @@ const StudyRoom = () => {
           toggleFullScreen={toggleFullScreen}
           handleBackgrounds={handleBackgrounds}
           handleSounds={handleSounds}
+          showBackgrounds={showBackgrounds}
+          setBackground={setBackground}
         />
       </div>
       <RoomFeatures ref={ref} />
+      {/* <div className="flex flex-col text-2xl bg-white p-5 w-fit">
+        <button onClick={() => setBackground(lights)}>lights</button>
+        <button onClick={() => setBackground(cafeCanvas)}>cafe canvas</button>
+      </div> */}
     </div>
   );
 };
