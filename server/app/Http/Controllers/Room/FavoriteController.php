@@ -16,7 +16,7 @@ class FavoriteController extends Controller
 
     public function store($id,$section){
         if ($section == 'image'){
-            $image = Image::find($id);
+            $image = Image::findOrFail($id);
             if(!$image){
                 return response()->json(['error'=>'Image not found'],404);
             }
@@ -27,7 +27,7 @@ class FavoriteController extends Controller
             return response()->json(['message'=>'Image added to favorites'],201);
 
         }elseif ($section == 'video'){ {
-            $video = Video::find($id);
+            $video = Video::findOrFail($id);
             if(!$video){
                 return response()->json(['error'=>'Video not found'],404);
             }
