@@ -15,8 +15,8 @@ body {
   @apply bg-indigo-500;
 }
 .timer {
-  left: 509px;
-  top: 150px;
+  top: -6px;
+  left: 45px;
   width: 360px;
   min-width: 360px;
   max-width: calc(1353px);
@@ -27,6 +27,3 @@ body {
 .backgrounds > div::-webkit-scrollbar-thumb {
   @apply bg-white w-0;
 }
-/* .study-room {
-  background-image: url("./images/lights.avif") !important;
-} */

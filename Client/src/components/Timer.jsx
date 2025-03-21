@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Timer = ({ setShowTimer, ref }) => {
+const Timer = ({ setShowTimer }) => {
   const [time, setTime] = useState(20 * 60); // Initial time in seconds (30 minutes)
   const [isActive, setIsActive] = useState(false);
   const [start, setStart] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
   const [inputValue, setInputValue] = useState(20);
   const [showPomo, setShowPomo] = useState(false);
-  const [lastDuration, setLastDuration] = useState(0);
+  const [lastDuration, setLastDuration] = useState(20 * 60);
 
   useEffect(() => {
     let interval;
@@ -24,8 +25,10 @@ const Timer = ({ setShowTimer, ref }) => {
     return () => clearInterval(interval);
   }, [isActive, time]);
 
+  // Sending an end request if the window closes or page reloads
   useEffect(() => {
-    const handleUnload = (event) => {
+    const handleUnload = () => {
+      setShowTimer(true);
       fetch("http://localhost:8000/api/timer/end", {
         method: "POST",
         headers: {
@@ -55,53 +58,17 @@ const Timer = ({ setShowTimer, ref }) => {
 
   // Start the timer
   const handleStart = async () => {
-    if (time >= 1200 && time <= 12000) {
-      if (!isActive) {
-        try {
-          const res = await axios.post(
-            "http://localhost:8000/api/timer/start",
-            {
-              duration: time,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          );
-
-          // Timer starts
-          setStart(true);
-          setIsActive(true);
-          console.log(res.data);
-        } catch (error) {
-          console.error(error);
-        }
-      } else {
-        try {
-          const res = await axios.post(
-            `http://localhost:8000/api/timer/pause/${time}`,
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          );
-          console.log(res.data);
-          setIsActive(false);
-        } catch (error) {
-          console.error(error);
-        }
-      }
+    // If timer is bigger than 200 minutes and less than 20 minutes leave
+    if (time <= 1200 && time >= 12000) {
+      return;
     }
-  };
 
-  const handleReset = async () => {
+    // If timer is running allow pause to work
     if (isActive) {
       try {
-        const res = await axios.delete(
-          "http://localhost:8000/api/timer/delete",
+        const res = await axios.post(
+          `http://localhost:8000/api/timer/pause/${time}`,
+          {},
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -109,13 +76,57 @@ const Timer = ({ setShowTimer, ref }) => {
           }
         );
         console.log(res.data);
-        // Stop the timer
         setIsActive(false);
-
-        setTime(lastDuration);
-      } catch (e) {
-        console.error("Error resetting timer", e);
+      } catch (error) {
+        console.error(error);
       }
+    } else {
+      try {
+        const res = await axios.post(
+          "http://localhost:8000/api/timer/start",
+          {
+            duration: time,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        // Timer starts
+        setStart(true);
+        setIsActive(true);
+
+        // Set has started so the reset button can work
+        setHasStarted(true);
+        console.log(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleReset = async () => {
+    // If timer has not started yet then leave the function
+    if (!hasStarted) {
+      return;
+    }
+
+    // Send request to cancel current timer
+    try {
+      const res = await axios.delete("http://localhost:8000/api/timer/delete", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(res.data);
+      // Stop the timer
+      setIsActive(false);
+
+      setTime(lastDuration);
+    } catch (e) {
+      console.error("Error resetting timer", e);
     }
   };
 
@@ -250,8 +261,8 @@ const Timer = ({ setShowTimer, ref }) => {
   ];
 
   return (
-    <div className="timer flex z-90 absolute h-auto rounded-md flex-col items-stretch overflow-hidden">
-      <div className="flex py-2 px-4 items-center justify-between border-b border-[#e9e9e9] ">
+    <div className="timer z-90 absolute h-auto rounded-md flex-col items-stretch overflow-hidden">
+      <div className="flex py-2 px-4 items-center justify-between border-b border-[#e9e9e9]">
         <span className="flex-0 text-sm text-[#4e4e4e] font-medium">
           Personal
         </span>
@@ -263,7 +274,7 @@ const Timer = ({ setShowTimer, ref }) => {
           strokeWidth={1.5}
           stroke="currentColor"
           className="size-6 cursor-pointer"
-          onClick={() => setShowTimer(false)}
+          onClick={() => setShowTimer(true)}
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
         </svg>

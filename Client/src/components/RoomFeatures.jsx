@@ -9,7 +9,7 @@ const RoomFeatures = ({ ref }) => {
       <div
         className={`flex items-center flex-col rounded-md px-3 py-[6px] hover:cursor-pointer
        hover:bg-indigo-200 hover:text-indigo-600 duration-300 
-       ${showTimer ? " text-indigo-600" : "bg-white text-black"}`}
+       ${!showTimer ? " text-indigo-600" : "bg-white text-black"}`}
         onClick={() => setShowTimer(!showTimer)}
       >
         <svg
@@ -28,7 +28,13 @@ const RoomFeatures = ({ ref }) => {
         </svg>
         <span className="text-xs hover:text-indigo-600">Timer</span>
       </div>
-      {showTimer && <Timer ref={ref} setShowTimer={setShowTimer} />}
+      <div
+        className={`absolute duration-300 ${
+          showTimer ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        <Timer ref={ref} setShowTimer={setShowTimer} />
+      </div>
     </div>
   );
 };
