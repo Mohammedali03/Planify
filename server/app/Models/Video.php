@@ -2,19 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Image extends Model
+class Video extends Model
 {
-    use HasApiTokens, HasFactory;
+    use HasApiTokens,Notifiable;
 
-    protected $fillable = [ 'name', 'image_path','section'];
+    protected $fillable = ['name', 'video_path','section'];
 
     public function favorites(){
         return $this->morphMany(Favorite::class,'favoritable');
     }
-    
 }
-

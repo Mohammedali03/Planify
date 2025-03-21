@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('sounds', function (Blueprint $table) {
             $table->id();
-            // $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Sound belongs to a user
             $table->string('name');
             $table->string('file_path'); // Store file path
             $table->timestamps();
