@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class FavoriteController extends Controller
 {
     public function index(){
-        $fav = auth()->user()->favorites;
+        $fav = auth()->user()->favorites()->with('favoritable')->get();
         return response()->json($fav);
     }
 
