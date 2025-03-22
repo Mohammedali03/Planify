@@ -10,8 +10,11 @@ use Illuminate\Http\Request;
 class FavoriteController extends Controller
 {
     public function index(){
-        $fav = auth()->user()->favorites()->with('favoritable')->get();
-        return response()->json($fav);
+        $favorites = auth()->user()->favorites()->with('favoritable')->get();
+        
+        return response()->json([
+            'favorites'=>$favorites->pluck('id'),
+            'favoritable'=>$favorites->pluck('favoritable')]);
     }
 
     public function store($id,$section){
