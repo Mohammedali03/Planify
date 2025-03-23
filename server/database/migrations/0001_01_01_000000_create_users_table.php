@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('role')->default('user');
             $table->string('profile_pic')->nullable();
+            $table->enum('status',['active','inactive'])->default('active');
+            $table->string('phone')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
