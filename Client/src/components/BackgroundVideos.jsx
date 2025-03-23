@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, spring } from "framer-motion";
 import axios from "axios";
 import chelsea from "../images/chelsea-market-skybridge.avif";
@@ -10,11 +10,10 @@ import awesome from "../images/awesome.avif";
 import cafe from "../images/cafe-canvas.avif";
 import city from "../images/city.avif";
 
-const BackgroundImages = ({ setBackground }) => {
+const BackgroundVideos = ({ setBackground }) => {
   const [favorites, setFavorites] = useState({});
-  const [Pictures, setPictures] = useState(null);
-
-  const images = [
+  const [videos, setVideos] = useState(null);
+  const [vid, setVid] = useState([
     { id: 1, image: city, alt: "city" },
     { id: 2, image: chelsea, alt: "Chelsea market skybridge" },
     { id: 3, image: dark, alt: "Dark 2AM" },
@@ -23,25 +22,25 @@ const BackgroundImages = ({ setBackground }) => {
     { id: 6, image: beach, alt: "Beach and mountains" },
     { id: 7, image: awesome, alt: "Awesome" },
     { id: 8, image: cafe, alt: "Cafe canvas" },
-  ];
+  ]);
 
   // Fetch Available images
   useEffect(() => {
-    const fetchPictures = async () => {
+    const fetchVideos = async () => {
       try {
-        const res = await axios.get("http//:localhost:8000/api/images", {
+        const res = await axios.get("http//:localhost:8000/api/videos", {
           headers: {
             Authorization: `Bearer, ${localStorage.getItem("token")}`,
           },
         });
         console.log(res.data);
-        setPictures(res.data);
+        setVideos(res.data);
       } catch (e) {
         console.error("an error has occured", e);
       }
     };
 
-    fetchPictures();
+    fetchVideos();
   });
 
   // Toggle favorite images
@@ -51,7 +50,7 @@ const BackgroundImages = ({ setBackground }) => {
       // Make the Image Favorite
       try {
         const response = await axios.post(
-          `http://localhost:8000/api/favorites/${id}/image`,
+          `http://localhost:8000/api/favorites/${id}/video`,
           {},
           {
             headers: {
@@ -59,14 +58,14 @@ const BackgroundImages = ({ setBackground }) => {
             },
           }
         );
-        console.log(response.data);
         setFavorites((prev) => ({ ...prev, [id]: true }));
+        console.log(response.data);
       } catch (e) {
         console.error(e);
       }
     }
 
-    // If Image Is Favorite Then Remove It
+    // If Video Is Favorite Then Remove It
     try {
       const response = await axios.delete(
         `http://localhost:8000/api/favorites/${id}`,
@@ -76,8 +75,8 @@ const BackgroundImages = ({ setBackground }) => {
           },
         }
       );
-      console.log(response.data);
       setFavorites((prev) => ({ ...prev, [id]: false }));
+      console.log(response.data);
     } catch (e) {
       console.error(e);
     }
@@ -85,11 +84,11 @@ const BackgroundImages = ({ setBackground }) => {
 
   return (
     <div className="p-4 overflow-y-scroll h-[400px]">
-      <h2 className="font-semibold text-lg mb-2">Featured Images</h2>
+      <h2 className="font-semibold text-lg mb-2">Featured Videos</h2>
       <ul className="grid grid-cols-2 gap-3 flex-wrap">
-        {images.map((image) => {
+        {vid.map((video) => {
           return (
-            <div key={image.id} className="relative">
+            <div key={video.id} className="relative">
               <motion.div className="relative hover:scale-[1.03] duration-500">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -98,10 +97,10 @@ const BackgroundImages = ({ setBackground }) => {
                   strokeWidth={1.5}
                   stroke="currentColor"
                   className={`size-5 absolute right-1 top-1 ${
-                    favorites[image.id] && "fill-indigo-600 text-indigo-200 "
+                    favorites[video.id] && "fill-indigo-600 text-indigo-200 "
                   } text-indigo-200 z-90 cursor-pointer
              hover:fill-indigo-400 duration-300`}
-                  onClick={() => toggleFavourite(image.id)}
+                  onClick={() => toggleFavourite(video.id)}
                 >
                   <path
                     strokeLinecap="round"
@@ -112,17 +111,17 @@ const BackgroundImages = ({ setBackground }) => {
                 </svg>
 
                 <img
-                  src={image.image}
+                  src={video.image}
                   loading="lazy"
-                  alt={image.alt}
+                  alt={video.alt}
                   className="h-20 w-36 rounded-md cursor-pointer"
                   whileHover={{ scale: 1.03 }}
                   transition={{ duration: 1, type: spring }}
-                  onClick={() => setBackground(image.image)}
+                  onClick={() => setBackground(video.image)}
                 />
               </motion.div>
               <span className="text-xs text-[#4e4e4e] w-full overflow-hidden whitespace-nowrap overflow-ellipsis">
-                {image.alt}
+                {video.alt}
               </span>
             </div>
           );
@@ -132,4 +131,4 @@ const BackgroundImages = ({ setBackground }) => {
   );
 };
 
-export default BackgroundImages;
+export default BackgroundVideos;
