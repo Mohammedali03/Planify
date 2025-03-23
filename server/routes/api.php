@@ -7,6 +7,7 @@ use App\Http\Controllers\Room\ImageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Room\TimerController;
 use App\Http\Controllers\Room\VideoController;
+use App\Http\Controllers\User\ProfileController;
 use App\Models\Timer;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -16,6 +17,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //user
 Route::get('/user', [AuthController::class, 'user']);
 Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('profile_pic',[ProfileController::class,'Profile_Pic']);
 
 //Goals
 
