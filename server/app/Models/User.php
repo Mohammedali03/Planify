@@ -12,6 +12,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $appends = ['profile_picture_url'];
+
     protected $fillable = [
         'name',
         'email',
@@ -41,6 +43,14 @@ class User extends Authenticatable
     public function favorites(){
         return $this->hasMany(Favorite::class);
     }
+
+    public function getProfilePictureUrlAttribute()
+{
+    return $this->profile_picture 
+        ? asset('storage/' . $this->profile_picture) 
+        : asset('default-avatar.png'); // Default if no image
+}
+
     
 }
 
