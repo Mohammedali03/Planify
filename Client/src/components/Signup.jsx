@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import Logo from "./Logo";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import axios from "axios";
+import Logo from "./Logo";
 
 const validateForm = (formData) => {
   const errors = {};
@@ -51,6 +51,7 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage(null);
 
     const errors = validateForm(formData);
     setErrors(errors);
@@ -63,15 +64,18 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const response = await submitFormData(formData);
-      console.log(response.data);
-      setLoading(false);
-      setSuccessMessage("Signup successful! Redirecting to login...");
-      setTimeout(() => location("/login"), 2000);
+      await submitFormData(formData);
+      setSuccessMessage(
+        "Created account successfully! Redirecting to Login..."
+      );
+      setTimeout(() => location("/login"), 3000);
     } catch (error) {
       console.error("an error has occured", error);
+      setErrorMessage(
+        error.response?.data?.message || "Email address is already registered!"
+      );
+    } finally {
       setLoading(false);
-      setErrorMessage("There was an error processing your request.");
     }
   };
 
@@ -83,9 +87,86 @@ const Signup = () => {
     return response;
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, 4000);
+
+    clearTimeout();
+
+    return () => clearTimeout();
+  }, [errorMessage]);
+
   return (
     <>
-      <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <motion.div
+        className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        {successMessage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className={`${
+              successMessage ? "opacity-100" : "opacity-0"
+            } block absolute top-5 left-1/2 w-[90%] md:w-[80%] lg:w-[50%] -translate-x-1/2 rounded-md 
+         bg-green-500 text-white p-4 duration-300`}
+          >
+            <div className="relative">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6 h-5 w-5 mr-2 inline-block"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m4.5 12.75 6 6 9-13.5"
+                />
+              </svg>
+
+              <span className="font-semibold">{successMessage}</span>
+            </div>
+          </motion.div>
+        )}
+        {errorMessage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className={`${
+              errorMessage ? "block" : "hidden"
+            } absolute top-5 left-1/2 w-[90%] md:w-[80%] lg:w-[50%] -translate-x-1/2 rounded-md 
+         bg-red-500 text-white p-4`}
+          >
+            <div className="relative">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-7 mr-2 inline-block "
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
+                />
+              </svg>
+
+              <span className="font-semibold">{errorMessage}</span>
+            </div>
+          </motion.div>
+        )}
         <div className="sm:mx-auto sm:w-full sm:max-w-sm flex items-center flex-col">
           <Link to="/">
             <Logo className="cursor-pointer" />
@@ -233,7 +314,7 @@ const Signup = () => {
             </Link>
           </p>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };

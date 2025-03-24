@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Logo from "./Logo";
 import { Link } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
+import { motion } from "framer-motion";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 const validateForm = (formData) => {
@@ -19,7 +20,7 @@ const validateForm = (formData) => {
 };
 
 const Login = () => {
-  const { login, user, errorMessage } = useAuth();
+  const { login, errorMessage, setErrorMessage } = useAuth();
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -41,6 +42,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage(null);
 
     const errors = validateForm(data);
     setErrors(errors);
@@ -61,13 +63,20 @@ const Login = () => {
   };
 
   useEffect(() => {
-    console.log(user);
-  }, [user]);
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, 4000);
+  }, [errorMessage]);
 
   return (
     <>
-      <div className=" relative flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        {errorMessage ? (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className=" relative flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8"
+      >
+        {errorMessage && (
           <div
             className={`${
               errorMessage ? "block" : "hidden"
@@ -75,15 +84,14 @@ const Login = () => {
          bg-red-500 text-white p-4`}
           >
             <div className="relative">
-              <ExclamationTriangleIcon className="h-5 w-5 mr-2 inline-block" />
+              <ExclamationTriangleIcon className="size-7 mr-2 inline-block" />
               <span className="font-semibold">
-                Login failed: <br />
+                Login failed:
+                {"   "}
                 {errorMessage}
               </span>
             </div>
           </div>
-        ) : (
-          ""
         )}
         <div className="sm:mx-auto sm:w-full sm:max-w-sm flex flex-col items-center">
           <Link to="/">
@@ -186,7 +194,7 @@ const Login = () => {
             </Link>
           </p>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };
