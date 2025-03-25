@@ -21,12 +21,12 @@ class ProfileController extends Controller
 
     }
 
-    // public function pic(){
-    //     $user=auth()->user();
-    //     $profile_picture=$user->profile_picture_url;
-    //     return response()->json(['profile_picture'=>$profile_picture]);
-    //     // return response()->json(['profile_picture'=>$user->profile_picture]);
-    // }
+    public function pic(){
+        $user=auth()->user();
+        $profile_picture=$user->profile_picture_url;
+        return response()->json(['profile_picture'=>$profile_picture]);
+        // return response()->json(['profile_picture'=>$user->profile_picture]);
+    }
 
         public function credentials(Request $request){
        $validated = $request->validate([
