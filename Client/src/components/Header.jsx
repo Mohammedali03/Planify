@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import avatar from "../images/avatar.jpeg";
-import { useDarkMode } from "./ThemeProvider";
 import Dropdown from "./Dropdown";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const [isDarkMode, setIsDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDarkMode]);
 
   const date = new Date();
   const day = date.getDate();
@@ -20,7 +31,7 @@ const Header = () => {
         {formatDate}
       </div>
       <div className="flex items-center space-x-1 cursor-pointer">
-        <div onClick={toggleDarkMode}>
+        <div onClick={() => setIsDarkMode(!isDarkMode)}>
           {isDarkMode ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"

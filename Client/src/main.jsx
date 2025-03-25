@@ -4,7 +4,6 @@ import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./components/AuthProvider.jsx";
-import { ThemeProvider } from "./components/ThemeProvider.jsx";
 import { AnimatePresence } from "framer-motion";
 
 createRoot(document.getElementById("root")).render(
@@ -12,9 +11,7 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <AnimatePresence>
         <AuthProvider>
-          <ThemeProvider>
-            <App />
-          </ThemeProvider>
+          <App />
         </AuthProvider>
       </AnimatePresence>
     </BrowserRouter>
