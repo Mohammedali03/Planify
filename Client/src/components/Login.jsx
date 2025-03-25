@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
 import { motion } from "framer-motion";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import Loader from "./ui/Loader";
 
 const validateForm = (formData) => {
   const errors = {};
@@ -164,23 +165,13 @@ const Login = () => {
             </div>
 
             <div>
-              {loading ? (
-                <button
-                  className="flex w-full justify-center rounded-md bg-indigo-400 px-3
-               py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-800 focus-visible:outline-2 
-               focus-visible:outline-offset-2 focus-visible:outline-indigo-600 duration-300 cursor-pointer"
-                >
-                  Login...
-                </button>
-              ) : (
-                <button
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3
+              <button
+                className="flex w-full justify-center items-center rounded-md bg-indigo-600 px-3 h-9
                  py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-800 focus-visible:outline-2 
                  focus-visible:outline-offset-2 focus-visible:outline-indigo-600 duration-300 cursor-pointer"
-                >
-                  Login
-                </button>
-              )}
+              >
+                {loading ? <Loader /> : "Login"}
+              </button>
             </div>
           </form>
 
