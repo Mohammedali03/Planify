@@ -1,11 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import avatar from "../images/avatar.jpeg";
-import { useDarkMode } from "./ThemeProvider";
 import Dropdown from "./Dropdown";
+import { motion } from "framer-motion";
+import { useOutletContext } from "react-router-dom";
+import EditProfile from "./EditProfile";
 
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+
+  const [isDarkMode, setIsDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
+
+  const { setIsOpen } = useOutletContext();
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDarkMode]);
 
   const date = new Date();
   const day = date.getDate();
@@ -16,11 +34,39 @@ const Header = () => {
 
   return (
     <div className="flex justify-between h-13 items-center px-5 border-b border-gray-300">
-      <div className="flex items-center space-x-1 font-semibold">
-        {formatDate}
-      </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.5 }}
+        className="flex items-center space-x-1 font-semibold"
+      >
+        <div className="flex items-center gap-4">
+          <button className="lg:hidden" onClick={() => setIsOpen(true)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          </button>
+          <span>{formatDate}</span>
+        </div>
+      </motion.div>
       <div className="flex items-center space-x-1 cursor-pointer">
-        <div onClick={toggleDarkMode}>
+        <motion.div
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.5 }}
+        >
           {isDarkMode ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -56,10 +102,13 @@ const Header = () => {
               />
             </svg>
           )}
-        </div>
+        </motion.div>
 
         {/* Notification Icon */}
-        <svg
+        <motion.svg
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.5 }}
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -74,11 +123,14 @@ const Header = () => {
             d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967
              0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
           />
-        </svg>
+        </motion.svg>
 
-        <div
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.5 }}
           className="relative flex items-center gap-2 ml-2 hover:cursor-pointer"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setShowDropdown(!showDropdown)}
         >
           <img
             src={avatar}
@@ -86,7 +138,7 @@ const Header = () => {
             className="size-8 rounded-full"
             loading="lazy"
           />
-          {isOpen ? (
+          {showDropdown ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -118,8 +170,9 @@ const Header = () => {
             </svg>
           )}
 
-          {isOpen && <Dropdown />}
-        </div>
+          {showDropdown && <Dropdown setShowProfile={setShowProfile} />}
+        </motion.div>
+        {showProfile && <EditProfile setShowProfile={setShowProfile} />}
       </div>
     </div>
   );
