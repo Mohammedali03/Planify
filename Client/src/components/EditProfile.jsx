@@ -34,10 +34,11 @@ const EditProfile = ({ setShowProfile }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:8000/credentials",
+      const res = await axios.post(
+        "http://localhost:8000/api/profile",
         formData,
         {
+          // withCredentials: true,
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

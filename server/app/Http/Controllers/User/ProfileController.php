@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -28,11 +29,11 @@ class ProfileController extends Controller
         // return response()->json(['profile_picture'=>$user->profile_picture]);
     }
 
-        public function credentials(Request $request){
+    public function profile(Request $request){
        $validated = $request->validate([
             'firstName'=>'required|string|max:255',
             'lastName'=>'required|string|max:255',
-             'email'=>'required|email|unique:users',
+            'email'=>'required|email|unique:users',
        ]);
 
        $user = auth()->user();
