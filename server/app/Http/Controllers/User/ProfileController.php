@@ -32,36 +32,38 @@ class ProfileController extends Controller
        $validated = $request->validate([
             'firstName'=>'required|string|max:255',
             'lastName'=>'required|string|max:255',
+             'email'=>'required|email|unique:users',
        ]);
 
        $user = auth()->user();
        $name = $validated['firstName'] . ' ' . $validated['lastName'];
 
        $user->name = $name;
+       $user->email=$request->email;
        $user->save();
          return response()->json(['message'=>'Credentials Updated Successfully'],201);
 
 
         }
-    public function update_email(Request $request){
-        $request->validate([
-            'email'=>'required|email|unique:users'
-        ]);
+    // public function update_email(Request $request){
+    //     $request->validate([
+    //         'email'=>'required|email|unique:users'
+    //     ]);
 
-        $user=auth()->user();
-        $user->email=$request->email;
-        $user->save();
-        return response()->json(['message'=>'Email Updated Successfully'],201);
-    }
+    //     $user=auth()->user();
+    //     $user->email=$request->email;
+    //     $user->save();
+    //     return response()->json(['message'=>'Email Updated Successfully'],201);
+    // }
 
-    public function update_password(Request $request){
-        $request->validate([
-            'password'=>'required|string|min:8'
-        ]);
+    // public function update_password(Request $request){
+    //     $request->validate([
+    //         'password'=>'required|string|min:8'
+    //     ]);
 
-        $user=auth()->user();
-        $user->password=bcrypt($request->password);
-        $user->save();
-        return response()->json(['message'=>'Password Updated Successfully'],201);
-    }
+    //     $user=auth()->user();
+    //     $user->password=bcrypt($request->password);
+    //     $user->save();
+    //     return response()->json(['message'=>'Password Updated Successfully'],201);
+    // }
 }

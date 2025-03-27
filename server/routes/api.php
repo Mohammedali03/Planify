@@ -18,6 +18,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/user', [AuthController::class, 'user']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('profile_pic',[ProfileController::class,'Profile_Pic']);
+Route::post('credentials',[ProfileController::class,'credentials']);
 // Route::get('profile_pic',[ProfileController::class,'pic']);
 
 //Goals
@@ -47,18 +48,7 @@ Route::group(['prefix'=>'timer' ],function(){
 
     //background and favorites
 
-    Route::group(['prefix'=>'background' ],function(){
-        //images
-        Route::get('images',[ImageController::class,'images']);
 
-        //videos
-        Route::get('videos',[VideoController::class,'videos']);
-
-        //favorites
-        Route::get('favorites',[FavoriteController::class,'index']);
-        Route::post('favorites/{id}/section/{section}',[FavoriteController::class,'store']);
-        Route::delete('favorites/{id}',[FavoriteController::class,'delete']);
-    });
 
 // Route::post('timer/start',[TimerController::class,'start']);
 // Route::post('timer/pause/{pause}',[TimerController::class,'pause']);
@@ -77,4 +67,17 @@ Route::group(['prefix'=>'timer' ],function(){
 //     Route::post('/rooms/{room}/pause', [RoomController::class, 'pauseSession']);
 //     Route::post('/rooms/{room}/end', [RoomController::class, 'endSession']);
 // });
+
+Route::group(['prefix'=>'background' ],function(){
+    //images
+    Route::get('images',[ImageController::class,'images']);
+
+    //videos
+    Route::get('videos',[VideoController::class,'videos']);
+
+    //favorites
+    Route::get('favorites',[FavoriteController::class,'index']);
+    Route::post('favorites/{id}/section/{section}',[FavoriteController::class,'store']);
+    Route::delete('favorites/{id}',[FavoriteController::class,'delete']);
+});
 
