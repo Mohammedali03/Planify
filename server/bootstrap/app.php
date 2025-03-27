@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //     'throttle:api',
         //     SubstituteBindings::class,
         // ]);
-        $middleware->
+        
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
