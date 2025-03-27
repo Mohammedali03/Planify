@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Button = ({ children }) => {
+const Button = ({ children, color, bg }) => {
   return (
     <StyledWrapper>
       <button>{children}</button>
@@ -15,13 +15,11 @@ const StyledWrapper = styled.div`
     font-family: inherit;
     display: inline-block;
     width: 8em;
-    height: 2.6em;
     line-height: 2.5em;
-    margin: 20px;
     position: relative;
     cursor: pointer;
     overflow: hidden;
-    border: 2px solid var(--color);
+    border: 1px solid var(--color);
     transition: color 0.5s;
     z-index: 1;
     font-size: 17px;
@@ -56,7 +54,6 @@ const StyledWrapper = styled.div`
   }
 
   button:active:before {
-    background: #3a0ca3;
     transition: background 0s;
   }
 `;
