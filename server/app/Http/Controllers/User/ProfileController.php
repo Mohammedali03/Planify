@@ -30,17 +30,23 @@ class ProfileController extends Controller
     }
 
     public function profile(Request $request){
+        $user = auth()->user();
+       
        $validated = $request->validate([
             'firstName'=>'required|string|max:255',
             'lastName'=>'required|string|max:255',
-            'email'=>'required|email|unique:users',
+            'email'=>'required|email',
        ]);
 
-       $user = auth()->user();
+       if($validated['email'] == auth()->user()->email){
+        $user->email=$request->email;
+   }
+      
+      
        $name = $validated['firstName'] . ' ' . $validated['lastName'];
 
        $user->name = $name;
-       $user->email=$request->email;
+       
        $user->save();
          return response()->json(['message'=>'Credentials Updated Successfully'],201);
 
