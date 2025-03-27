@@ -1,8 +1,10 @@
 import { useState } from "react";
 import avatar from "../images/avatar.jpeg";
 import { useAuth } from "./AuthProvider";
+import axios from "axios";
+import Button from "./ui/Button";
 
-const EditProfile = () => {
+const EditProfile = ({ setShowProfile }) => {
   const { user } = useAuth();
 
   const [formData, setFormData] = useState({
@@ -10,31 +12,74 @@ const EditProfile = () => {
     lastName: user?.name.split(" ")[1],
     email: user?.email,
   });
+  const [loading, setLoading] = useState(false);
 
-  console.log(lastName);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (
+      !firstName &&
+      !lastName &&
+      /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(formData.email)
+    ) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/credentials",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log(res.data);
+    } catch (e) {
+      console.log("error updating user's data");
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div
       className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2
-      bg-background p-4 md:p-8"
+      bg-background p-3 md:p-8"
     >
-      <div className="bg-white max-w-3xl mx-auto bg-card rounded-lg shadow-lg p-6 md:p-8">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="size-6"
+        onClick={() => setShowProfile(false)}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M6 18 18 6M6 6l12 12"
+        />
+      </svg>
+
+      <div className="bg-white max-w-3xl mx-auto bg-card rounded-lg shadow-lg p-3 md:p-5 ">
         <h1 className=" text-2xl text-indigo-600 font-bold mb-8">
           Edit Profile
         </h1>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="flex items-center gap-3 mb-5">
             <div className="relative cursor-pointer">
-              <div className="size-20 rounded-full overflow-hidden border border-primary">
+              <div className="size-20 rounded-full overflow-hidden border border-gray-300">
                 <img
                   src={avatar}
                   alt="Profile"
@@ -44,9 +89,7 @@ const EditProfile = () => {
               {/* <input aria-label="Upload profile picture" /> */}
             </div>
             <div className="flex gap-2">
-              <button className="p-2 px-3 bg-indigo-600 font-semibold text-white rounded-md cursor-pointer">
-                Change Picture
-              </button>
+              <Button>Change Picture</Button>
               <button
                 className="p-2 px-3 bg-gray-100 font-semibold text-red-500 border border-gray-200 
               cursor-pointer rounded-md"
@@ -70,9 +113,14 @@ const EditProfile = () => {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-2 rounded-md border  focus:outline-none focus:ring-2 focus:ring-ring`}
+                className={`w-full px-4 py-2 rounded-md border `}
                 required
               />
+              {formData.firstName === "" ? (
+                <p className="error">This field is required</p>
+              ) : (
+                ""
+              )}
             </div>
 
             <div>
@@ -88,12 +136,17 @@ const EditProfile = () => {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-2 rounded-md border  focus:outline-none focus:ring-2 focus:ring-ring`}
+                className={`w-full px-4 py-2 rounded-md border `}
                 required
               />
+              {formData.lastName === "" ? (
+                <p className="error">This field is required</p>
+              ) : (
+                ""
+              )}
             </div>
 
-            <div>
+            <div className="col-span-2">
               <label className="block text-sm font-medium mb-2" htmlFor="email">
                 Email
               </label>
@@ -103,9 +156,14 @@ const EditProfile = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-2 rounded-md border  focus:outline-none focus:ring-2 focus:ring-ring`}
+                className={`w-full px-4 py-2 rounded-md border `}
                 required
               />
+              {!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(formData.email) ? (
+                <p className="error">Invalid email address</p>
+              ) : (
+                ""
+              )}
             </div>
           </div>
 
@@ -113,17 +171,10 @@ const EditProfile = () => {
             <button
               className="p-2 px-3 bg-red-600 font-semibold text-white rounded-md cursor-pointer"
               type="submit"
-              onClick={handleSubmit}
             >
               Close
             </button>
-            <button
-              className="p-2 px-3 bg-indigo-600 font-semibold text-white rounded-md cursor-pointer"
-              type="submit"
-              onClick={handleSubmit}
-            >
-              Save Changes
-            </button>
+            <Button type="submit">Save Changes</Button>
           </div>
         </form>
       </div>
