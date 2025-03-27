@@ -35,12 +35,19 @@ class ProfileController extends Controller
        $validated = $request->validate([
             'firstName'=>'required|string|max:255',
             'lastName'=>'required|string|max:255',
-            'email'=>'required|email',
+           
        ]);
+       if ($request->email){
+       $validated=[
+           ...$validated , 'email'=>'required|email|unique:users'
+        ];
 
-       if($validated['email'] == auth()->user()->email){
-        $user->email=$request->email;
-   }
+        if($validated['email'] == auth()->user()->email){
+            $user->email=$request->email;
+       }
+       }
+       
+    
       
       
        $name = $validated['firstName'] . ' ' . $validated['lastName'];
@@ -48,10 +55,10 @@ class ProfileController extends Controller
        $user->name = $name;
        
        $user->save();
-         return response()->json(['message'=>'Credentials Updated Successfully'],201);
+    return response()->json(['message'=>'Credentials Updated Successfully'],201);
 
 
-        }
+    }
     // public function update_email(Request $request){
     //     $request->validate([
     //         'email'=>'required|email|unique:users'
