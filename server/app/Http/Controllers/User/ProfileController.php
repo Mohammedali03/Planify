@@ -31,29 +31,20 @@ class ProfileController extends Controller
 
     public function profile(Request $request){
         $user = auth()->user();
-       
        $validated = $request->validate([
             'firstName'=>'required|string|max:255',
-            'lastName'=>'required|string|max:255',
-           
+            'lastName'=>'required|string|max:255',     
        ]);
        if ($request->email){
        $validated=[
            ...$validated , 'email'=>'required|email|unique:users'
         ];
-
         if($validated['email'] == auth()->user()->email){
             $user->email=$request->email;
        }
        }
-       
-    
-      
-      
        $name = $validated['firstName'] . ' ' . $validated['lastName'];
-
        $user->name = $name;
-       
        $user->save();
     return response()->json(['message'=>'Credentials Updated Successfully'],201);
 
