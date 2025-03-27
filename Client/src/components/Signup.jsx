@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
 import Logo from "./Logo";
+import Loader from "./ui/Loader";
 
 const validateForm = (formData) => {
   const errors = {};
@@ -284,23 +285,13 @@ const Signup = () => {
             </div>
 
             <div>
-              {loading ? (
-                <button
-                  className="flex w-full justify-center rounded-md bg-indigo-400 px-3 py-1.5 text-sm/6 
-                font-semibold text-white shadow-xs hover:bg-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 
-                focus-visible:outline-indigo-600 duration-300 cursor-pointer"
-                >
-                  Sign in...
-                </button>
-              ) : (
-                <button
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 
+              <button
+                className="flex w-full justify-center items-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 h-9 
               font-semibold text-white shadow-xs hover:bg-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 
               focus-visible:outline-indigo-600 duration-300 cursor-pointer"
-                >
-                  Sign in
-                </button>
-              )}
+              >
+                {loading ? <Loader /> : "Sign in"}
+              </button>
             </div>
           </form>
 
