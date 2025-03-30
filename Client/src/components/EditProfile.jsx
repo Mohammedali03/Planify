@@ -38,7 +38,6 @@ const EditProfile = ({ setShowProfile }) => {
         "http://localhost:8000/api/profile",
         formData,
         {
-          // withCredentials: true,
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -53,26 +52,26 @@ const EditProfile = ({ setShowProfile }) => {
   };
   return (
     <div
-      className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2
+      className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-100
       bg-background p-3 md:p-8"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="size-6"
-        onClick={() => setShowProfile(false)}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M6 18 18 6M6 6l12 12"
-        />
-      </svg>
+      <div className="bg-white relative max-w-3xl mx-auto bg-card rounded-lg shadow-lg p-3 md:p-5 ">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-7 absolute top-5 right-5"
+          onClick={() => setShowProfile(false)}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18 18 6M6 6l12 12"
+          />
+        </svg>
 
-      <div className="bg-white max-w-3xl mx-auto bg-card rounded-lg shadow-lg p-3 md:p-5 ">
         <h1 className=" text-2xl text-indigo-600 font-bold mb-8">
           Edit Profile
         </h1>
@@ -114,7 +113,7 @@ const EditProfile = ({ setShowProfile }) => {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-2 rounded-md border `}
+                className={`w-full px-4 py-2 rounded-md border`}
                 required
               />
               {formData.firstName === "" ? (
@@ -171,7 +170,7 @@ const EditProfile = ({ setShowProfile }) => {
           <div className="flex justify-end space-x-4 mt-8">
             <button
               className="p-2 px-3 bg-red-600 font-semibold text-white rounded-md cursor-pointer"
-              type="submit"
+              onClick={() => setShowProfile(false)}
             >
               Close
             </button>

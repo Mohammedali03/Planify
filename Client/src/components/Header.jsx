@@ -172,7 +172,13 @@ const Header = () => {
 
           {showDropdown && <Dropdown setShowProfile={setShowProfile} />}
         </motion.div>
-        {showProfile && <EditProfile setShowProfile={setShowProfile} />}
+        {showProfile && (
+          <div>
+            <div className="fixed inset-0 bg-black opacity-40 z-80"></div>
+
+            <EditProfile setShowProfile={setShowProfile} />
+          </div>
+        )}
       </div>
     </div>
   );
