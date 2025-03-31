@@ -29,20 +29,19 @@ const BackgroundImages = ({ setBackground }) => {
   useEffect(() => {
     const fetchPictures = async () => {
       try {
-        const res = await axios.get("http//:localhost:8000/api/images", {
+        const response = await axios.get("http//:localhost:8000/api/images", {
           headers: {
             Authorization: `Bearer, ${localStorage.getItem("token")}`,
           },
         });
-        console.log(res.data);
-        setPictures(res.data);
+        setPictures(response.data);
       } catch (e) {
         console.error("an error has occured", e);
       }
     };
 
     fetchPictures();
-  });
+  }, []);
 
   // Toggle favorite images
   const toggleFavourite = async (id) => {
@@ -59,7 +58,6 @@ const BackgroundImages = ({ setBackground }) => {
             },
           }
         );
-        console.log(response.data);
         setFavorites((prev) => ({ ...prev, [id]: true }));
       } catch (e) {
         console.error(e);

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 const Timer = ({ setShowTimer }) => {
-  const [time, setTime] = useState(20 * 60); // Initial time in seconds (30 minutes)
+  const [time, setTime] = useState(20 * 60); // Initial time in seconds (20 minutes)
   const [isActive, setIsActive] = useState(false);
   const [start, setStart] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
@@ -24,6 +25,37 @@ const Timer = ({ setShowTimer }) => {
 
     return () => clearInterval(interval);
   }, [isActive, time]);
+
+  // Send end request if location changes
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!hasStarted) return;
+
+    const sendRequest = async () => {
+      try {
+        const response = await axios.post(
+          `http://localhost:8000/api/timer/end/${time}`,
+          {
+            path: location.pathname,
+          }
+        );
+
+        console.log("Route change request sent successfully!", response.data);
+      } catch (error) {
+        console.error("Error sending route change request:", error);
+      }
+    };
+
+    sendRequest();
+  }, [location.pathname]);
+
+  // Send end request when the timer ends
+  useEffect(() => {
+    if (time === 0) {
+      handleEndRequest();
+    }
+  }, [time]);
 
   // Sending an end request if the window closes or page reloads
   useEffect(() => {
@@ -125,12 +157,36 @@ const Timer = ({ setShowTimer }) => {
       setIsActive(false);
 
       setTime(lastDuration);
+
+      // Hide the end button
+      setStart(false);
     } catch (e) {
       console.error("Error resetting timer", e);
     }
   };
 
-  const handleSave = () => {
+  const handleEndRequest = async () => {
+    try {
+      const res = await axios.post(
+        `http://localhost:8000/api/timer/end/${time}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSave = async () => {
+    if (hasStarted) {
+      handleEndRequest();
+    }
+
     // Convert inputValue to a number
     const numericValue = parseInt(inputValue, 10);
 
@@ -186,6 +242,7 @@ const Timer = ({ setShowTimer }) => {
 
   const actions = [
     {
+      id: 1,
       icon: isActive ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -220,6 +277,7 @@ const Timer = ({ setShowTimer }) => {
       callback: handleStart,
     },
     {
+      id: 2,
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -240,6 +298,7 @@ const Timer = ({ setShowTimer }) => {
       callback: handleReset,
     },
     {
+      id: 3,
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -282,9 +341,9 @@ const Timer = ({ setShowTimer }) => {
       <div className="flex items-center justify-between pt-4 px-4 pb-2 w-full">
         <span className="text-5xl font-semibold">{formatTime(time)}</span>
         <div className="flex gap-2 items-center">
-          {actions.map(({ icon, callback }) => (
+          {actions.map(({ id, icon, callback }) => (
             <button
-              key={icon}
+              key={id}
               onClick={callback}
               className={`cursor-pointer size-10 ${
                 callback === handleEnd && !start && "hidden"
@@ -318,7 +377,7 @@ const Timer = ({ setShowTimer }) => {
               strokeLinecap="round"
               strokeLinejoin="round"
               d="M6 13.5V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 0 1 0
-     3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 9.75V10.5"
+              3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 9.75V10.5"
             />
           </svg>
         </button>
