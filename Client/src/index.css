@@ -28,9 +28,13 @@ body {
   width: 360px;
 }
 .media {
-  top: 200px;
-  left: 450px;
+  top: 180px;
+  left: 500px;
   /* width: 360px; */
+}
+.tasks {
+  top: 180px;
+  left: 44px;
 }
 .backgrounds > div::-webkit-scrollbar-thumb {
   @apply bg-white w-0;

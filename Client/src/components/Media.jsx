@@ -19,9 +19,9 @@ const Media = ({ setShowMedia }) => {
 
   return (
     <motion.div
-      drag
-      dragMomentum={false}
-      dragElastic={0}
+      //   drag
+      //   dragMomentum={false}
+      //   dragElastic={0}
       className={`feature media z-90 absolute rounded-md flex-col items-stretch overflow-hidden bg-white shadow-lg ${
         showVideo ? "p-0" : ""
       }`}
@@ -31,7 +31,7 @@ const Media = ({ setShowMedia }) => {
       }}
     >
       <div
-        className={`flex py-2 px-4 items-center justify-between border-b border-[#e9e9e9] cursor-grab ${
+        className={`flex py-2 px-4 items-center justify-between border-b border-[#e9e9e9] ${
           showVideo ? "px-2" : ""
         }`}
         style={{ touchAction: "none" }}
