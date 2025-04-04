@@ -16,15 +16,21 @@ body {
   border-radius: 50px;
   @apply bg-indigo-500;
 }
-.timer {
-  top: -6px;
-  left: 45px;
-  width: 360px;
-  min-width: 360px;
+.feature {
   max-width: calc(1353px);
   border-radius: 7px;
   box-shadow: 0 0 4px rgba(131, 131, 131, 0.25);
   background: #fcfcfc;
+}
+.timer {
+  top: -6px;
+  left: 45px;
+  width: 360px;
+}
+.media {
+  top: 200px;
+  left: 450px;
+  /* width: 360px; */
 }
 .backgrounds > div::-webkit-scrollbar-thumb {
   @apply bg-white w-0;

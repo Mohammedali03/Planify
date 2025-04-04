@@ -320,7 +320,7 @@ const Timer = ({ setShowTimer }) => {
   ];
 
   return (
-    <div className="timer z-90 absolute h-auto rounded-md flex-col items-stretch overflow-hidden">
+    <div className="feature timer z-90 absolute h-auto rounded-md flex-col items-stretch overflow-hidden">
       <div className="flex py-2 px-4 items-center justify-between border-b border-[#e9e9e9]">
         <span className="flex-0 text-sm text-[#4e4e4e] font-medium">
           Personal

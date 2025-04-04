@@ -1,9 +1,12 @@
 import React from "react";
 import { useState } from "react";
 import Timer from "./Timer";
+import Media from "./Media";
 
 const RoomFeatures = ({ ref }) => {
   const [showTimer, setShowTimer] = useState(false);
+  const [showMedia, setShowMedia] = useState(false);
+
   return (
     <div className="w-fit p-[6px] rounded-md flex flex-col items-center gap-[10px] ml-2 bg-[#fcfcfc]">
       <div
@@ -34,6 +37,41 @@ const RoomFeatures = ({ ref }) => {
         }`}
       >
         <Timer ref={ref} setShowTimer={setShowTimer} />
+      </div>
+      <div
+        className={`flex items-center flex-col rounded-md px-3 py-[6px] hover:cursor-pointer
+       hover:bg-indigo-200 hover:text-indigo-600 duration-300 
+       ${!showMedia ? " text-indigo-600" : "bg-white text-black"}`}
+        onClick={() => setShowMedia(!showMedia)}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z"
+          />
+        </svg>
+
+        <span className="text-xs hover:text-indigo-600">Media</span>
+      </div>
+      <div
+        className={`absolute duration-300 ${
+          showMedia ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        <Media ref={ref} setShowMedia={setShowMedia} />
       </div>
     </div>
   );
