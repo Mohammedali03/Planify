@@ -1,5 +1,6 @@
 import React from "react";
 import Backgrounds from "./Backgrounds";
+import Sounds from "./Sounds";
 
 const RoomOptions = ({
   isFull,
@@ -8,6 +9,8 @@ const RoomOptions = ({
   toggleFullScreen,
   showBackgrounds,
   setBackground,
+  showSounds,
+  setShowSounds,
 }) => {
   const options = [
     {
@@ -88,6 +91,7 @@ const RoomOptions = ({
       ))}
       <div>
         {showBackgrounds && <Backgrounds setBackground={setBackground} />}
+        {showSounds && <Sounds setShowSounds={setShowSounds} />}
       </div>
     </ul>
   );
