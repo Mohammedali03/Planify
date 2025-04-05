@@ -36,6 +36,9 @@ body {
   top: 180px;
   left: 44px;
 }
+.fortune {
+  transform: translateX(1032.5px) translateY(503.75px);
+}
 .backgrounds > div::-webkit-scrollbar-thumb {
   @apply bg-white w-0;
 }
