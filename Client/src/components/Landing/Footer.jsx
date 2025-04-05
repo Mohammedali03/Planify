@@ -1,5 +1,5 @@
 import React from "react";
-import Reveal from "./Reveal";
+import Reveal from "../Reveal";
 import { Link } from "react-router-dom";
 
 const Footer = () => {

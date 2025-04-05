@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Logo from "./Logo";
+import Logo from "../Logo";
 import { Link } from "react-router-dom";
-import { useAuth } from "./AuthProvider";
+import { useAuth } from "../AuthProvider";
 import { motion } from "framer-motion";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import Loader from "./ui/Loader";
+import Loader from "../ui/Loader";
 
 const validateForm = (formData) => {
   const errors = {};

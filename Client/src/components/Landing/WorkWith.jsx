@@ -1,10 +1,10 @@
 import React from "react";
-import Reveal from "./Reveal";
-import stanford from "../images/stanford-university.webp";
-import purple from "../images/Purple-UO2.webp";
-import aaronloeb from "../images/aaronloeb-university.webp";
-import graduate from "../images/Graduate-university.webp";
-import oxford from "../images/university-of-oxford.webp";
+import Reveal from "../Reveal";
+import stanford from "../../images/stanford-university.webp";
+import purple from "../../images/Purple-UO2.webp";
+import aaronloeb from "../../images/aaronloeb-university.webp";
+import graduate from "../../images/Graduate-university.webp";
+import oxford from "../../images/university-of-oxford.webp";
 
 const images = [
   { name: "stanford", image: stanford },

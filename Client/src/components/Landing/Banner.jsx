@@ -1,6 +1,6 @@
 import React from "react";
-import image from "../images/banner.webp";
-import Reveal from "./Reveal";
+import image from "../../images/banner.webp";
+import Reveal from "../Reveal";
 
 const Banner = () => {
   return (

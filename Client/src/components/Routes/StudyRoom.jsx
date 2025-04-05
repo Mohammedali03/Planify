@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import RoomOptions from "./RoomOptions";
+import RoomOptions from "../Study Room/RoomOptions";
 import { useOutletContext } from "react-router-dom";
-import RoomFeatures from "./RoomFeatures";
-import lights from "../images/lights.avif";
+import RoomFeatures from "../Study Room/RoomFeatures";
+import lights from "../../images/lights.avif";
 import { motion } from "framer-motion";
 
 const StudyRoom = () => {

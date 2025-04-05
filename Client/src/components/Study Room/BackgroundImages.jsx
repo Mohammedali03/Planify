@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { motion, spring } from "framer-motion";
 import axios from "axios";
-import chelsea from "../images/chelsea-market-skybridge.avif";
-import dark from "../images/dark-2m.avif";
-import mountains from "../images/in-the-mountains.avif";
-import whispering from "../images/whispering-shores.avif";
-import beach from "../images/beach-and-mountains.avif";
-import awesome from "../images/awesome.avif";
-import cafe from "../images/cafe-canvas.avif";
-import city from "../images/city.avif";
+import chelsea from "../../images/chelsea-market-skybridge.avif";
+import dark from "../../images/dark-2m.avif";
+import mountains from "../../images/in-the-mountains.avif";
+import whispering from "../../images/whispering-shores.avif";
+import beach from "../../images/beach-and-mountains.avif";
+import awesome from "../../images/awesome.avif";
+import cafe from "../../images/cafe-canvas.avif";
+import city from "../../images/city.avif";
 
 const BackgroundImages = ({ setBackground }) => {
   const [favorites, setFavorites] = useState({});

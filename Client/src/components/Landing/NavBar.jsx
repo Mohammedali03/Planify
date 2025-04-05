@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Link } from "react-scroll";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import Logo from "./Logo";
+import Logo from "../Logo";
 import { useNavigate } from "react-router-dom";
 
 const navigation = [

@@ -1,7 +1,7 @@
 import React from "react";
-import avatar from "../images/avatar.jpeg";
+import avatar from "../../images/avatar.jpeg";
 import { motion } from "framer-motion";
-import Reveal from "./Reveal";
+import Reveal from "../Reveal";
 
 const testimonials = [
   {

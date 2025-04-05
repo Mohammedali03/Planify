@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
-import Logo from "./Logo";
-import Loader from "./ui/Loader";
+import Logo from "../Logo";
+import Loader from "../ui/Loader";
 
 const validateForm = (formData) => {
   const errors = {};

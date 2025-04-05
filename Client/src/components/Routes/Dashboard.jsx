@@ -1,7 +1,7 @@
 import React from "react";
-import Header from "./Header";
-import KeyStats from "./KeyStats";
-import { useAuth } from "./AuthProvider";
+import Header from "../Header";
+import KeyStats from "../KeyStats";
+import { useAuth } from "../AuthProvider";
 
 const Dashboard = () => {
   const { user } = useAuth();

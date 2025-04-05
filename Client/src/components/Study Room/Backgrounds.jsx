@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import BackgroundImages from "./BackgroundImages";
 import BackgroundVideos from "./BackgroundVideos";
-import Favorites from "./Favorites";
 
 const Backgrounds = ({ setBackground }) => {
   const [options, setOptions] = useState([
@@ -17,12 +16,6 @@ const Backgrounds = ({ setBackground }) => {
       name: "Videos",
       selected: false,
       component: <BackgroundVideos setBackground={setBackground} />,
-    },
-    {
-      id: 3,
-      name: "Favorites",
-      selected: false,
-      component: <Favorites setBackground={setBackground} />,
     },
   ]);
 

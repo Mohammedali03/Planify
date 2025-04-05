@@ -1,5 +1,5 @@
 import React from "react";
-import Reveal from "./Reveal";
+import Reveal from "../Reveal";
 
 const stats = [
   { id: 1, number: "42 million", desc: "Study sessions logged every 24 hours" },

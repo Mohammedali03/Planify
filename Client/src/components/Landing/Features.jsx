@@ -5,7 +5,7 @@ import {
   ClipboardDocumentCheckIcon,
   ClockIcon,
 } from "@heroicons/react/24/outline";
-import Reveal from "./Reveal";
+import Reveal from "../Reveal";
 const features = [
   {
     name: "Progress tracking",

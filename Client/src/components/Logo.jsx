@@ -1,8 +1,6 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
 
 const Logo = () => {
-  const location = useLocation();
   return (
     <div
       className={`flex items-center text-2xl
