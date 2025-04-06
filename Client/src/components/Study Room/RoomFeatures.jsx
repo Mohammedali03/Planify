@@ -5,7 +5,7 @@ import Tasks from "./Tasks";
 import Fortune from "./Fortune";
 
 const RoomFeatures = ({ ref }) => {
-  const [showTimer, setShowTimer] = useState(false);
+  const [showTimer, setShowTimer] = useState(true);
   const [showMedia, setShowMedia] = useState(false);
   const [showTasks, setShowTasks] = useState(false);
   const [showFortune, setShowFortune] = useState(false);
@@ -15,7 +15,7 @@ const RoomFeatures = ({ ref }) => {
       <div
         className={`flex items-center flex-col rounded-md px-3 py-[6px] hover:cursor-pointer
        hover:bg-indigo-200 hover:text-indigo-600 duration-300 
-       ${!showTimer ? " text-indigo-600" : "bg-white text-black"}`}
+       ${showTimer ? " text-indigo-600" : "bg-white text-black"}`}
         onClick={() => setShowTimer(!showTimer)}
       >
         <svg
@@ -36,7 +36,7 @@ const RoomFeatures = ({ ref }) => {
       </div>
       <div
         className={`absolute duration-300 ${
-          showTimer ? "opacity-0" : "opacity-100"
+          showTimer ? "opacity-100" : "opacity-0"
         }`}
       >
         <Timer ref={ref} setShowTimer={setShowTimer} />
@@ -44,7 +44,7 @@ const RoomFeatures = ({ ref }) => {
       <div
         className={`flex items-center flex-col rounded-md px-3 py-[6px] hover:cursor-pointer
        hover:bg-indigo-200 hover:text-indigo-600 duration-300 
-       ${!showMedia ? " text-indigo-600" : "bg-white text-black"}`}
+       ${showMedia ? " text-indigo-600" : "bg-white text-black"}`}
         onClick={() => setShowMedia(!showMedia)}
       >
         <svg
@@ -71,7 +71,7 @@ const RoomFeatures = ({ ref }) => {
       </div>
       <div
         className={`absolute duration-300 ${
-          showMedia ? "opacity-0" : "opacity-100"
+          showMedia ? "opacity-100" : "opacity-0"
         }`}
       >
         <Media ref={ref} setShowMedia={setShowMedia} />
@@ -79,7 +79,7 @@ const RoomFeatures = ({ ref }) => {
       <div
         className={`flex items-center flex-col rounded-md px-3 py-[6px] hover:cursor-pointer
        hover:bg-indigo-200 hover:text-indigo-600 duration-300 
-       ${!showTasks ? " text-indigo-600" : "bg-white text-black"}`}
+       ${showTasks ? " text-indigo-600" : "bg-white text-black"}`}
         onClick={() => setShowTasks(!showTasks)}
       >
         <svg
@@ -101,7 +101,7 @@ const RoomFeatures = ({ ref }) => {
       </div>
       <div
         className={`absolute duration-300 ${
-          showTasks ? "opacity-0" : "opacity-100"
+          showTasks ? "opacity-100" : "opacity-0"
         }`}
       >
         <Tasks ref={ref} setShowTasks={setShowTasks} />
@@ -109,7 +109,7 @@ const RoomFeatures = ({ ref }) => {
       <div
         className={`flex items-center flex-col rounded-md px-3 py-[6px] hover:cursor-pointer
        hover:bg-indigo-200 hover:text-indigo-600 duration-300 
-       ${!showFortune ? " text-indigo-600" : "bg-white text-black"}`}
+       ${showFortune ? " text-indigo-600" : "bg-white text-black"}`}
         onClick={() => setShowFortune(!showFortune)}
       >
         <svg
@@ -131,10 +131,10 @@ const RoomFeatures = ({ ref }) => {
       </div>
       <div
         className={`absolute duration-300 ${
-          showFortune ? "opacity-0" : "opacity-100"
+          showFortune ? "opacity-100" : "opacity-0"
         }`}
       >
-        <Fortune ref={ref} setShowFortune={setShowTasks} />
+        <Fortune ref={ref} setShowFortune={setShowFortune} />
       </div>
     </div>
   );

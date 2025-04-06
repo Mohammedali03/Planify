@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 const QUOTES = [
   {
@@ -44,10 +44,14 @@ const QUOTES = [
   },
 ];
 
-const Fortune = ({ setShowFortune }) => {
+const Fortune = ({ ref, setShowFortune }) => {
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
   const [fadeIn, setFadeIn] = useState(false);
   const autoChangeTimerRef = useRef(null);
+
+  const showNextQuote = () => {
+    setCurrentQuoteIndex((prevIndex) => (prevIndex + 1) % QUOTES.length);
+  };
 
   // Initialize with first quote and setup auto-change timer
   useEffect(() => {
@@ -73,7 +77,11 @@ const Fortune = ({ setShowFortune }) => {
     <motion.div
       drag
       dragMomentum={false}
-      className="feature fortune absolute 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="feature absolute left-[1000px] top-[500px]
        rounded-md flex flex-col backdrop-blur-sm shadow-lg overflow-hidden z-90"
       style={{ width: "300px", backgroundColor: "transparent" }}
     >
@@ -83,7 +91,7 @@ const Fortune = ({ setShowFortune }) => {
         </span>
         <button
           onClick={() => setShowFortune(false)}
-          className="p-1 hover:bg-gray-100/80 rounded-md transition-colors"
+          className="p-1 cursor-pointer rounded-md transition-colors"
           aria-label="Hide fortune"
         >
           <svg
@@ -104,7 +112,6 @@ const Fortune = ({ setShowFortune }) => {
           fadeIn ? "opacity-100" : "opacity-0"
         }`}
       >
-        <div className="text-xl text-indigo-600 mb-4">🔮</div>
         {currentQuote && (
           <>
             <p className="text-center text-gray-50 font-medium mb-2 leading-relaxed">
