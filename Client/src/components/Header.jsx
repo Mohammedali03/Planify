@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from "react";
-import avatar from "../images/avatar.jpeg";
 import Dropdown from "./Dropdown";
 import { motion } from "framer-motion";
 import { useOutletContext } from "react-router-dom";
 import EditProfile from "./EditProfile";
+import { useAuth } from "./AuthProvider";
 
 const Header = () => {
+  const { user } = useAuth();
+
   const [showDropdown, setShowDropdown] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
+  // Check the theme in local storage
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
   );
 
   const { setIsOpen } = useOutletContext();
 
+  // Toggle the theme based on the user's preference
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
@@ -25,6 +33,7 @@ const Header = () => {
     }
   }, [isDarkMode]);
 
+  // formatting the date
   const date = new Date();
   const day = date.getDate();
   const month = date.toLocaleString("default", { month: "short" });
@@ -60,8 +69,9 @@ const Header = () => {
           <span>{formatDate}</span>
         </div>
       </motion.div>
-      <div className="flex items-center space-x-1 cursor-pointer">
+      <div className="flex items-center space-x-1 ">
         <motion.div
+          className="cursor-pointer"
           onClick={() => setIsDarkMode(!isDarkMode)}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -115,7 +125,7 @@ const Header = () => {
           strokeWidth={1.5}
           stroke="currentColor"
           className="size-9 rounded-md p-2 flex items-center justify-center
-          duration-300 hover:bg-indigo-200 hover:text-indigo-600 "
+          duration-300 hover:bg-indigo-200 hover:text-indigo-600 cursor-pointer"
         >
           <path
             strokeLinecap="round"
@@ -132,12 +142,18 @@ const Header = () => {
           className="relative flex items-center gap-2 ml-2 hover:cursor-pointer"
           onClick={() => setShowDropdown(!showDropdown)}
         >
-          <img
-            src={avatar}
-            alt="avatar"
-            className="size-8 rounded-full"
-            loading="lazy"
-          />
+          <div className="size-9 rounded-full overflow-hidden border border-gray-300">
+            {user?.profile_pic !== null ? (
+              <img src={user?.profile_picture_url} alt="Profile picture" />
+            ) : (
+              <span
+                className="text-lg size-full font-semibold text-white
+                 bg-indigo-600 flex items-center justify-center"
+              >
+                {user?.name[0]}
+              </span>
+            )}
+          </div>
           {showDropdown ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -169,7 +185,6 @@ const Header = () => {
               />
             </svg>
           )}
-
           {showDropdown && <Dropdown setShowProfile={setShowProfile} />}
         </motion.div>
         {showProfile && (

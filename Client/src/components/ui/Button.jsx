@@ -1,10 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 
-const Button = ({ children, color, bg }) => {
+const Button = ({
+  children,
+  color,
+  bg,
+  onClick,
+  type = "button",
+  ...props
+}) => {
   return (
     <StyledWrapper>
-      <button>{children}</button>
+      <button onClick={onClick} type={type} {...props}>
+        {children}
+      </button>
     </StyledWrapper>
   );
 };
@@ -36,16 +45,13 @@ const StyledWrapper = styled.div`
     height: 150px;
     width: 200px;
     border-radius: 50%;
+    top: 100%;
+    left: 100%;
+    transition: all 0.7s;
   }
 
   button:hover {
     color: #fff;
-  }
-
-  button:before {
-    top: 100%;
-    left: 100%;
-    transition: all 0.7s;
   }
 
   button:hover:before {
