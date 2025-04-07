@@ -6,14 +6,13 @@ import EditProfile from "./EditProfile";
 import { useAuth } from "./AuthProvider";
 
 const Header = () => {
+  // default image url (NO image)
+  const defaultUrl = "http://localhost:8000/default-avatar.png";
+
   const { user } = useAuth();
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   // Check the theme in local storage
   const [isDarkMode, setIsDarkMode] = useState(
@@ -135,6 +134,7 @@ const Header = () => {
           />
         </motion.svg>
 
+        {/* Profile  */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -143,15 +143,15 @@ const Header = () => {
           onClick={() => setShowDropdown(!showDropdown)}
         >
           <div className="size-9 rounded-full overflow-hidden border border-gray-300">
-            {user?.profile_pic !== null ? (
-              <img src={user?.profile_picture_url} alt="Profile picture" />
-            ) : (
+            {user?.profile_picture_url === defaultUrl ? (
               <span
-                className="text-lg size-full font-semibold text-white
-                 bg-indigo-600 flex items-center justify-center"
+                className="text-lg size-full font-semibold text-white capitalize
+                bg-indigo-600 flex items-center justify-center"
               >
                 {user?.name[0]}
               </span>
+            ) : (
+              <img src={user?.profile_picture_url} alt="Profile picture" />
             )}
           </div>
           {showDropdown ? (

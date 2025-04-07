@@ -4,6 +4,9 @@ import axios from "axios";
 import Button from "./ui/Button";
 
 const EditProfile = ({ setShowProfile }) => {
+  // default image url (NO image)
+  const defaultUrl = "http://localhost:8000/default-avatar.png";
+
   const { user } = useAuth();
 
   // file reference
@@ -16,8 +19,6 @@ const EditProfile = ({ setShowProfile }) => {
   });
   const [picture, setPicture] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  const [isProfilePic, setIsProfilePic] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -141,15 +142,15 @@ const EditProfile = ({ setShowProfile }) => {
           <div className="flex items-center gap-3 mb-5">
             <div className="relative cursor-pointer">
               <div className="size-20 rounded-full overflow-hidden border border-gray-300">
-                {user?.profile_pic ? (
-                  <img src={user?.profile_picture_url} alt="Profile picture" />
-                ) : (
+                {user?.profile_picture_url === defaultUrl ? (
                   <span
-                    className="text-lg size-full font-semibold text-white
-                 bg-indigo-600 flex items-center justify-center"
+                    className="text-2xl size-full font-semibold text-white capitalize
+                bg-indigo-600 flex items-center justify-center"
                   >
                     {user?.name[0]}
                   </span>
+                ) : (
+                  <img src={user?.profile_picture_url} alt="Profile picture" />
                 )}
               </div>
               {/* <input aria-label="Upload profile picture" /> */}
@@ -189,7 +190,7 @@ const EditProfile = ({ setShowProfile }) => {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-2 rounded-md border`}
+                className="w-full px-4 py-2 rounded-md border"
                 required
               />
               {formData.firstName === "" ? (
@@ -212,7 +213,7 @@ const EditProfile = ({ setShowProfile }) => {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-2 rounded-md border `}
+                className="w-full px-4 py-2 rounded-md border"
                 required
               />
               {formData.lastName === "" ? (
@@ -232,7 +233,7 @@ const EditProfile = ({ setShowProfile }) => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-2 rounded-md border `}
+                className="w-full px-4 py-2 rounded-md border"
                 required
               />
               {!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(formData.email) ? (
@@ -245,7 +246,7 @@ const EditProfile = ({ setShowProfile }) => {
 
           <div className="flex justify-end space-x-4 mt-8">
             <button
-              className="p-2 px-3 bg-red-600 font-semibold text-white rounded-md cursor-pointer"
+              className="p-2 px-3 bg-red-600 duration-300 hover:bg-red-400 font-semibold text-white rounded-md cursor-pointer"
               onClick={() => setShowProfile(false)}
             >
               Close
