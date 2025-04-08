@@ -8,31 +8,51 @@ import WorkWith from "../Landing/WorkWith";
 import Testimonials from "../Landing/Testimonials";
 import CTA from "../Landing/CTA";
 import Footer from "../Landing/Footer";
+import PreLoader from "../ui/PreLoader";
+import { useState, useEffect } from "react";
 
 const Home = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  });
+
   return (
-    <div className="bg-white">
-      <NavBar />
-      <main>
-        <Hero />
-        <div id="features">
-          <Features />
+    <>
+      {loading ? (
+        <div className="h-screen grid place-content-center">
+          <PreLoader />
         </div>
-        <div id="stats">
-          <Stats />
+      ) : (
+        <div className="bg-white">
+          <NavBar />
+          <main>
+            <Hero />
+            <div id="features">
+              <Features />
+            </div>
+            <div id="stats">
+              <Stats />
+            </div>
+            <Banner />
+            <div id="about">
+              <About />
+            </div>
+            <WorkWith />
+            <div id="testimonials">
+              <Testimonials />
+            </div>
+            <CTA />
+          </main>
+          <Footer />
         </div>
-        <Banner />
-        <div id="about">
-          <About />
-        </div>
-        <WorkWith />
-        <div id="testimonials">
-          <Testimonials />
-        </div>
-        <CTA />
-        <Footer />
-      </main>
-    </div>
+      )}
+    </>
   );
 };
 
