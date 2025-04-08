@@ -173,7 +173,7 @@ const Signup = () => {
             <Logo className="cursor-pointer" />
           </Link>
           <h2 className="mt-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-            Sign in to your account
+            Sign up to your account
           </h2>
         </div>
 
@@ -290,13 +290,13 @@ const Signup = () => {
               font-semibold text-white shadow-xs hover:bg-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 
               focus-visible:outline-indigo-600 duration-300 cursor-pointer"
               >
-                {loading ? <Loader /> : "Sign in"}
+                {loading ? <Loader /> : "Sign up"}
               </button>
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm/6 text-gray-500">
-            Don't have an account?{" "}
+          <p className="mt-5 text-center text-sm/6 text-gray-500">
+            Already have an account?{" "}
             <Link
               to="/login"
               className="font-semibold text-indigo-600 hover:text-indigo-500"
