@@ -1,19 +1,30 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { FaUsers, FaCalendarCheck, FaChartLine } from "react-icons/fa";
 
 const stats = [
-  { id: 1, number: "42 million", desc: "Study sessions logged every 24 hours" },
+  {
+    id: 1,
+    number: 42000,
+    desc: "Study sessions logged every 24 hours",
+    icon: <FaChartLine className="w-8 h-8 text-indigo-600" />,
+  },
   {
     id: 2,
-    number: "119,000",
+    number: 119000,
     desc: "Study plans created and successfully completed",
+    icon: <FaCalendarCheck className="w-8 h-8 text-indigo-600" />,
   },
-  { id: 3, number: "46,000", desc: "New users joining our community annually" },
+  {
+    id: 3,
+    number: 46000,
+    desc: "New users joining our community annually",
+    icon: <FaUsers className="w-8 h-8 text-indigo-600" />,
+  },
 ];
 
 const Stats = () => {
   const statsRef = useRef(null);
-
   const isStatsInView = useInView(statsRef, { once: true, margin: "-200px" });
 
   return (
@@ -22,101 +33,140 @@ const Stats = () => {
       initial={{ opacity: 0 }}
       animate={isStatsInView ? { opacity: 1 } : { opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="relative isolate py-24 sm:py-32"
+      className="relative isolate py-24 sm:py-32 overflow-hidden"
     >
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-      >
-        <div
-          style={{
-            clipPath:
-              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-          }}
-          className="relative left-[calc(50%-11rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 rotate-[30deg] 
-          bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+30rem)] sm:w-[72.1875rem]"
-        />
+      <div className="absolute inset-0 -z-10 h-full w-full bg-white">
+        <div className="absolute inset-0 bg-gradient-to-b from-indigo-50/50 to-white"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] opacity-20"></div>
       </div>
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-      >
-        <div
-          style={{
-            clipPath:
-              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-          }}
-          className="relative left-[calc(50%-11rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 rotate-[30deg]
-           bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
-        />
-      </div>
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 lg:text-center ">
-        <motion.h2
-          initial={{ opacity: 0, x: -50 }}
-          animate={
-            isStatsInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }
-          }
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="mx-auto max-w-2xl  text-4xl lg:w-fit lg:m-0 lg:text-5xl font-semibold text-[#101828]"
+
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isStatsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
         >
-          Our mission
-        </motion.h2>
-        <div className="mt-6 max-w-2xl mx-auto flex flex-col lg:m-0 lg:max-w-full lg:flex-row lg:items-center lg:justify-between ">
-          <div className="mt-5 lg:text-start lg:max-w-[640px]">
-            <motion.p
-              initial={{ opacity: 0, x: -50 }}
-              animate={
-                isStatsInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }
-              }
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="text-xl leading-normal font-semibold"
-            >
-              At <span className="font-bold text-indigo-600">Planify</span>, we
-              help students and lifelong learners stay organized, manage time
-              effectively, and stay motivated. Our platform simplifies study
-              management and adapts to your learning style, making it easier to
-              achieve your goals.
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, x: -50 }}
-              animate={
-                isStatsInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }
-              }
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="mt-10 text-gray-700"
-            >
-              Whether you're preparing for exams, juggling multiple courses, or
-              pursuing self-directed learning, Planify offers a range of tools
-              to keep you on track. From customizable study plans and progress
-              tracking to reminders and performance analytics, we provide
-              everything you need to succeed.
-            </motion.p>
-          </div>
-          <ul className="flex flex-col gap-3 mt-7 lg:gap-0 lg:mx-auto">
-            {stats.map((stat, index) => {
-              return (
-                <motion.li
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={
-                    isStatsInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }
-                  }
-                  transition={{
-                    duration: 0.5,
-                    delay: (index = 0 ? 0.2 : index * 0.2),
-                  }}
-                  key={stat.id}
-                  className="mb-5 flex flex-col gap-4"
-                >
-                  <span className="text-4xl sm:text-5xl font-semibold">
-                    {stat.number}
-                  </span>
-                  <span className="text-base/7 text-gray-700 leading-normal">
-                    {stat.desc}
-                  </span>
-                </motion.li>
-              );
-            })}
-          </ul>
+          <h2 className="text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+            Our mission
+          </h2>
+          <p className="mt-6 text-lg leading-8 text-gray-600 max-w-2xl mx-auto">
+            Empowering students and lifelong learners to achieve their full
+            potential through innovative study management solutions.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={
+              isStatsInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }
+            }
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="space-y-12"
+          >
+            <div className="space-y-6">
+              <h3 className="text-2xl font-semibold text-gray-900">
+                Why Choose Planify?
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                At <span className="font-bold text-indigo-600">Planify</span>,
+                we help students and lifelong learners stay organized, manage
+                time effectively, and stay motivated. Our platform simplifies
+                study management and adapts to your learning style, making it
+                easier to achieve your goals.
+              </p>
+            </div>
+            <div className="space-y-6">
+              <h3 className="text-2xl font-semibold text-gray-900">
+                Your Success, Our Priority
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Whether you&apos;re preparing for exams, juggling multiple
+                courses, or pursuing self-directed learning, Planify offers a
+                range of tools to keep you on track. From customizable study
+                plans and progress tracking to reminders and performance
+                analytics, we provide everything you need to succeed.
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={
+              isStatsInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }
+            }
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="space-y-12"
+          >
+            {stats.map((stat, index) => (
+              <motion.div
+                key={stat.id}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={
+                  isStatsInView
+                    ? { opacity: 1, y: 0, scale: 1 }
+                    : { opacity: 0, y: 20, scale: 0.95 }
+                }
+                transition={{
+                  duration: 0.5,
+                  delay: 0.5 + index * 0.2,
+                  ease: [0.4, 0, 0.2, 1],
+                }}
+                className="group relative"
+              >
+                <div className="absolute -inset-4 rounded-lg bg-gradient-to-r from-indigo-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative flex items-center gap-6 p-4">
+                  <motion.div
+                    className="flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-50 group-hover:bg-indigo-100 transition-colors duration-300"
+                    initial={{ scale: 0 }}
+                    animate={isStatsInView ? { scale: 1 } : { scale: 0 }}
+                    transition={{
+                      duration: 0.5,
+                      delay: 0.5 + index * 0.2,
+                      ease: "backOut",
+                    }}
+                  >
+                    {stat.icon}
+                  </motion.div>
+                  <div>
+                    <motion.h3
+                      className="text-3xl font-bold text-gray-900"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={
+                        isStatsInView
+                          ? { opacity: 1, x: 0 }
+                          : { opacity: 0, x: -20 }
+                      }
+                      transition={{
+                        duration: 0.5,
+                        delay: 0.6 + index * 0.2,
+                        ease: "easeOut",
+                      }}
+                    >
+                      {stat.number.toLocaleString()}
+                    </motion.h3>
+                    <motion.p
+                      className="mt-2 text-gray-600"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={
+                        isStatsInView
+                          ? { opacity: 1, x: 0 }
+                          : { opacity: 0, x: -20 }
+                      }
+                      transition={{
+                        duration: 0.5,
+                        delay: 0.7 + index * 0.2,
+                        ease: "easeOut",
+                      }}
+                    >
+                      {stat.desc}
+                    </motion.p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </div>
     </motion.section>
