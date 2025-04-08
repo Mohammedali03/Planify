@@ -39,7 +39,7 @@ class ProfileController extends Controller
        $validated=[
            ...$validated , 'email'=>'required|email|unique:users'
         ];
-        if($validated['email'] == auth()->user()->email){
+        if($validated['email'] !== auth()->user()->email){
             $user->email=$request->email;
        }
        }
