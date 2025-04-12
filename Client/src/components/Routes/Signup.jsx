@@ -50,6 +50,10 @@ const Signup = () => {
     }
   };
 
+  useEffect(() => {
+    document.title = "Signup - Planify";
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage(null);

@@ -69,6 +69,10 @@ const Login = () => {
     }, 4000);
   }, [errorMessage]);
 
+  useEffect(() => {
+    document.title = "Login - Planify";
+  }, []);
+
   return (
     <>
       <motion.div

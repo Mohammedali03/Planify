@@ -15,6 +15,8 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    document.title = "Planify";
+
     const timer = setTimeout(() => {
       setLoading(false);
     }, 2000);

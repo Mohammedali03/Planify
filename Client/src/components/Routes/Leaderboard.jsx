@@ -108,6 +108,10 @@ const Leaderboard = () => {
     },
   ];
 
+  useEffect(() => {
+    document.title = "Leaderboard - Planify";
+  }, []);
+
   // Simulate loading
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 1000);

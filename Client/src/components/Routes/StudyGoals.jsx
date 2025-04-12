@@ -174,6 +174,10 @@ const StudyGoals = () => {
     }
   };
 
+  useEffect(() => {
+    document.title = "Study Goals - Planify";
+  }, []);
+
   return (
     <motion.div
       className={`min-h-screen transition-colors duration-300 ${

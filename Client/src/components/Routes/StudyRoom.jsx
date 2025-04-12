@@ -35,6 +35,10 @@ const StudyRoom = () => {
     return () => removeEventListener("fullscreenchange", handleFullScreen);
   }, []);
 
+  useEffect(() => {
+    document.title = "Study Room - Planify";
+  }, []);
+
   function handleBackgrounds() {
     setShowBackgrounds(!showBackgrounds);
   }

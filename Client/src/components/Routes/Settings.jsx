@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, Suspense, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   FiUser,
@@ -11,48 +11,39 @@ import {
   FiHelpCircle,
   FiLogOut,
 } from "react-icons/fi";
-import ProfileSettings from "../Settings/ProfileSettings";
-import EmailSettings from "../Settings/EmailSettings";
-import SecuritySettings from "../Settings/SecuritySettings";
-import LanguageSettings from "../Settings/LanguageSettings";
+import * as Lazy from "../lazy";
 
 const Settings = () => {
+  const [activeSection, setActiveSection] = useState("profile");
+
   useEffect(() => {
     document.title = "Settings - Planify";
   }, []);
-
-  const [activeSection, setActiveSection] = useState("profile");
 
   const settingsSections = [
     {
       id: "profile",
       title: "Account Settings",
       icon: <FiUser className="w-5 h-5" />,
-      component: <ProfileSettings />,
+      component: <Lazy.ProfileSettings />,
     },
     {
       id: "email",
       title: "Email Preferences",
       icon: <FiMail className="w-5 h-5" />,
-      component: <EmailSettings />,
+      component: <Lazy.EmailSettings />,
     },
     {
       id: "security",
       title: "Password & Security",
       icon: <FiLock className="w-5 h-5" />,
-      component: <SecuritySettings />,
+      component: <Lazy.SecuritySettings />,
     },
-    // {
-    //   id: "theme",
-    //   title: "Theme",
-    //   icon: <FiMoon className="w-5 h-5" />,
-    //   component: <ThemeSettings />,
-    // },
     {
       id: "language",
       title: "Language",
       icon: <FiGlobe className="w-5 h-5" />,
-      component: <LanguageSettings />,
+      component: <Lazy.LanguageSettings />,
     },
   ];
 
@@ -104,9 +95,17 @@ const Settings = () => {
           <div className="flex-1">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
               <div className="p-6">
-                {settingsSections.find(
-                  (section) => section.id === activeSection
-                )?.component || <ProfileSettings />}
+                <Suspense
+                  fallback={
+                    <div className="flex items-center justify-center h-64">
+                      <Lazy.Loader />
+                    </div>
+                  }
+                >
+                  {settingsSections.find(
+                    (section) => section.id === activeSection
+                  )?.component || <Lazy.ProfileSettings />}
+                </Suspense>
               </div>
             </div>
           </div>

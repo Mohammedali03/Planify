@@ -1,57 +1,72 @@
-import React from "react";
+import React, { Suspense } from "react";
 import "./index.css";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Home from "./components/Routes/Home";
-import Signup from "./components/Routes/Signup";
-import Login from "./components/Routes/Login";
-import Layout from "./components/Layout";
-import Dashboard from "./components/Routes/Dashboard";
 import { useAuth } from "./components/AuthProvider";
-import StudyRoom from "./components/Routes/StudyRoom";
-import Leaderboard from "./components/Routes/Leaderboard";
-import StudyGoals from "./components/Routes/StudyGoals";
-import Settings from "./components/Routes/Settings";
+import Layout from "./components/Layout";
+import * as Lazy from "./components/lazy";
 
 const App = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={!isAuthenticated ? <Home /> : <Navigate to="/dashboard" />}
-      />
-      <Route
-        path="/signup"
-        element={!isAuthenticated ? <Signup /> : <Navigate to="/dashboard" />}
-      />
-      <Route
-        path="/login"
-        element={!isAuthenticated ? <Login /> : <Navigate to="/dashboard" />}
-      />
-      <Route element={<Layout />}>
+    <Suspense
+      fallback={
+        <div className="h-screen grid place-items-center">
+          <Lazy.PreLoader />
+        </div>
+      }
+    >
+      <Routes>
         <Route
-          path="/dashboard"
-          element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
+          path="/"
+          element={
+            !isAuthenticated ? <Lazy.Home /> : <Navigate to="/dashboard" />
+          }
         />
         <Route
-          path="/study-room"
-          element={isAuthenticated ? <StudyRoom /> : <Navigate to="/login" />}
+          path="/signup"
+          element={
+            !isAuthenticated ? <Lazy.Signup /> : <Navigate to="/dashboard" />
+          }
         />
         <Route
-          path="/study-goals"
-          element={isAuthenticated ? <StudyGoals /> : <Navigate to="/login" />}
+          path="/login"
+          element={!isAuthenticated ? <Lazy.Login /> : <Navigate to="/login" />}
         />
+        <Route element={<Layout />}>
+          <Route
+            path="/dashboard"
+            element={
+              isAuthenticated ? <Lazy.Dashboard /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/study-room"
+            element={
+              isAuthenticated ? <Lazy.StudyRoom /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/study-goals"
+            element={
+              isAuthenticated ? <Lazy.StudyGoals /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/leaderboard"
+            element={
+              isAuthenticated ? <Lazy.Leaderboard /> : <Navigate to="/login" />
+            }
+          />
+        </Route>
         <Route
-          path="/leaderboard"
-          element={isAuthenticated ? <Leaderboard /> : <Navigate to="/login" />}
+          path="/settings"
+          element={
+            isAuthenticated ? <Lazy.Settings /> : <Navigate to="/login" />
+          }
         />
-      </Route>
-      <Route
-        path="settings"
-        element={isAuthenticated ? <Settings /> : <Navigate to="/login" />}
-      />
-    </Routes>
+      </Routes>
+    </Suspense>
   );
 };
 

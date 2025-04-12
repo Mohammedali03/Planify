@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../Header";
 import KeyStats from "../KeyStats";
 import { useAuth } from "../AuthProvider";
 
 const Dashboard = () => {
   const { user } = useAuth();
+
+  useEffect(() => {
+    document.title = "Dashboard - Planify";
+  }, []);
 
   return (
     <div className="relative min-h-screen w-full">
