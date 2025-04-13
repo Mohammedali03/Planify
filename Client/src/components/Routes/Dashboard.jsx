@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Header from "../Header";
 import KeyStats from "../KeyStats";
 import { useAuth } from "../AuthProvider";
+import Chart from "../Chart";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -20,6 +21,7 @@ const Dashboard = () => {
 
       <div className="bg-gray-100 p-4 min-h-screen">
         <KeyStats />
+        <Chart />
       </div>
     </div>
   );
