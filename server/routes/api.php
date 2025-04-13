@@ -19,6 +19,7 @@ Route::get('/user', [AuthController::class, 'user']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/profile_pic',[ProfileController::class,'Profile_Picture']);
 Route::post('/profile',[ProfileController::class,'profile']);
+Route::delete('/profile_pic',[ProfileController::class,'deleteProfilePicture']);
 // Route::get('profile_pic',[ProfileController::class,'pic']);
 
 //Goals
