@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Dropdown from "./Dropdown";
 import { motion } from "framer-motion";
 import { useOutletContext } from "react-router-dom";
-import EditProfile from "./EditProfile";
 import { useAuth } from "./AuthProvider";
 
 const Header = () => {
@@ -12,7 +11,6 @@ const Header = () => {
   const { user } = useAuth();
 
   const [showDropdown, setShowDropdown] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
 
   // Check the theme in local storage
   const [isDarkMode, setIsDarkMode] = useState(
@@ -142,7 +140,10 @@ const Header = () => {
           className="relative flex items-center gap-2 ml-2 hover:cursor-pointer"
           onClick={() => setShowDropdown(!showDropdown)}
         >
-          <div className="size-9 rounded-full overflow-hidden border border-gray-300">
+          <div
+            className="flex items-center justify-center size-9 rounded-full
+            overflow-hidden border border-gray-300"
+          >
             {user?.profile_picture_url === defaultUrl ? (
               <span
                 className="text-lg size-full font-semibold text-white capitalize
@@ -185,15 +186,8 @@ const Header = () => {
               />
             </svg>
           )}
-          {showDropdown && <Dropdown setShowProfile={setShowProfile} />}
+          {showDropdown && <Dropdown />}
         </motion.div>
-        {showProfile && (
-          <div>
-            <div className="fixed inset-0 bg-black opacity-40 z-80"></div>
-
-            <EditProfile setShowProfile={setShowProfile} />
-          </div>
-        )}
       </div>
     </div>
   );

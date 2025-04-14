@@ -60,16 +60,6 @@ const Sidebar = ({ setIsOpen }) => {
             })}
           </div>
         </div>
-        <Link
-          to="/settings"
-          className="flex gap-3 p-3 
-           text-red-600 hover:cursor-pointer hover:bg-red-600 hover:text-white 
-            rounded-md duration-300 transition-all mt-auto"
-          onClick={() => setIsOpen(false)} // Also close sidebar on settings click
-        >
-          <Cog8ToothIcon className="size-6" />
-          <span className={`font-medium`}>Settings</span>
-        </Link>
       </div>
     </div>
   );
