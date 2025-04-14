@@ -30,7 +30,6 @@ export const Button = React.lazy(() => import("./ui/Button"));
 export const Loader = React.lazy(() => import("./ui/Loader"));
 
 // Other Components
-export const EditProfile = React.lazy(() => import("./EditProfile"));
 export const KeyStats = React.lazy(() => import("./KeyStats"));
 export const Header = React.lazy(() => import("./Header"));
 export const Dropdown = React.lazy(() => import("./Dropdown"));
