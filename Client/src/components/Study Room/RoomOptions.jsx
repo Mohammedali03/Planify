@@ -91,7 +91,7 @@ const RoomOptions = ({
       ))}
       <div>
         {showBackgrounds && <Backgrounds setBackground={setBackground} />}
-        {showSounds && <Sounds setShowSounds={setShowSounds} />}
+        <Sounds showSounds={showSounds} setShowSounds={setShowSounds} />
       </div>
     </ul>
   );

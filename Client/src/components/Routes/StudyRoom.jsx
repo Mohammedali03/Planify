@@ -40,9 +40,16 @@ const StudyRoom = () => {
   }, []);
 
   function handleBackgrounds() {
+    if (showSounds) {
+      setShowSounds(false);
+    }
     setShowBackgrounds(!showBackgrounds);
   }
+
   function handleSounds() {
+    if (showBackgrounds) {
+      setShowBackgrounds(false);
+    }
     setShowSounds(!showSounds);
   }
 

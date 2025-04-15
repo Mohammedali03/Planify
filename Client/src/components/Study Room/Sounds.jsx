@@ -4,31 +4,31 @@ const SOUNDS = [
   {
     id: "rain",
     name: "Rain",
-    url: "https://www.soundjay.com/nature/rain-01.mp3", // Rain sound (working)
+    url: "./sounds/rain-01.mp3",
     icon: "🌧️",
   },
   {
-    id: "forest",
-    name: "Forest",
-    url: "https://www.soundjay.com/nature/forest-ambience-01.mp3", // Forest sound (working)
-    icon: "🌳",
+    id: "wind",
+    name: "Wind",
+    url: "./sounds/wind-breeze-01.mp3",
+    icon: "💨",
   },
   {
     id: "waves",
     name: "Ocean",
-    url: "https://www.soundjay.com/nature/ocean-waves-01.mp3", // Ocean waves sound (working)
+    url: "./sounds/ocean-wave-1.mp3",
     icon: "🌊",
   },
   {
-    id: "cafe",
-    name: "Cafe",
-    url: "https://www.soundjay.com/ambience/cafe-ambience-01.mp3", // Cafe ambiance sound (working)
-    icon: "☕",
+    id: "birds",
+    name: "Birds",
+    url: "./sounds/birds-chirping-75156.mp3",
+    icon: "🐦",
   },
   {
     id: "fireplace",
     name: "Fire",
-    url: "https://www.soundjay.com/ambience/fireplace-01.mp3", // Fireplace sound (working)
+    url: "./sounds/fire-1.mp3",
     icon: "🔥",
   },
 ];
@@ -50,7 +50,6 @@ const SoundButton = ({ sound, isPlaying, volume, onToggle }) => {
         if (playPromise !== undefined) {
           playPromise.catch((error) => {
             console.error("Audio play failed:", error);
-            // Reset playing state if audio fails to play
             onToggle();
           });
         }
@@ -60,7 +59,6 @@ const SoundButton = ({ sound, isPlaying, volume, onToggle }) => {
     }
   }, [isPlaying, onToggle]);
 
-  // Cleanup audio on unmount
   useEffect(() => {
     return () => {
       if (audioRef.current) {
@@ -126,7 +124,7 @@ const VolumeSlider = ({ volume, onChange }) => {
   );
 };
 
-const Sounds = ({ setShowSounds }) => {
+const Sounds = ({ showSounds, setShowSounds }) => {
   const [playingStates, setPlayingStates] = useState({});
   const [volume, setVolume] = useState(0.5);
 
@@ -139,8 +137,10 @@ const Sounds = ({ setShowSounds }) => {
 
   return (
     <div
-      className="feature sounds z-90 absolute right-2 top-16 rounded-md flex-col
-      h-auto w-[300px] max-h-[400px] items-stretch overflow-hidden bg-white shadow-lg"
+      className={`${
+        showSounds ? "block" : "hidden"
+      } feature sounds z-90 absolute right-2 top-16 rounded-md flex-col
+      h-auto w-[300px] max-h-[400px] items-stretch overflow-hidden bg-white shadow-lg`}
     >
       <div className="flex py-2 px-4 items-center justify-between border-b border-[#e9e9e9]">
         <span className="text-sm text-gray-600 font-medium">Sounds</span>
