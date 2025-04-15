@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 const QUOTES = [
   {
@@ -77,6 +77,7 @@ const Fortune = ({ ref, setShowFortune }) => {
     <motion.div
       drag
       dragMomentum={false}
+      dragConstraints={ref}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -126,5 +127,4 @@ const Fortune = ({ ref, setShowFortune }) => {
     </motion.div>
   );
 };
-
 export default Fortune;
