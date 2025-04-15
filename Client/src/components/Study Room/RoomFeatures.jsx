@@ -11,9 +11,9 @@ const RoomFeatures = ({ ref }) => {
   const [showFortune, setShowFortune] = useState(false);
 
   return (
-    <div className="w-fit p-[6px] rounded-md flex flex-col items-center gap-[10px] ml-2 bg-[#fcfcfc]">
+    <div className="w-fit p-[6px] rounded-md flex flex-col items-center ml-2 bg-[#fcfcfc]">
       <div
-        className={`flex items-center flex-col rounded-md px-3 py-[6px] hover:cursor-pointer
+        className={`flex size-[60px] justify-center items-center flex-col rounded-md px-3 py-[6px] hover:cursor-pointer
        hover:bg-indigo-200 hover:text-indigo-600 duration-300 
        ${showTimer ? " text-indigo-600" : "bg-white text-black"}`}
         onClick={() => setShowTimer(!showTimer)}
@@ -42,7 +42,7 @@ const RoomFeatures = ({ ref }) => {
         <Timer ref={ref} setShowTimer={setShowTimer} />
       </div>
       <div
-        className={`flex items-center flex-col rounded-md px-3 py-[6px] hover:cursor-pointer
+        className={`flex size-[60px] justify-center items-center flex-col rounded-md px-3 py-[6px] hover:cursor-pointer
        hover:bg-indigo-200 hover:text-indigo-600 duration-300 
        ${showMedia ? " text-indigo-600" : "bg-white text-black"}`}
         onClick={() => setShowMedia(!showMedia)}
@@ -77,7 +77,7 @@ const RoomFeatures = ({ ref }) => {
         <Media ref={ref} setShowMedia={setShowMedia} />
       </div>
       <div
-        className={`flex items-center flex-col rounded-md px-3 py-[6px] hover:cursor-pointer
+        className={`flex size-[60px] justify-center items-center flex-col rounded-md px-3 py-[6px] hover:cursor-pointer
        hover:bg-indigo-200 hover:text-indigo-600 duration-300 
        ${showTasks ? " text-indigo-600" : "bg-white text-black"}`}
         onClick={() => setShowTasks(!showTasks)}
@@ -107,7 +107,7 @@ const RoomFeatures = ({ ref }) => {
         <Tasks ref={ref} setShowTasks={setShowTasks} />
       </div>
       <div
-        className={`flex items-center flex-col rounded-md px-3 py-[6px] hover:cursor-pointer
+        className={`flex size-[60px] justify-center items-center flex-col rounded-md px-3 py-[6px] hover:cursor-pointer
        hover:bg-indigo-200 hover:text-indigo-600 duration-300 
        ${showFortune ? " text-indigo-600" : "bg-white text-black"}`}
         onClick={() => setShowFortune(!showFortune)}
