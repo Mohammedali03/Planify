@@ -4,19 +4,19 @@ const SOUNDS = [
   {
     id: "rain",
     name: "Rain",
-    url: "./sounds/rain-01.mp3",
+    url: "https://www.soundjay.com/nature/rain-01.mp3",
     icon: "🌧️",
   },
   {
     id: "wind",
     name: "Wind",
-    url: "./sounds/wind-breeze-01.mp3",
+    url: "https://www.soundjay.com/nature/wind-breeze-01.mp3",
     icon: "💨",
   },
   {
     id: "waves",
     name: "Ocean",
-    url: "./sounds/ocean-wave-1.mp3",
+    url: "https://www.soundjay.com/nature/ocean-wave-1.mp3",
     icon: "🌊",
   },
   {
@@ -28,7 +28,7 @@ const SOUNDS = [
   {
     id: "fireplace",
     name: "Fire",
-    url: "./sounds/fire-1.mp3",
+    url: "https://www.soundjay.com/nature/fire-1.mp3",
     icon: "🔥",
   },
 ];
