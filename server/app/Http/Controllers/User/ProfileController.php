@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -49,6 +50,26 @@ class ProfileController extends Controller
 
 
     }
+
+    public function deleteProfilePicture()
+    {
+        $user = auth()->user();
+        
+        if (!$user->profile_picture) {
+            return response()->json(['message' => 'No profile picture found'], 404);
+        }
+        
+        if (Storage::disk('public')->exists($user->profile_picture)) {
+            Storage::disk('public')->delete($user->profile_picture);
+        }
+        
+       
+        $user->profile_picture = null;
+        $user->save();
+        
+        return response()->json(['message' => 'Profile picture deleted successfully'], 200);
+    }
+
     // public function update_email(Request $request){
     //     $request->validate([
     //         'email'=>'required|email|unique:users'
