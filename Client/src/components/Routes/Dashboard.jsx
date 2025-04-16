@@ -3,6 +3,7 @@ import Header from "../Header";
 import KeyStats from "../KeyStats";
 import { useAuth } from "../AuthProvider";
 import Chart from "../Chart";
+import PieChart from "../PieChart";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -21,7 +22,10 @@ const Dashboard = () => {
 
       <div className="bg-gray-100 p-4 min-h-screen">
         <KeyStats />
-        <Chart />
+        <div className="flex flex-col md:flex-row gap-5 mt-10">
+          <Chart />
+          <PieChart />
+        </div>
       </div>
     </div>
   );

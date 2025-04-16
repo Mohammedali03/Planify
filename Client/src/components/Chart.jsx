@@ -12,56 +12,51 @@ import {
 const Chart = () => {
   // Sample data - replace with actual data from backend later
   const data = [
-    { date: "1", time: 1800 },
-    { date: "2", time: 7200 },
-    { date: "3", time: 2700 },
-    { date: "4", time: 5400 },
-    { date: "5", time: 3600 },
-    { date: "6", time: 10800 },
-    { date: "7", time: 0 },
-    { date: "8", time: 4500 },
-    { date: "9", time: 9000 },
-    { date: "10", time: 1800 },
-    { date: "11", time: 3600 },
-    { date: "12", time: 7200 },
-    { date: "13", time: 5400 },
-    { date: "14", time: 0 },
-    { date: "15", time: 3600 },
-    { date: "16", time: 9000 },
-    { date: "17", time: 1800 },
-    { date: "18", time: 7200 },
-    { date: "19", time: 3600 },
-    { date: "20", time: 5400 },
-    { date: "21", time: 0 },
-    { date: "22", time: 3600 },
-    { date: "23", time: 7200 },
-    { date: "24", time: 1800 },
-    { date: "25", time: 9000 },
-    { date: "26", time: 3600 },
-    { date: "27", time: 5400 },
-    { date: "28", time: 0 },
-    { date: "29", time: 7200 },
-    { date: "30", time: 3600 },
-    { date: "31", time: 1800 },
+    { date: "1", month: "April", time: 1800 },
+    { date: "2", month: "April", time: 7200 },
+    { date: "3", month: "April", time: 2700 },
+    { date: "4", month: "April", time: 5400 },
+    { date: "5", month: "April", time: 3600 },
+    { date: "6", month: "April", time: 10800 },
+    { date: "7", month: "April", time: 0 },
+    { date: "8", month: "April", time: 4500 },
+    { date: "9", month: "April", time: 9000 },
+    { date: "10", month: "April", time: 1800 },
+    { date: "11", month: "April", time: 3600 },
+    { date: "12", month: "April", time: 7200 },
+    { date: "13", month: "April", time: 5400 },
+    { date: "14", month: "April", time: 0 },
+    { date: "15", month: "April", time: 3600 },
+    { date: "16", month: "April", time: 9000 },
+    { date: "17", month: "April", time: 16000 },
+    { date: "18", month: "April", time: 7200 },
+    { date: "19", month: "April", time: 3600 },
+    { date: "20", month: "April", time: 5400 },
+    { date: "21", month: "April", time: 0 },
+    { date: "22", month: "April", time: 3600 },
+    { date: "23", month: "April", time: 7200 },
+    { date: "24", month: "April", time: 1800 },
+    { date: "25", month: "April", time: 9000 },
+    { date: "26", month: "April", time: 3600 },
+    { date: "27", month: "April", time: 5400 },
+    { date: "28", month: "April", time: 0 },
+    { date: "29", month: "April", time: 7200 },
+    { date: "30", month: "April", time: 12000 },
+    { date: "31", month: "April", time: 1800 },
   ];
 
   // Custom tooltip formatter to show time in hours, minutes, and seconds
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
 
-    if (hours === 0 && minutes === 0) return `${secs} seconds`;
-    if (hours === 0) return `${minutes} min ${secs} sec`;
-    if (minutes === 0)
-      return `${hours} ${hours === 1 ? "hour" : "hours"} ${secs} sec`;
-    return `${hours} ${
-      hours === 1 ? "hour" : "hours"
-    } ${minutes} min ${secs} sec`;
+    if (hours === 0) return `${minutes} min`;
+    if (minutes === 0) return `${hours} ${hours === 1 ? "hour" : "hours"}`;
+    return `${hours} ${hours === 1 ? "hour" : "hours"} ${minutes} min`;
   };
 
   return (
-    <div className="w-2/3 h-[400px] bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 mt-10">
+    <div className="w-2/3 h-[400px] bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 ">
       <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
         Monthly Study Time
       </h2>
@@ -94,6 +89,8 @@ const Chart = () => {
               tick={{ fill: "#6b7280", fontSize: 12 }}
               tickFormatter={(value) => formatTime(value)}
               tickMargin={5}
+              interval={0}
+              ticks={[0, 3600, 7200, 10800, 14400, 18000, 21600]}
             />
             <Tooltip
               contentStyle={{
@@ -109,6 +106,12 @@ const Chart = () => {
                 fontSize: "12px",
               }}
               formatter={(value) => [formatTime(value), "Study Time"]}
+              labelFormatter={(label, payload) => {
+                if (payload && payload[0]) {
+                  return `${payload[0].payload.month} ${label}`;
+                }
+                return label;
+              }}
             />
             <Bar
               dataKey="time"
