@@ -2,8 +2,8 @@ import React from "react";
 
 // Route Components
 export const Home = React.lazy(() => import("./Routes/Home"));
-export const Signup = React.lazy(() => import("./Routes/Signup"));
-export const Login = React.lazy(() => import("./Routes/Login"));
+export const Signup = React.lazy(() => import("./Routes/Signup/Signup"));
+export const Login = React.lazy(() => import("./Routes/Login/Login"));
 export const Dashboard = React.lazy(() => import("./Routes/Dashboard"));
 export const StudyRoom = React.lazy(() => import("./Routes/StudyRoom"));
 export const Leaderboard = React.lazy(() => import("./Routes/Leaderboard"));
