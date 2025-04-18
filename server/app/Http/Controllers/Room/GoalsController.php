@@ -25,6 +25,7 @@ class GoalsController extends Controller
     {
         $validated = $request->validate([
             'description' => 'required|string',
+            'start_date' => 'date',
         ]);
         $goal = auth()->user()->goals()->create($validated);
         return response()->json([
@@ -63,6 +64,7 @@ class GoalsController extends Controller
         }
         $validated = $request->validate([
             'description' => 'required|string',
+            'start_date' => 'date',
         ]);
         $goal_update->update($validated);
         return response()->json([
