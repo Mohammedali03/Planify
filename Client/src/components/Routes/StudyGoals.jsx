@@ -24,6 +24,7 @@ const StudyGoals = () => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
+        console.log(res.data);
         setGoals(res.data);
       } catch (e) {
         setError("Failed to fetch goals. Please try again later.");
@@ -191,15 +192,13 @@ const StudyGoals = () => {
                               isDarkMode ? "text-gray-500" : "text-gray-400"
                             }
                           />
-                          {goal.due_date && (
-                            <span
-                              className={`text-sm ${
-                                isDarkMode ? "text-gray-400" : "text-gray-500"
-                              }`}
-                            >
-                              {new Date(goal.due_date).toLocaleDateString()}
-                            </span>
-                          )}
+                          <span
+                            className={`text-sm ${
+                              isDarkMode ? "text-gray-400" : "text-gray-500"
+                            }`}
+                          >
+                            {goal.startDate}
+                          </span>
                         </div>
                       </div>
                     </div>
