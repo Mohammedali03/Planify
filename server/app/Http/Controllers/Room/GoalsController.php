@@ -40,11 +40,16 @@ class GoalsController extends Controller
      */
     public function show(goal $goal )
     {
-        $goal_show = Goal::find($goal)->where("user_id", auth()->id())->first();
-        if(!$goal_show){
+        // $goal_show = Goal::find($goal)->where("user_id", auth()->id());
+    //    $goal->where("user_id", auth()->id());
+        $user = auth()->user();
+        if(!$goal){
             return response()->json(["message" => "Goal not found"], 404);
         }
-        return response()->json($goal_show);
+        if($goal->user_id !== $user->id){
+            return response()->json(["message" => "Goal not found"], 404);
+        }
+        return response()->json($goal);
         
     }
 
@@ -56,20 +61,24 @@ class GoalsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,goal $goal)
+    public function update(Request $request, goal $goal)
     {
-        $goal_update = Goal::find($goal)->where("user_id", auth()->id())->first();
-        if(!$goal_update){
+        // $goal_update = Goal::find($goal)->where("user_id", auth()->id())->first();
+        if(!$goal){
+            return response()->json(["message" => "Goal not found"], 404);
+        }
+        $user = auth()->user();
+        if($goal->user_id !== $user->id){
             return response()->json(["message" => "Goal not found"], 404);
         }
         $validated = $request->validate([
-            'description' => 'required|string',
-            'start_date' => 'date',
+            'description' => 'required|string'
+            
         ]);
-        $goal_update->update($validated);
+        $goal->update($validated);
         return response()->json([
             "message" => "Goal updated successfully",
-            "goal" => $goal_update
+            "goal" => $goal
         ], 201);
        
     }
@@ -79,23 +88,32 @@ class GoalsController extends Controller
      */
     public function destroy(goal $goal)
     {
-        $goal_delete = Goal::find($goal)->where("user_id", auth()->id())->first();
-        if(!$goal_delete){
+       
+        // $goal_delete = Goal::find($goal)->where("user_id", auth()->id())->first();
+        if(!$goal){
             return response()->json(["message" => "Goal not found"], 404);
         }
-        $goal_delete->delete();
+        $user = auth()->user();
+        if($goal->user_id !== $user->id){
+            return response()->json(["message" => "Goal not found"], 404);
+        }
+        $goal->delete();
         return response()->json(["message" => "Goal deleted successfully"], 200);
 
     }
 
     public function complete(goal $goal){
 
-        $goal_complete = Goal::find($goal)->where("user_id",auth()->id())->first();
-        if(!$goal_complete){
+        // $goal_complete = Goal::find($goal)->where("user_id",auth()->id())->first();
+        $user = auth()->user();
+        if(!$goal){
             return response()->json(["message"=>"goal not found"],404);
         }
-        $goal_complete->update(["status"=>!$goal_complete->status]);
-        if($goal_complete->status){
+        if($goal->user_id !== $user->id){
+            return response()->json(["message" => "Goal not found"], 404);
+        }
+        $goal->update(["status"=>!$goal->status]);
+        if($goal->status){
             return response()->json(["message"=>"goal completed successfully"],200);
         }else{
             return response()->json(["message"=>"the goal is not completed yet take your time finishing it"],200);
