@@ -21,6 +21,12 @@ return new class extends Migration
             $table->string('profile_picture')->nullable();
             $table->enum('status',['active','inactive'])->default('active');
             $table->string('phone')->nullable();
+          
+            $table->integer('streak')->default(0);
+            $table->unsignedInteger('max_streak')->default(0)->nullable();
+            $table->date('last_visit_at')->nullable();
+
+            
             $table->rememberToken();
             $table->timestamps();
         });
