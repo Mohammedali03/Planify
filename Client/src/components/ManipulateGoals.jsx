@@ -97,8 +97,6 @@ const ManipulateGoals = ({
       // Ensure we have the complete updated goal data
       const updatedGoal = {
         ...editingGoal,
-        description: newGoal,
-        startDate: selectedDate.toISOString().split("T")[0],
         ...res.data,
       };
 

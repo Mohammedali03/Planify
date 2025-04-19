@@ -26,6 +26,7 @@ const StudyGoals = () => {
         });
         console.log(res.data);
         setGoals(res.data);
+        console.log(res.data);
       } catch (e) {
         setError("Failed to fetch goals. Please try again later.");
         console.error("error fetching data", e);
