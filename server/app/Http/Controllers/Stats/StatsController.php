@@ -81,5 +81,13 @@ class StatsController extends Controller
          'completedGoals' => $completedGoals
       ]);
    }
+
+   public function numberOfTimers(){
+      $user = auth()->user();
+      $numberOfTimers = $user->timers()->count();
+      return response()->json([
+         'numberOfSessions' => $numberOfTimers
+      ]);
+   }
    
 }
