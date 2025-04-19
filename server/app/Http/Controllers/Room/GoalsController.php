@@ -52,7 +52,7 @@ class GoalsController extends Controller
     
     return response()->json([
         "message" => "Goal created successfully",
-        "goal" => $goal
+        "goal" => ["id"=>$goal->id,"description"=>$goal->description,"startDate"=>$goal->start_date]
     ], 201);
 }
 
