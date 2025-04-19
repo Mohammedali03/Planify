@@ -77,7 +77,7 @@ class AuthController extends Controller
             ]);
         }
 
-        // === 🧠 Streak Logic ===
+        // ===  Streak Logic ===
         $today = Carbon::now()->startOfDay();
         // $tomorrow = Carbon::now()->startOfDay()->addDays(3);
         // $lastVisit = $user->last_visit_at ? Carbon::parse($user->last_visit_at)->startOfDay() : null;
@@ -105,7 +105,7 @@ $test ="false";
             $user->save();
         }
 
-    // === 🔐 Create Token ===
+    // ===  Create Token ===
     $token = $user->createToken('auth_token', ['*'], now()->addHours(24))->plainTextToken;
 
         return response()->json([
