@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Stats;
-
+use App\Models\Timer;
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Http\Request;
 
 class StatsController extends Controller
@@ -31,4 +34,52 @@ class StatsController extends Controller
          'last_visit' => $last_visit
       ]);
    }
+
+   public function getTotalStudyTime()
+   {
+       $user = Auth::user();
+   
+       // Sum up the time_spent for 'ended' timers
+       $totalSeconds = Timer::where('user_id', $user->id)
+           ->where('status', 'ended')
+           ->sum('time_spent');
+   
+       // Convert to hours and minutes
+       $hours = floor($totalSeconds / 3600);
+       $minutes = floor(($totalSeconds % 3600) / 60);
+   
+       return response()->json([
+           'formatted_time' => "{$hours}h {$minutes}m",
+           'hours' => $hours,
+           'minutes' => $minutes,
+           'total_seconds' => $totalSeconds
+       ]);
+   }
+
+
+   public function monthlyStudyData()
+   {
+       $start = Carbon::now()->startOfMonth();
+       $end = Carbon::now()->endOfMonth();
+   
+       $studyData = Timer::where('user_id', auth()->id())
+           ->whereBetween('created_at', [$start, $end])
+           ->whereNotNull('time_spent')
+           ->get()
+           ->groupBy(fn ($timer) => $timer->created_at->day)
+           ->map(fn ($timers) => round($timers->sum('time_spent') / 3600, 2)); // convert to hours, rounded to 2 decimal places
+   
+       return response()->json([
+           'studyData' => $studyData
+       ], 200);
+   }
+
+   public function completedGoals(){
+      $user = auth()->user();
+      $completedGoals = $user->goals()->where('status', true)->count();
+      return response()->json([
+         'completedGoals' => $completedGoals
+      ]);
+   }
+   
 }
