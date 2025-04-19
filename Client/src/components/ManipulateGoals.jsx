@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import axios from "axios";
-import PropTypes from "prop-types";
 
 const ManipulateGoals = ({
   isDarkMode,
   setShowAddModal,
   editingGoal,
   onGoalUpdated,
-  setGoals,
 }) => {
   const [newGoal, setNewGoal] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -18,8 +16,8 @@ const ManipulateGoals = ({
   useEffect(() => {
     if (editingGoal) {
       setNewGoal(editingGoal.description || "");
-      if (editingGoal.due_date) {
-        setSelectedDate(new Date(editingGoal.due_date));
+      if (editingGoal.startDate) {
+        setSelectedDate(new Date(editingGoal.startDate));
       }
     } else {
       setNewGoal("");
@@ -41,7 +39,7 @@ const ManipulateGoals = ({
         "http://localhost:8000/api/goals",
         {
           description: newGoal,
-          due_date: selectedDate.toISOString().split("T")[0],
+          startDate: selectedDate.toISOString().split("T")[0],
         },
         {
           headers: {
@@ -54,7 +52,7 @@ const ManipulateGoals = ({
       const newGoalData = {
         id: res.data.id,
         description: newGoal,
-        due_date: selectedDate.toISOString().split("T")[0],
+        startDate: selectedDate.toISOString().split("T")[0],
         status: 0, // Default status for new goals
         ...res.data,
       };
@@ -87,7 +85,7 @@ const ManipulateGoals = ({
         `http://localhost:8000/api/goals/${editingGoal.id}`,
         {
           description: newGoal,
-          due_date: selectedDate.toISOString().split("T")[0],
+          startDate: selectedDate.toISOString().split("T")[0],
         },
         {
           headers: {
@@ -99,8 +97,6 @@ const ManipulateGoals = ({
       // Ensure we have the complete updated goal data
       const updatedGoal = {
         ...editingGoal,
-        description: newGoal,
-        due_date: selectedDate.toISOString().split("T")[0],
         ...res.data,
       };
 
@@ -228,17 +224,6 @@ const ManipulateGoals = ({
       </motion.div>
     </AnimatePresence>
   );
-};
-
-ManipulateGoals.propTypes = {
-  isDarkMode: PropTypes.bool.isRequired,
-  setShowAddModal: PropTypes.func.isRequired,
-  editingGoal: PropTypes.shape({
-    id: PropTypes.number,
-    description: PropTypes.string,
-    due_date: PropTypes.string,
-  }),
-  onGoalUpdated: PropTypes.func.isRequired,
 };
 
 export default ManipulateGoals;
