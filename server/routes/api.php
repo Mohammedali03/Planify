@@ -7,6 +7,7 @@ use App\Http\Controllers\Room\ImageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Room\TimerController;
 use App\Http\Controllers\Room\VideoController;
+use App\Http\Controllers\Stats\StatsController;
 use App\Http\Controllers\User\ProfileController;
 use App\Models\Timer;
 
@@ -79,5 +80,12 @@ Route::group(['prefix'=>'background' ],function(){
     Route::get('favorites',[FavoriteController::class,'index']);
     Route::post('favorites/{id}/section/{section}',[FavoriteController::class,'store']);
     Route::delete('favorites/{id}',[FavoriteController::class,'delete']);
+});
+
+
+Route::group(['prefix'=>'stats'],function(){
+    Route::get('streak',[StatsController::class,'streak']);
+    Route::get('max_streak',[StatsController::class,'max_streak']);
+    Route::get('last_visit',[StatsController::class,'last_visit']);
 });
 
