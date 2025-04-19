@@ -60,8 +60,12 @@ Route::group(['prefix'=>'stats'],function(){
     Route::get('max_streak',[StatsController::class,'max_streak']);
     Route::get('last_visit',[StatsController::class,'last_visit']);
     Route::get('total_study_time',[StatsController::class,'getTotalStudyTime']);
+    //monthly study data for graph  
     Route::get('monthly_study_data',[StatsController::class,'monthlyStudyData']);
+
+
     Route::get('completed_goals',[StatsController::class,'completedGoals']);
+    Route::get('number_of_sessions',[StatsController::class,'numberOfTimers']);
 });
 
 
