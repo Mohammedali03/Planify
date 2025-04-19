@@ -14,7 +14,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    //user
+//user
 Route::get('/user', [AuthController::class, 'user']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/profile_pic',[ProfileController::class,'Profile_Picture']);
@@ -32,8 +32,7 @@ Route::apiResource('goals', GoalsController::class);
 Route::post('goals/{goal}/complete',[GoalsController::class,'complete']);
 
 //Timer
-
-Route::group(['prefix'=>'timer' ],function(){
+Route::group(['prefix'=>'timer'],function(){
     Route::controller(TimerController::class)->group(function(){
         Route::post('start','start');
         Route::post('pause/{pause}','pause');
