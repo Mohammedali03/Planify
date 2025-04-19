@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -29,14 +30,38 @@ class AuthController extends Controller
         ]);
 
         return response()->json([
-            'token' => $user->createToken('auth_token')->plainTextToken,
-            'user' => ['name'=>$user["name"]],
+            // 'token' => $user->createToken('auth_token')->plainTextToken,
+            'user' => ['name'=>$user["name"]]
         ], 201);
     }
 
     /**
      * Handle user login
      */
+    // public function login(Request $request)
+    // {
+    //     $request->validate([
+    //         'email' => 'required|email',
+    //         'password' => 'required',
+    //     ]);
+
+    //     $user = User::where('email', $request->email)->first();
+
+    //     if (!$user || !Hash::check($request->password, $user->password)) {
+    //         throw ValidationException::withMessages([
+    //             'email' => ['Invalid credentials.'],
+    //         ]);
+    //     }
+
+    //     $token=$user->createToken('auth_token', ['*'], now()->addMinutes(2))->plainTextToken;
+    //     return response()->json([
+    //         // 'token' => $user->createToken('auth_token')->plainTextToken,
+    //         'token' => $token,
+    //         'user' => $user,
+    //     ]);
+    // }
+
+
     public function login(Request $request)
     {
         $request->validate([
@@ -52,9 +77,42 @@ class AuthController extends Controller
             ]);
         }
 
+        // === 🧠 Streak Logic ===
+        $today = Carbon::now()->startOfDay();
+        // $tomorrow = Carbon::now()->startOfDay()->addDays(3);
+        // $lastVisit = $user->last_visit_at ? Carbon::parse($user->last_visit_at)->startOfDay() : null;
+        $lastVisit = Carbon::parse($user->last_visit_at) ;
+$ress = $lastVisit->diffInDays($today);
+$test ="false";
+        if (!$lastVisit || $lastVisit->lt($today)) {
+            // First login today
+            if ($ress ==1) {
+                // Consecutive day
+                $user->streak += 1;
+                $test ="true";
+            } else {
+                // Missed a day or first time
+                $user->streak = 1;
+            }
+
+            $user->last_visit_at = now()->startOfDay();
+
+            // Optional: track max streak
+            if ($user->streak > ($user->max_streak ?? 0)) {
+                $user->max_streak = $user->streak;
+            }
+
+            $user->save();
+        }
+
+    // === 🔐 Create Token ===
+    $token = $user->createToken('auth_token', ['*'], now()->addHours(24))->plainTextToken;
+
         return response()->json([
-            'token' => $user->createToken('auth_token')->plainTextToken,
+            'token' => $token,
             'user' => $user,
+            "ress"=>$ress,
+            "test"=>$test
         ]);
     }
 
