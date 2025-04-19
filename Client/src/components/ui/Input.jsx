@@ -1,6 +1,11 @@
-import React from "react";
-
-const Input = ({ id, name, type = "text", errors, onChange }) => {
+const Input = ({
+  id,
+  name,
+  type = "text",
+  errors = "",
+  onChange,
+  ...inputProps
+}) => {
   return (
     <>
       <input
@@ -13,6 +18,7 @@ const Input = ({ id, name, type = "text", errors, onChange }) => {
                   -outline-offset-1 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2
                   focus:outline-indigo-600 sm:text-sm/6`}
         onChange={onChange}
+        {...inputProps}
       />
     </>
   );
