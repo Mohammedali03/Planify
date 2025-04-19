@@ -17,7 +17,14 @@ class GoalsController extends Controller
         $user = auth()->user();
         $goals = $user->goals;
         return response()->json([
-            "goals" => ["id"=>$goals->id,"description"=>$goals->description,"startDate"=>$goals->start_date]
+            "message"=>"goals fetched successfully",
+            "goals"=>$goals->map(function($goal){
+                return [
+                    "id"=>$goal->id,
+                    "description"=>$goal->description,
+                    "startDate"=>$goal->start_date
+                ];
+            })
         ]);
     }
     /**
