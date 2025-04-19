@@ -16,7 +16,9 @@ class GoalsController extends Controller
     {
         $user = auth()->user();
         $goals = $user->goals;
-        return response()->json($goals);
+        return response()->json([
+            "goals" => ["id"=>$goals->id,"description"=>$goals->description,"startDate"=>$goals->start_date]
+        ]);
     }
     /**
      * Store a newly created resource in storage.
