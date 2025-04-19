@@ -21,19 +21,40 @@ class GoalsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'description' => 'required|string',
-            'start_date' => 'date',
-        ]);
-        $goal = auth()->user()->goals()->create($validated);
-        return response()->json([
-            "message" => "Goal created successfully",
-            "goal" => $goal
-        ], 201);
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'description' => 'required|string',
+    //         'start_date' => 'date',
+    //     ]);
+    //     $goal = auth()->user()->goals()->create($validated);
+    //     return response()->json([
+    //         "message" => "Goal created successfully",
+    //         "goal" => $goal
+    //     ], 201);
        
-    }
+    // }
+
+    public function store(Request $request)
+{
+    // Convert camelCase keys to snake_case before validation
+    $input = [
+        'description' => $request->input('description'),
+        'start_date' => $request->input('startDate'), // Convert here
+    ];
+    
+    $validated = validator($input, [
+        'description' => 'required|string',
+        'start_date' => 'date',
+    ])->validate();
+    
+    $goal = auth()->user()->goals()->create($validated);
+    
+    return response()->json([
+        "message" => "Goal created successfully",
+        "goal" => ["id"=>$goal->id,"description"=>$goal->description,"startDate"=>$goal->start_date]
+    ], 201);
+}
 
     /**
      * Display the specified resource.
@@ -71,14 +92,19 @@ class GoalsController extends Controller
         if($goal->user_id !== $user->id){
             return response()->json(["message" => "Goal not found"], 404);
         }
-        $validated = $request->validate([
-            'description' => 'required|string'
+        $input = [
+            'description' => $request->input('description'),
+            'start_date' => $request->input('startDate'), // Convert here
+        ];
+        $validated = validator($input, [
+            'description' => 'required|string',
+            'start_date' => 'date'
             
-        ]);
+        ])->validate();
         $goal->update($validated);
         return response()->json([
             "message" => "Goal updated successfully",
-            "goal" => $goal
+            "goal" => ["id"=>$goal->id,"description"=>$goal->description,"startDate"=>$goal->start_date]
         ], 201);
        
     }

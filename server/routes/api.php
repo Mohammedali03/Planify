@@ -55,6 +55,14 @@ Route::group(['prefix'=>'timer'],function(){
 // Route::post('timer/pause/{pause}',[TimerController::class,'pause']);
 // Route::post('timer/end/{end?}',[TimerController::class,'end']);
 
+Route::group(['prefix'=>'stats'],function(){
+    Route::get('streak',[StatsController::class,'streak']);
+    Route::get('max_streak',[StatsController::class,'max_streak']);
+    Route::get('last_visit',[StatsController::class,'last_visit']);
+    Route::get('total_study_time',[StatsController::class,'getTotalStudyTime']);
+    Route::get('monthly_study_data',[StatsController::class,'monthlyStudyData']);
+    Route::get('completed_goals',[StatsController::class,'completedGoals']);
+});
 
 
 });
@@ -83,9 +91,5 @@ Route::group(['prefix'=>'background' ],function(){
 });
 
 
-Route::group(['prefix'=>'stats'],function(){
-    Route::get('streak',[StatsController::class,'streak']);
-    Route::get('max_streak',[StatsController::class,'max_streak']);
-    Route::get('last_visit',[StatsController::class,'last_visit']);
-});
+
 
