@@ -21,19 +21,40 @@ class GoalsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'description' => 'required|string',
-            'start_date' => 'date',
-        ]);
-        $goal = auth()->user()->goals()->create($validated);
-        return response()->json([
-            "message" => "Goal created successfully",
-            "goal" => $goal
-        ], 201);
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'description' => 'required|string',
+    //         'start_date' => 'date',
+    //     ]);
+    //     $goal = auth()->user()->goals()->create($validated);
+    //     return response()->json([
+    //         "message" => "Goal created successfully",
+    //         "goal" => $goal
+    //     ], 201);
        
-    }
+    // }
+
+    public function store(Request $request)
+{
+    // Convert camelCase keys to snake_case before validation
+    $input = [
+        'description' => $request->input('description'),
+        'start_date' => $request->input('startDate'), // Convert here
+    ];
+    
+    $validated = validator($input, [
+        'description' => 'required|string',
+        'start_date' => 'date',
+    ])->validate();
+    
+    $goal = auth()->user()->goals()->create($validated);
+    
+    return response()->json([
+        "message" => "Goal created successfully",
+        "goal" => $goal
+    ], 201);
+}
 
     /**
      * Display the specified resource.
