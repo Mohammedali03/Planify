@@ -58,22 +58,44 @@ class StatsController extends Controller
    }
 
 
-   public function monthlyStudyData()
-   {
-       $start = Carbon::now()->startOfMonth();
-       $end = Carbon::now()->endOfMonth();
+   // public function monthlyStudyData()
+   // {
+   //     $start = Carbon::now()->startOfMonth();
+   //     $end = Carbon::now()->endOfMonth();
    
-       $studyData = Timer::where('user_id', auth()->id())
-           ->whereBetween('created_at', [$start, $end])
-           ->whereNotNull('time_spent')
-           ->get()
-           ->groupBy(fn ($timer) => $timer->created_at->day)
-           ->map(fn ($timers) => round($timers->sum('time_spent') / 3600, 2)); // convert to hours, rounded to 2 decimal places
+   //     $studyData = Timer::where('user_id', auth()->id())
+   //         ->whereBetween('created_at', [$start, $end])
+   //         ->whereNotNull('time_spent')
+   //         ->get()
+   //         ->groupBy(fn ($timer) => $timer->created_at->day)
+   //         ->map(fn ($timers) => round($timers->sum('time_spent') / 3600, 2)); // convert to hours, rounded to 2 decimal places
    
-       return response()->json([
-           'studyData' => $studyData
-       ], 200);
-   }
+   //     return response()->json([
+   //         'studyData' => $studyData
+   //     ], 200);
+   // }
+   public function monthlyStudyData() 
+{ 
+    $start = Carbon::now()->startOfMonth(); 
+    $end = Carbon::now()->endOfMonth(); 
+
+    $studyData = Timer::where('user_id', auth()->id()) 
+        ->whereBetween('created_at', [$start, $end]) 
+        ->whereNotNull('time_spent') 
+        ->get() 
+        ->groupBy(fn ($timer) => $timer->created_at->day) 
+        ->map(function ($timers) {
+            $totalSeconds = $timers->sum('time_spent');
+            $hours = floor($totalSeconds / 3600);
+            $minutes = floor(($totalSeconds % 3600) / 60);
+            return sprintf('%d:%02d', $hours, $minutes); // Format: H:mm
+        });
+
+    return response()->json([ 
+        'studyData' => $studyData 
+    ], 200); 
+}
+
 
    public function completedGoals(){
       $user = auth()->user();
