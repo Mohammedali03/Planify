@@ -21,6 +21,7 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/profile_pic',[ProfileController::class,'Profile_Picture']);
 Route::post('/profile',[ProfileController::class,'profile']);
 Route::delete('/profile_pic',[ProfileController::class,'deleteProfilePicture']);
+Route::post('/update_password',[ProfileController::class,'update_password']);
 // Route::get('profile_pic',[ProfileController::class,'pic']);
 
 //Goals
@@ -66,11 +67,14 @@ Route::group(['prefix'=>'stats'],function(){
 
     Route::get('completed_goals',[StatsController::class,'completedGoals']);
     Route::get('number_of_sessions',[StatsController::class,'numberOfTimers']);
+    Route::get('session_duration',[StatsController::class,'sessionDuration']);
+    Route::get('leaderboard',[StatsController::class,'leaderboard']);
 });
 
 
 });
-
+//leaderboard
+Route::get('leaderboard',[StatsController::class,'leaderboard']);
 
 
 

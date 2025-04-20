@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Stats;
 use App\Models\Timer;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
@@ -88,6 +89,55 @@ class StatsController extends Controller
       return response()->json([
          'numberOfSessions' => $numberOfTimers
       ]);
+   }
+
+   public function sessionDuration(){
+      
+          $userId = auth()->id();
+      
+          // time_spent is in seconds
+          $under30min = Timer::where('user_id', $userId)
+              ->where('time_spent', '<', 1800) // 30 minutes = 1800 seconds
+              ->count();
+      
+          $between30and60min = Timer::where('user_id', $userId)
+              ->where('time_spent', '>=', 1800)
+              ->where('time_spent', '<', 3600) // 60 minutes = 3600 seconds
+              ->count();
+      
+          $above60min = Timer::where('user_id', $userId)
+              ->where('time_spent', '>=', 3600)
+              ->count();
+      
+          return response()->json([
+              'short' => $under30min,
+              'medium' => $between30and60min,
+              'long' => $above60min,
+          ]);
+     
+      
+   }
+   public function leaderboard()
+   {
+       $leaderboard = User::withSum(['timers as total_time_spent' => function ($query) {
+           $query->where('status', 'ended');
+       }], 'time_spent')
+       ->orderByDesc('total_time_spent')
+       ->limit(10)
+       ->get(['id', 'name']); // only fetch fields you need
+   
+       return response()->json([
+           'leaderboard' =>  $leaderboard->map(function($user){
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'total_time_spent' => $user->total_time_spent,
+                'max_streak'=>$user->max_streak,
+                'completed_goals'=>$user->goals()->where('status', true)->count(),
+                'numberOfSessions'=>$user->timers()->count(),
+            ];
+           })
+       ]);
    }
    
 }
