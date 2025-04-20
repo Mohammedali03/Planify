@@ -14,32 +14,32 @@ const StudyGoals = () => {
   const [error, setError] = useState(null);
 
   // Fetch goals
-  const fetchGoals = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const res = await axios.get("http://localhost:8000/api/goals", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setGoals(res.data.goals);
-      console.log(res.data.goals);
-    } catch (e) {
-      setError("Failed to fetch goals. Please try again later.");
-      console.error("error fetching data", e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchGoals = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const res = await axios.get("http://localhost:8000/api/goals", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setGoals(res.data.goals);
+        console.log(res.data.goals);
+      } catch (e) {
+        setError("Failed to fetch goals. Please try again later.");
+        console.error("error fetching data", e);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     fetchGoals();
   }, []);
 
   const handleToggleComplete = async (id) => {
     try {
-      await axios.post(
+      const res = await axios.post(
         `http://localhost:8000/api/goals/${id}/complete`,
         {},
         {
@@ -48,7 +48,12 @@ const StudyGoals = () => {
           },
         }
       );
-      await fetchGoals();
+      console.log(res.data);
+      setGoals(
+        goals.map((goal) =>
+          goal.id === id ? { ...goal, ...res.data.goal } : goal
+        )
+      );
     } catch (e) {
       console.error("toggling goal failed", e);
     }
@@ -56,12 +61,14 @@ const StudyGoals = () => {
 
   const handleDeleteGoal = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/api/goals/${id}`, {
+      const res = await axios.delete(`http://localhost:8000/api/goals/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      await fetchGoals();
+      console.log(res.data);
+      // Remove the deleted goal from the state (will be replaced by optimistic UI later)
+      setGoals(goals.filter((goal) => goal.id !== res.data.goal.id));
     } catch (e) {
       console.log(e);
     }
@@ -123,9 +130,9 @@ const StudyGoals = () => {
           </div>
         ) : (
           /* Goals Grid */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6">
             <AnimatePresence>
-              {goals?.map((goal) => (
+              {goals.map((goal) => (
                 <motion.div
                   key={goal.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -135,28 +142,26 @@ const StudyGoals = () => {
                     isDarkMode
                       ? "bg-gray-800 hover:bg-gray-700"
                       : "bg-white hover:bg-gray-50"
-                  } ${goal.status === 1 ? "opacity-75" : ""}`}
+                  } ${goal.status ? "opacity-75" : ""}`}
                 >
                   <div className="flex justify-between items-start">
                     <div className="flex items-start space-x-3">
                       <button
                         onClick={() => handleToggleComplete(goal.id)}
                         className={`size-5 aspect-square rounded-full border-2 flex items-center justify-center cursor-pointer cursro-pointer ${
-                          goal.status === 1
+                          goal.status
                             ? "bg-green-500 border-green-500"
                             : isDarkMode
                             ? "border-gray-600"
                             : "border-gray-300"
                         } mt-1.5`}
                       >
-                        {goal.status === 1 && (
-                          <FiCheck className="text-white" />
-                        )}
+                        {goal.status == 1 && <FiCheck className="text-white" />}
                       </button>
                       <div>
                         <h3
                           className={`text-lg font-semibold ${
-                            goal.status === 1
+                            goal.status
                               ? "line-through text-gray-500"
                               : isDarkMode
                               ? "text-gray-200"
@@ -217,8 +222,8 @@ const StudyGoals = () => {
             setShowAddModal={setShowAddModal}
             isDarkMode={isDarkMode}
             editingGoal={editingGoal}
+            setEditingGoal={setEditingGoal}
             setGoals={setGoals}
-            fetchGoals={fetchGoals}
           />
         )}
       </div>

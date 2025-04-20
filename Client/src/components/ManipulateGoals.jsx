@@ -6,7 +6,8 @@ const ManipulateGoals = ({
   isDarkMode,
   setShowAddModal,
   editingGoal,
-  fetchGoals,
+  setEditingGoal,
+  setGoals,
 }) => {
   const [newGoal, setNewGoal] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -33,7 +34,7 @@ const ManipulateGoals = ({
     setError(null);
 
     try {
-      await axios.post(
+      const res = await axios.post(
         "http://localhost:8000/api/goals",
         {
           description: newGoal,
@@ -46,8 +47,7 @@ const ManipulateGoals = ({
         }
       );
 
-      await fetchGoals();
-
+      setGoals((prevGoals) => [res.data.goal, ...prevGoals]);
       setShowAddModal(false);
     } catch (error) {
       setError(error.response?.data?.message || "Error adding goal");
@@ -71,7 +71,7 @@ const ManipulateGoals = ({
     setError(null);
 
     try {
-      await axios.patch(
+      const res = await axios.patch(
         `http://localhost:8000/api/goals/${editingGoal.id}`,
         {
           description: newGoal,
@@ -84,7 +84,17 @@ const ManipulateGoals = ({
         }
       );
 
-      await fetchGoals();
+      setGoals((prevGoals) =>
+        prevGoals.map((goal) =>
+          goal.id === res.data.goal.id
+            ? {
+                ...goal,
+                ...res.data.goal,
+              }
+            : goal
+        )
+      );
+      setEditingGoal("");
       setShowAddModal(false);
     } catch (error) {
       setError(error.response?.data?.message || "Error updating goal");
@@ -103,6 +113,7 @@ const ManipulateGoals = ({
   const handleClose = () => {
     setShowAddModal(false);
     setNewGoal("");
+    setEditingGoal("");
     setSelectedDate(new Date());
     setError(null);
   };
