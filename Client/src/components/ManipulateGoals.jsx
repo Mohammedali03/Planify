@@ -6,7 +6,7 @@ const ManipulateGoals = ({
   isDarkMode,
   setShowAddModal,
   editingGoal,
-  onGoalUpdated,
+  setGoals,
 }) => {
   const [newGoal, setNewGoal] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -16,9 +16,7 @@ const ManipulateGoals = ({
   useEffect(() => {
     if (editingGoal) {
       setNewGoal(editingGoal.description || "");
-      if (editingGoal.startDate) {
-        setSelectedDate(new Date(editingGoal.startDate));
-      }
+      setSelectedDate(new Date(editingGoal.startDate));
     } else {
       setNewGoal("");
       setSelectedDate(new Date());
@@ -50,14 +48,14 @@ const ManipulateGoals = ({
 
       // Create a complete goal object with all necessary fields
       const newGoalData = {
-        id: res.data.id,
+        id: Date.now(),
         description: newGoal,
         startDate: selectedDate.toISOString().split("T")[0],
-        status: 0, // Default status for new goals
+        status: 0,
         ...res.data,
       };
 
-      onGoalUpdated(newGoalData);
+      setGoals((prevGoals) => [...prevGoals, newGoalData]);
       setShowAddModal(false);
     } catch (error) {
       setError(error.response?.data?.message || "Error adding goal");
@@ -81,7 +79,7 @@ const ManipulateGoals = ({
     setError(null);
 
     try {
-      const res = await axios.patch(
+      await axios.patch(
         `http://localhost:8000/api/goals/${editingGoal.id}`,
         {
           description: newGoal,
@@ -94,13 +92,17 @@ const ManipulateGoals = ({
         }
       );
 
-      // Ensure we have the complete updated goal data
-      const updatedGoal = {
-        ...editingGoal,
-        ...res.data,
-      };
-
-      onGoalUpdated(updatedGoal);
+      setGoals((prevGoals) =>
+        prevGoals.map((goal) =>
+          goal.id === editingGoal.id
+            ? {
+                ...goal,
+                description: newGoal,
+                startDate: selectedDate.toISOString().split("T")[0],
+              }
+            : goal
+        )
+      );
       setShowAddModal(false);
     } catch (error) {
       setError(error.response?.data?.message || "Error updating goal");

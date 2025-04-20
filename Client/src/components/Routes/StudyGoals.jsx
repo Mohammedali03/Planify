@@ -24,9 +24,8 @@ const StudyGoals = () => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        console.log(res.data);
-        setGoals(res.data);
-        console.log(res.data);
+        setGoals(res.data.goals);
+        console.log(res.data.goals);
       } catch (e) {
         setError("Failed to fetch goals. Please try again later.");
         console.error("error fetching data", e);
@@ -60,33 +59,17 @@ const StudyGoals = () => {
   };
 
   const handleDeleteGoal = async (id) => {
+    // Remove the deleted goal from the state (will be replaced by optimistic UI later)
+    setGoals(goals.filter((goal) => goal.id !== id));
     try {
       await axios.delete(`http://localhost:8000/api/goals/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      // Remove the deleted goal from the state
-      setGoals(goals.filter((goal) => goal.id !== id));
     } catch (e) {
       console.log(e);
     }
-  };
-
-  const handleGoalUpdated = (updatedGoal) => {
-    if (editingGoal) {
-      // Update existing goal
-      setGoals((prevGoals) =>
-        prevGoals.map((goal) =>
-          goal.id === updatedGoal.id ? { ...goal, ...updatedGoal } : goal
-        )
-      );
-    } else {
-      // Add new goal at the beginning of the list
-      setGoals((prevGoals) => [updatedGoal, ...prevGoals]);
-    }
-    setEditingGoal(null);
-    setShowAddModal(false);
   };
 
   useEffect(() => {
@@ -147,7 +130,7 @@ const StudyGoals = () => {
           /* Goals Grid */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <AnimatePresence>
-              {goals.map((goal) => (
+              {goals?.map((goal) => (
                 <motion.div
                   key={goal.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -160,16 +143,16 @@ const StudyGoals = () => {
                   } ${goal.status === 1 ? "opacity-75" : ""}`}
                 >
                   <div className="flex justify-between items-start">
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-start space-x-3">
                       <button
                         onClick={() => handleToggleComplete(goal.id)}
-                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center cursor-pointer cursro-pointer ${
+                        className={`size-5 aspect-square rounded-full border-2 flex items-center justify-center cursor-pointer cursro-pointer ${
                           goal.status === 1
                             ? "bg-green-500 border-green-500"
                             : isDarkMode
                             ? "border-gray-600"
                             : "border-gray-300"
-                        }`}
+                        } mt-1.5`}
                       >
                         {goal.status === 1 && (
                           <FiCheck className="text-white" />
@@ -239,7 +222,6 @@ const StudyGoals = () => {
             setShowAddModal={setShowAddModal}
             isDarkMode={isDarkMode}
             editingGoal={editingGoal}
-            onGoalUpdated={handleGoalUpdated}
             setGoals={setGoals}
           />
         )}
