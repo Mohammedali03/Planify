@@ -22,7 +22,8 @@ class GoalsController extends Controller
                 return [
                     "id"=>$goal->id,
                     "description"=>$goal->description,
-                    "startDate"=>$goal->start_date
+                    "startDate"=>$goal->start_date,
+                    "status"=>$goal->status
                 ];
             })
         ]);
@@ -61,7 +62,7 @@ class GoalsController extends Controller
     
     return response()->json([
         "message" => "Goal created successfully",
-        "goal" => ["id"=>$goal->id,"description"=>$goal->description,"startDate"=>$goal->start_date]
+        "goal" => ["id"=>$goal->id,"description"=>$goal->description,"startDate"=>$goal->start_date,"status"=>$goal->status]
     ], 201);
 }
 
@@ -113,7 +114,7 @@ class GoalsController extends Controller
         $goal->update($validated);
         return response()->json([
             "message" => "Goal updated successfully",
-            "goal" => ["id"=>$goal->id,"description"=>$goal->description,"startDate"=>$goal->start_date]
+            "goal" => ["id"=>$goal->id,"description"=>$goal->description,"startDate"=>$goal->start_date,"status"=>$goal->status]
         ], 201);
        
     }
