@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use Dotenv\Exception\ValidationException;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
@@ -91,4 +93,26 @@ class ProfileController extends Controller
     //     $user->save();
     //     return response()->json(['message'=>'Password Updated Successfully'],201);
     // }
+    public function update_password(Request $request)
+    {
+        $input = [
+            'current_password' => $request->currentPassword,
+            'new_password' => $request->newPassword,
+            'new_password_confirmation' => $request->newPasswordConfirmation,
+        ];
+        $validated =  validator($input,[
+            'current_password' => 'required',
+            'new_password' => 'required|min:8|confirmed'])->validate();
+
+            $user = auth()->user();
+            if (!Hash::check($validated['current_password'], $user->password)) {
+                return response()->json(['message' => 'Current password is incorrect.'], 422);
+            }
+            $user->update([
+                'password' => Hash::make($validated['new_password']),
+            ]);
+            $user->tokens()->delete(); // Force logout all devices
+
+            return response()->json(['message' => 'Password updated successfully'], 200);
+    }
 }
