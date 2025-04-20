@@ -89,5 +89,31 @@ class StatsController extends Controller
          'numberOfSessions' => $numberOfTimers
       ]);
    }
-   
+
+   public function sessionDuration(){
+      
+          $userId = auth()->id();
+      
+          // time_spent is in seconds
+          $under30min = Timer::where('user_id', $userId)
+              ->where('time_spent', '<', 1800) // 30 minutes = 1800 seconds
+              ->count();
+      
+          $between30and60min = Timer::where('user_id', $userId)
+              ->where('time_spent', '>=', 1800)
+              ->where('time_spent', '<', 3600) // 60 minutes = 3600 seconds
+              ->count();
+      
+          $above60min = Timer::where('user_id', $userId)
+              ->where('time_spent', '>=', 3600)
+              ->count();
+      
+          return response()->json([
+              'short' => $under30min,
+              'medium' => $between30and60min,
+              'long' => $above60min,
+          ]);
+     
+      
+   }
 }
