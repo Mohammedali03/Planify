@@ -134,7 +134,9 @@ class GoalsController extends Controller
             return response()->json(["message" => "Goal not found"], 404);
         }
         $goal->delete();
-        return response()->json(["message" => "Goal deleted successfully"], 200);
+        return response()->json(["message" => "Goal deleted successfully",
+        "goal"=>["id"=>$goal->id,"description"=>$goal->description,"startDate"=>$goal->start_date,"status"=>$goal->status]
+        ], 200);
 
     }
 
