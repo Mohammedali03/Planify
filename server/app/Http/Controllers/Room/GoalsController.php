@@ -142,12 +142,12 @@ class GoalsController extends Controller
 
         // $goal_complete = Goal::find($goal)->where("user_id",auth()->id())->first();
         $user = auth()->user();
-        if(!$goal){
+        if(!$goal || $goal->user_id !== $user->id ){
             return response()->json(["message"=>"goal not found"],404);
         }
-        if($goal->user_id !== $user->id){
-            return response()->json(["message" => "Goal not found"], 404);
-        }
+        // if($goal->user_id !== $user->id){
+        //     return response()->json(["message" => "Goal not found"], 404);
+        // }
         $goal->update(["status"=>!$goal->status]);
         if($goal->status){
             return response()->json(["message"=>"goal completed successfully",
