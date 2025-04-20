@@ -150,9 +150,13 @@ class GoalsController extends Controller
         }
         $goal->update(["status"=>!$goal->status]);
         if($goal->status){
-            return response()->json(["message"=>"goal completed successfully"],200);
+            return response()->json(["message"=>"goal completed successfully",
+        "goal"=>["id"=>$goal->id,"description"=>$goal->description,"startDate"=>$goal->start_date,"status"=>$goal->status]
+        ],200);
         }else{
-            return response()->json(["message"=>"the goal is not completed yet take your time finishing it"],200);
+            return response()->json(["message"=>"the goal is not completed yet take your time finishing it",
+        "goal"=>["id"=>$goal->id,"description"=>$goal->description,"startDate"=>$goal->start_date,"status"=>$goal->status]
+        ],200);
         }
 
     }
