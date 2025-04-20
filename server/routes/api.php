@@ -66,6 +66,7 @@ Route::group(['prefix'=>'stats'],function(){
 
     Route::get('completed_goals',[StatsController::class,'completedGoals']);
     Route::get('number_of_sessions',[StatsController::class,'numberOfTimers']);
+    Route::get('session_duration',[StatsController::class,'sessionDuration']);
 });
 
 
