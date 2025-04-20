@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Stats;
 use App\Models\Timer;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
@@ -116,4 +117,27 @@ class StatsController extends Controller
      
       
    }
+   public function leaderboard()
+   {
+       $leaderboard = User::withSum(['timers as total_time_spent' => function ($query) {
+           $query->where('status', 'ended');
+       }], 'time_spent')
+       ->orderByDesc('total_time_spent')
+       ->limit(10)
+       ->get(['id', 'name']); // only fetch fields you need
+   
+       return response()->json([
+           'leaderboard' =>  $leaderboard->map(function($user){
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'total_time_spent' => $user->total_time_spent,
+                'max_streak'=>$user->max_streak,
+                'completed_goals'=>$user->goals()->where('status', true)->count(),
+                'numberOfSessions'=>$user->timers()->count(),
+            ];
+           })
+       ]);
+   }
+   
 }
