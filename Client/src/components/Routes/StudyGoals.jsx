@@ -14,26 +14,26 @@ const StudyGoals = () => {
   const [error, setError] = useState(null);
 
   // Fetch goals
-  useEffect(() => {
-    const fetchGoals = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const res = await axios.get("http://localhost:8000/api/goals", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        setGoals(res.data.goals);
-        console.log(res.data.goals);
-      } catch (e) {
-        setError("Failed to fetch goals. Please try again later.");
-        console.error("error fetching data", e);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchGoals = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const res = await axios.get("http://localhost:8000/api/goals", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setGoals(res.data.goals);
+      console.log(res.data.goals);
+    } catch (e) {
+      setError("Failed to fetch goals. Please try again later.");
+      console.error("error fetching data", e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchGoals();
   }, []);
 
@@ -48,25 +48,20 @@ const StudyGoals = () => {
           },
         }
       );
-      setGoals(
-        goals.map((goal) =>
-          goal.id === id ? { ...goal, status: goal.status === 0 ? 1 : 0 } : goal
-        )
-      );
+      await fetchGoals();
     } catch (e) {
       console.error("toggling goal failed", e);
     }
   };
 
   const handleDeleteGoal = async (id) => {
-    // Remove the deleted goal from the state (will be replaced by optimistic UI later)
-    setGoals(goals.filter((goal) => goal.id !== id));
     try {
       await axios.delete(`http://localhost:8000/api/goals/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+      await fetchGoals();
     } catch (e) {
       console.log(e);
     }
@@ -223,6 +218,7 @@ const StudyGoals = () => {
             isDarkMode={isDarkMode}
             editingGoal={editingGoal}
             setGoals={setGoals}
+            fetchGoals={fetchGoals}
           />
         )}
       </div>

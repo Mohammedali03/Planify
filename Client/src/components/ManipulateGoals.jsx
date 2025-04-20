@@ -6,7 +6,7 @@ const ManipulateGoals = ({
   isDarkMode,
   setShowAddModal,
   editingGoal,
-  setGoals,
+  fetchGoals,
 }) => {
   const [newGoal, setNewGoal] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -33,7 +33,7 @@ const ManipulateGoals = ({
     setError(null);
 
     try {
-      const res = await axios.post(
+      await axios.post(
         "http://localhost:8000/api/goals",
         {
           description: newGoal,
@@ -46,16 +46,8 @@ const ManipulateGoals = ({
         }
       );
 
-      // Create a complete goal object with all necessary fields
-      const newGoalData = {
-        id: Date.now(),
-        description: newGoal,
-        startDate: selectedDate.toISOString().split("T")[0],
-        status: 0,
-        ...res.data,
-      };
+      await fetchGoals();
 
-      setGoals((prevGoals) => [...prevGoals, newGoalData]);
       setShowAddModal(false);
     } catch (error) {
       setError(error.response?.data?.message || "Error adding goal");
@@ -92,17 +84,7 @@ const ManipulateGoals = ({
         }
       );
 
-      setGoals((prevGoals) =>
-        prevGoals.map((goal) =>
-          goal.id === editingGoal.id
-            ? {
-                ...goal,
-                description: newGoal,
-                startDate: selectedDate.toISOString().split("T")[0],
-              }
-            : goal
-        )
-      );
+      await fetchGoals();
       setShowAddModal(false);
     } catch (error) {
       setError(error.response?.data?.message || "Error updating goal");
@@ -124,6 +106,8 @@ const ManipulateGoals = ({
     setSelectedDate(new Date());
     setError(null);
   };
+
+  const today = new Date().toISOString().split("T")[0];
 
   return (
     <AnimatePresence>
@@ -195,6 +179,7 @@ const ManipulateGoals = ({
                     : "border-gray-300 focus:border-indigo-500"
                 } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
                 disabled={loading}
+                min={today}
               />
             </div>
           </div>
