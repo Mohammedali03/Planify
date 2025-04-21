@@ -30,8 +30,10 @@ Route::post('/update_password',[ProfileController::class,'update_password']);
 // Route::post('/goals', [GoalsController::class, 'store']);
 // Route::get('/goals/{goal}', [GoalsController::class, 'show']);
 
-Route::apiResource('goals', GoalsController::class);
+
 Route::post('goals/{goal}/complete',[GoalsController::class,'complete']);
+Route::get('goals/today',[GoalsController::class,'todayGoals']);
+Route::apiResource('goals', GoalsController::class);
 
 //Timer
 Route::group(['prefix'=>'timer'],function(){
