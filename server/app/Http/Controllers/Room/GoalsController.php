@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Room;
-
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 
 use App\Models\Goal;
@@ -60,9 +60,10 @@ class GoalsController extends Controller
     
     $goal = auth()->user()->goals()->create($validated);
     
+    $goalres = Goal::find($goal->id);
     return response()->json([
         "message" => "Goal created successfully",
-        "goal" => ["id"=>$goal->id,"description"=>$goal->description,"startDate"=>$goal->start_date,"status"=>$goal->status]
+        "goal" => ["id"=>$goalres->id,"description"=>$goalres->description,"startDate"=>$goalres->start_date,"status"=>$goalres->status]
     ], 201);
 }
 
@@ -161,5 +162,25 @@ class GoalsController extends Controller
         ],200);
         }
 
+    }
+
+    public function todayGoals(){
+        $user = auth()->user();
+        $today = Carbon::today()->toDateString();
+        $todayGoals = Goal::where("user_id",$user->id)->where("start_date",$today)->get();
+        if($todayGoals->isEmpty()){
+            return response()->json(["message"=>"no goals for today"],404);
+        }
+        return response()->json([
+            "message"=>"today goals fetched successfully",
+            "goals"=>$todayGoals->map(function($goal){
+                return [
+                    "id"=>$goal->id,
+                    "description"=>$goal->description,
+                    "startDate"=>$goal->start_date,
+                    "status"=>$goal->status
+                ];
+            })
+        ]);
     }
 }
