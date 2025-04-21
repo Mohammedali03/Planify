@@ -1,37 +1,108 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { motion } from "framer-motion";
+import Input from "../ui/Input";
+import {
+  CheckIcon,
+  MinusIcon,
+  PlusIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 
 const Tasks = ({ setShowTasks }) => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [isAddingTask, setIsAddingTask] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleAddTask = () => {
+  const today = new Date().toISOString().split("T")[0];
+
+  // Fetch goals
+  useEffect(() => {
+    const fetchGoals = async () => {
+      setIsLoading(true);
+      try {
+        const res = await axios.get("http://localhost:8000/api/goals", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        const data = res.data.goals;
+
+        setTasks(data.filter((task) => task.startDate === today));
+      } catch (e) {
+        console.error("error fetching data", e);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchGoals();
+  }, []);
+
+  const handleAddTask = async () => {
     if (!newTask.trim()) return;
 
-    setTasks((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        text: newTask.trim(),
-        completed: false,
-        createdAt: new Date(),
-      },
-    ]);
-    setNewTask("");
-    setIsAddingTask(false);
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/goals",
+        {
+          description: newTask,
+          startDate: new Date().toISOString().split("T")[0],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setTasks((prev) => [...prev, res.data.goal]);
+      setNewTask("");
+      setIsAddingTask(false);
+    } catch (e) {
+      console.log("error adding task", e);
+    }
   };
 
-  const handleToggleTask = (taskId) => {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === taskId ? { ...task, completed: !task.completed } : task
-      )
-    );
+  const handleToggleTask = async (taskId) => {
+    try {
+      const res = await axios.post(
+        `http://localhost:8000/api/goals/${taskId}/complete`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const data = res.data;
+
+      setTasks(
+        tasks.map((task) =>
+          task.id === taskId ? { ...task, status: data.goal.status } : task
+        )
+      );
+    } catch (e) {
+      console.error("toggling goal failed", e);
+    }
   };
 
-  const handleDeleteTask = (taskId) => {
-    setTasks((prev) => prev.filter((task) => task.id !== taskId));
+  const handleDeleteTask = async (taskId) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:8000/api/goals/${taskId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log(res.data);
+      setTasks((prev) => prev.filter((task) => task.id !== taskId));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -42,11 +113,8 @@ const Tasks = ({ setShowTasks }) => {
 
   return (
     <div
-      className="feature tasks z-90 absolute rounded-md flex-col items-stretch overflow-hidden bg-white shadow-lg"
-      style={{
-        width: "400px",
-        height: "300px",
-      }}
+      className="feature tasks z-90 absolute rounded-md flex-col 
+      items-stretch bg-white shadow-lg overflow-y-scroll size-[400px]"
       role="dialog"
       aria-label="Tasks"
     >
@@ -54,21 +122,11 @@ const Tasks = ({ setShowTasks }) => {
         <span className="text-sm text-gray-600 font-medium">Tasks</span>
 
         <button
-          onClick={() => setShowTasks(true)}
-          className="p-1 hover:bg-gray-100 rounded-md transition-colors cursor-pointer"
+          onClick={() => setShowTasks(false)}
+          className="size-7 text-gray-500 p-1 hover:bg-gray-100 rounded-md transition-colors cursor-pointer"
           aria-label="Hide tasks panel"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-5 h-5 text-gray-500"
-            aria-hidden="true"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
-          </svg>
+          <MinusIcon />
         </button>
       </div>
 
@@ -80,33 +138,17 @@ const Tasks = ({ setShowTasks }) => {
           text-sm font-semibold ${isAddingTask ? "mb-3" : "mb-0"}`}
           aria-label="Add new task"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-5 h-5"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 4.5v15m7.5-7.5h-15"
-            />
-          </svg>
+          <PlusIcon className="size-5" />
           Add Task
         </button>
         {isAddingTask && (
           <div className="flex gap-2">
-            <input
+            <Input
               type="text"
               value={newTask}
               onChange={(e) => setNewTask(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Add a new task..."
-              className="flex-1 px-2 py-2 border border-indigo-400 rounded-md focus:outline-none 
-              focus:ring focus:ring-indigo-600 focus:border-transparent placeholder:text-gray-400"
               autoFocus
               aria-label="New task input"
             />
@@ -121,49 +163,35 @@ const Tasks = ({ setShowTasks }) => {
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.3 }}
             key={task.id}
-            onClick={() => handleToggleTask(task.id)}
-            className="flex items-center justify-between p-2 mb-2 cursor-pointer
+            className="flex items-center justify-between p-2 mb-2 
             hover:bg-indigo-100 hover:border-gray-200 rounded-md border border-[#ddd]"
           >
             <div className="flex items-center  gap-3 cursor-pointer">
               <button
-                className={`w-5 h-5 border-2 flex items-center justify-center transition-colors  ${
-                  task.completed
+                onClick={() => handleToggleTask(task.id)}
+                className={`w-5 h-5 border-2 flex items-center justify-center transition-colors cursor-pointer ${
+                  task.status == 1
                     ? "border-indigo-500 bg-indigo-500"
                     : "border-gray-300 hover:border-gray-400"
                 } starting:opacity-0 duration-300`}
                 aria-label={
-                  task.completed
+                  task.status == 1
                     ? "Mark task as incomplete"
                     : "Mark task as complete"
                 }
               >
-                {task.completed && (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-3 h-3 text-white"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4.5 12.75l6 6 9-13.5"
-                    />
-                  </svg>
+                {task.status == 1 && (
+                  <CheckIcon className="size-4 text-white" />
                 )}
               </button>
               <span
                 className={`capitalize font-medium text-sm ${
-                  task.completed
+                  task.status == 1
                     ? "line-through text-gray-400"
                     : "text-gray-700"
                 }`}
               >
-                {task.text}
+                {task.description}
               </span>
             </div>
             <button
@@ -171,21 +199,7 @@ const Tasks = ({ setShowTasks }) => {
               className="p-1 hover:bg-indigo-100 duration-300 rounded-md cursor-pointer"
               aria-label="Delete task"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-4 h-4 text-gray-500"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                />
-              </svg>
+              <TrashIcon className="w-4 h-4 text-gray-500" />
             </button>
           </motion.li>
         ))}
