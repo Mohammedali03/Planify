@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { Rnd } from "react-rnd";
+import { MinusIcon } from "@heroicons/react/24/outline";
+import Input from "../ui/Input";
 
 const Media = ({ setShowMedia }) => {
   const [youtubeUrl, setYoutubeUrl] = useState("");
@@ -7,7 +9,6 @@ const Media = ({ setShowMedia }) => {
   const [videoId, setVideoId] = useState("");
 
   const handlePlayVideo = () => {
-    // Extract video ID from YouTube URL
     const videoIdMatch = youtubeUrl.match(
       /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/
     );
@@ -18,79 +19,54 @@ const Media = ({ setShowMedia }) => {
   };
 
   return (
-    <motion.div
-      //   drag
-      //   dragMomentum={false}
-      //   dragElastic={0}
-      className={`feature media z-90 absolute rounded-md flex-col items-stretch overflow-hidden bg-white shadow-lg ${
-        showVideo ? "p-0" : ""
-      }`}
-      style={{
-        width: "400px",
-        height: "300px",
+    <Rnd
+      default={{
+        x: 0,
+        y: 100,
+        width: 400,
+        height: 300,
       }}
+      minWidth={400}
+      minHeight={300}
+      bounds="window"
+      enableResizing={showVideo ? { bottomRight: true } : false}
+      style={{ zIndex: 100, border: "6px" }}
     >
       <div
-        className={`flex py-2 px-4 items-center justify-between border-b border-[#e9e9e9] ${
-          showVideo ? "px-2" : ""
+        className={`w-full h-full rounded-md flex flex-col bg-white shadow-lg ${
+          showVideo && "p-0"
         }`}
-        style={{ touchAction: "none" }}
       >
-        <div className="flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-5 h-5 text-gray-500"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"
-            />
-          </svg>
-          <span className="text-sm text-gray-600 font-medium">Media</span>
-        </div>
-        <div className="flex items-center gap-2">
+        <div
+          className="flex py-2 px-4 items-center justify-between border-b
+           border-gray-200 bg-gray-50 cursor-grab"
+          style={{ touchAction: "none", borderRadius: "6px 6px 0 0" }}
+        >
+          <span className="text-sm font-medium text-gray-600">Media</span>
           <button
-            onClick={() => setShowMedia(true)}
-            className="p-1 hover:bg-gray-100 rounded-md transition-colors"
+            onClick={() => setShowMedia(false)}
+            className="size-6 p-1 hover:bg-gray-100 rounded-md transition-colors cursor-pointer"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-5 h-5 text-gray-500"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
-            </svg>
+            <MinusIcon />
           </button>
         </div>
-      </div>
 
-      {!showVideo ? (
-        <div className="p-6">
-          <div className="flex flex-col gap-4">
+        {!showVideo ? (
+          <div className="flex flex-col gap-4 mt-4 p-4">
             <div className="flex gap-2">
-              <input
+              <Input
                 type="text"
                 placeholder="Enter YouTube URL"
-                className="flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 value={youtubeUrl}
                 onChange={(e) => setYoutubeUrl(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handlePlayVideo();
-                  }
+                  if (e.key === "Enter") handlePlayVideo();
                 }}
               />
               <button
                 onClick={handlePlayVideo}
-                className="px-4 py-2 font-semibold bg-indigo-600 text-white rounded-md hover:bg-indigo-500 duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                className="px-4 py-2 font-semibold bg-indigo-600 text-white
+                cursor-pointer rounded-md hover:bg-indigo-500 transition disabled:opacity-50"
                 disabled={!youtubeUrl}
               >
                 Play
@@ -100,10 +76,8 @@ const Media = ({ setShowMedia }) => {
               Paste a YouTube URL to start watching
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="w-full h-[calc(100%-2.5rem)]">
-          <div className="relative w-full h-full">
+        ) : (
+          <div className="flex-1 relative">
             <iframe
               className="absolute top-0 left-0 w-full h-full"
               src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
@@ -113,9 +87,9 @@ const Media = ({ setShowMedia }) => {
               allowFullScreen
             ></iframe>
           </div>
-        </div>
-      )}
-    </motion.div>
+        )}
+      </div>
+    </Rnd>
   );
 };
 
