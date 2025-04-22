@@ -151,8 +151,8 @@ class StatsController extends Controller
        ->get(['id', 'name'])
        ; // only fetch fields you need
    
-       return response()->json([
-           'leaderboard' =>  $leaderboard->map(function($user){
+       return response()->json(
+      $leaderboard->map(function($user){
             $totalSeconds = $user->total_time_spent;
             $hours = floor($totalSeconds / 3600);
             $minutes = floor(($totalSeconds % 3600) / 60);
@@ -160,14 +160,14 @@ class StatsController extends Controller
             return [
                 'id' => $user->id,
                 'name' => $user->name,
-                'profile_pic' => $user->profile_picture_url,
-                'total_time_spent' => "{$hours}h {$minutes}min",
-                'max_streak'=>$user->max_streak,
-                'completed_goals'=>$user->goals()->where('status', true)->count(),
+                'profilePic' => $user->profile_picture_url,
+                'totalTimeSpent' => "{$hours}h {$minutes}min",
+                'maxStreak'=>$user->max_streak,
+                'completedGoals'=>$user->goals()->where('status', true)->count(),
                 'numberOfSessions'=>$user->timers()->count(),
             ];
            })
-       ]);
+       );
    }
 
    public function getUserMonthStats()
