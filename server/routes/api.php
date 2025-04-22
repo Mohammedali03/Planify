@@ -9,10 +9,28 @@ use App\Http\Controllers\Room\TimerController;
 use App\Http\Controllers\Room\VideoController;
 use App\Http\Controllers\Stats\StatsController;
 use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\Auth\VerificationController;
 use App\Models\Timer;
 
+use Illuminate\Http\Request ;
+use App\Models\User;
+use Illuminate\Support\Facades\Redirect;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
+    $user = User::findOrFail($id);
+
+    if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+        return response()->json(['message' => 'Invalid verification link'], 400);
+    }
+
+    if (!$user->hasVerifiedEmail()) {
+        $user->markEmailAsVerified();
+    }
+
+    return Redirect::to('http://localhost:3000/login?verified=1');
+})->middleware(['signed'])->name('verification.verify');
 
 Route::middleware('auth:sanctum')->group(function () {
 //user
@@ -71,6 +89,8 @@ Route::group(['prefix'=>'stats'],function(){
     Route::get('number_of_sessions',[StatsController::class,'numberOfTimers']);
     Route::get('session_duration',[StatsController::class,'sessionDuration']);
     Route::get('leaderboard',[StatsController::class,'leaderboard']);
+    //general monthly stats
+    Route::get('user_month_stats',[StatsController::class,'getUserMonthStats']);
 });
 
 

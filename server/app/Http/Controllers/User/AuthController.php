@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SignupMail;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -28,10 +30,13 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        $user->sendEmailVerificationNotification();
+        Mail::to($user->email)->send(new SignupMail($user->name));
 
         return response()->json([
             // 'token' => $user->createToken('auth_token')->plainTextToken,
-            'user' => ['name'=>$user["name"]]
+            'user' => ['name'=>$user["name"],
+            'email_verified' => $user->hasVerifiedEmail(),]
         ], 201);
     }
 
