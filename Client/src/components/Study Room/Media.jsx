@@ -30,7 +30,7 @@ const Media = ({ setShowMedia }) => {
       minHeight={300}
       bounds="window"
       enableResizing={showVideo ? { bottomRight: true } : false}
-      style={{ zIndex: 100, border: "6px" }}
+      style={{ zIndex: 100, border: "6px", left: "40px" }}
     >
       <div
         className={`w-full h-full rounded-md flex flex-col bg-white shadow-lg ${
