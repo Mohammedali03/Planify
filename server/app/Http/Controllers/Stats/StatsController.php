@@ -161,7 +161,7 @@ class StatsController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'profile_pic' => $user->profile_picture_url,
-                'total_time_spent' => "{$hours}h:{$minutes}min",
+                'total_time_spent' => "{$hours}h {$minutes}min",
                 'max_streak'=>$user->max_streak,
                 'completed_goals'=>$user->goals()->where('status', true)->count(),
                 'numberOfSessions'=>$user->timers()->count(),
@@ -191,7 +191,7 @@ class StatsController extends Controller
     $minutes = floor(($studyData % 3600) / 60);
 
     return response()->json([
-        'monthlyStudyTime' => "{$hours}h:{$minutes}min",
+        'monthlyStudyTime' => "{$hours}h {$minutes}min",
         'monthlyCompletedGoals' => $completedGoals,
         'monthlyStreak' => $monthStreak,
         'monthlySessions' => $monthTimers
