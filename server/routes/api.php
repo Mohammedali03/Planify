@@ -29,7 +29,7 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) 
         $user->markEmailAsVerified();
     }
 
-    return Redirect::to('http://localhost:3000/login?verified=1');
+    return Redirect::to('http://localhost:5173/login?verified=1');
 })->middleware(['signed'])->name('verification.verify');
 
 Route::middleware('auth:sanctum')->group(function () {
