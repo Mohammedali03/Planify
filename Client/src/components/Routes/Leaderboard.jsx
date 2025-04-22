@@ -15,8 +15,7 @@ const Leaderboard = () => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        const data = res.data;
-        setStudents(data.leaderboard);
+        setStudents(res.data);
       } catch (err) {
         console.error("Error getting data", err);
       } finally {
