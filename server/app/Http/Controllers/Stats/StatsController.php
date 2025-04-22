@@ -155,6 +155,7 @@ class StatsController extends Controller
             return [
                 'id' => $user->id,
                 'name' => $user->name,
+                'profile_pic' => $user->profile_picture_url,
                 'total_time_spent' => $user->total_time_spent,
                 'max_streak'=>$user->max_streak,
                 'completed_goals'=>$user->goals()->where('status', true)->count(),
