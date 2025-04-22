@@ -148,15 +148,20 @@ class StatsController extends Controller
        }], 'time_spent')
        ->orderByDesc('total_time_spent')
        ->limit(10)
-       ->get(['id', 'name']); // only fetch fields you need
+       ->get(['id', 'name'])
+       ; // only fetch fields you need
    
        return response()->json([
            'leaderboard' =>  $leaderboard->map(function($user){
+            $totalSeconds = $user->total_time_spent;
+            $hours = floor($totalSeconds / 3600);
+            $minutes = floor(($totalSeconds % 3600) / 60);
+
             return [
                 'id' => $user->id,
                 'name' => $user->name,
                 'profile_pic' => $user->profile_picture_url,
-                'total_time_spent' => $user->total_time_spent,
+                'total_time_spent' => "{$hours}h:{$minutes}min",
                 'max_streak'=>$user->max_streak,
                 'completed_goals'=>$user->goals()->where('status', true)->count(),
                 'numberOfSessions'=>$user->timers()->count(),
@@ -182,10 +187,11 @@ class StatsController extends Controller
     $monthStreak = $user->streak;
     $monthTimers = $user->timers()->whereBetween('created_at', [$start, $end])->where('status', 'ended')->count();
 
-
+    $hours = floor($studyData / 3600);
+    $minutes = floor(($studyData % 3600) / 60);
 
     return response()->json([
-        'monthlyStudyTime' => $studyData,
+        'monthlyStudyTime' => "{$hours}h:{$minutes}min",
         'monthlyCompletedGoals' => $completedGoals,
         'monthlyStreak' => $monthStreak,
         'monthlySessions' => $monthTimers
