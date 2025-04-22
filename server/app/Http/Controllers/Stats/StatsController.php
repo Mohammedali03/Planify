@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Stats;
 use App\Models\Timer;
+use App\Models\Goal;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Room\GoalsController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -161,5 +163,31 @@ class StatsController extends Controller
            })
        ]);
    }
-   
+
+   public function getUserMonthStats()
+   {
+    $user = auth()->user();
+    $start = Carbon::now()->startOfMonth();
+    $end = Carbon::now()->endOfMonth();
+
+    $studyData = Timer::where('user_id', $user->id)
+        ->whereBetween('created_at', [$start, $end])
+        ->whereNotNull('time_spent')
+        ->sum('time_spent');
+    $completedGoals = Goal::where('user_id', $user->id)
+    ->whereBetween('start_date', [$start, $end])
+    ->where('status', true)
+    ->count();
+    $monthStreak = $user->streak;
+    $monthTimers = $user->timers()->whereBetween('created_at', [$start, $end])->where('status', 'ended')->count();
+
+
+
+    return response()->json([
+        'monthlyStudyTime' => $studyData,
+        'monthlyCompletedGoals' => $completedGoals,
+        'monthlyStreak' => $monthStreak,
+        'monthlySessions' => $monthTimers
+    ], 200);
+   }
 }
