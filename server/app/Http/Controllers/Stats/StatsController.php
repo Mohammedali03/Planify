@@ -166,9 +166,7 @@ class StatsController extends Controller
         ];
        });
   
-       return response()->json(
-        $data
-    );
+       return response()->json($data,200);
    }
 
    public function getUserMonthStats()
