@@ -93,9 +93,7 @@ class StatsController extends Controller
             return sprintf('%d:%02d', $hours, $minutes); // Format: H:mm
         });
 
-    return response()->json([ 
-        'studyData' => $studyData 
-    ], 200); 
+    return response()->json($studyData , 200); 
 }
 
 
