@@ -77,19 +77,24 @@ Route::group(['prefix'=>'timer'],function(){
 // Route::post('timer/end/{end?}',[TimerController::class,'end']);
 
 Route::group(['prefix'=>'stats'],function(){
+    //streak stats
     Route::get('streak',[StatsController::class,'streak']);
     Route::get('max_streak',[StatsController::class,'max_streak']);
+    //last visit of the user
     Route::get('last_visit',[StatsController::class,'last_visit']);
+    //total study time of the user 
     Route::get('total_study_time',[StatsController::class,'getTotalStudyTime']);
     //monthly study data for graph  
     Route::get('monthly_study_data',[StatsController::class,'monthlyStudyData']);
-
-
+    //completed goals     all time  
     Route::get('completed_goals',[StatsController::class,'completedGoals']);
+    //number of sessions aka total timers all time
     Route::get('number_of_sessions',[StatsController::class,'numberOfTimers']);
+    //session duration circle graph all time
     Route::get('session_duration',[StatsController::class,'sessionDuration']);
+    //leaderboard
     Route::get('leaderboard',[StatsController::class,'leaderboard']);
-    //general monthly stats
+    //general monthly stats this api return all the stats of the user in a month 
     Route::get('user_month_stats',[StatsController::class,'getUserMonthStats']);
 });
 
