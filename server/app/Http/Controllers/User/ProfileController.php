@@ -111,7 +111,7 @@ class ProfileController extends Controller
             $user->update([
                 'password' => Hash::make($validated['new_password']),
             ]);
-            $user->tokens()->delete(); // Force logout all devices
+            // $user->tokens()->delete(); // Force logout all devices
 
             return response()->json(['message' => 'Password updated successfully'], 200);
     }
