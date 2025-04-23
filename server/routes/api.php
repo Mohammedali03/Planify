@@ -15,6 +15,8 @@ use App\Models\Timer;
 use Illuminate\Http\Request ;
 use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
+use App\Http\Controllers\MessageController;
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -93,6 +95,8 @@ Route::group(['prefix'=>'stats'],function(){
     Route::get('user_month_stats',[StatsController::class,'getUserMonthStats']);
 });
 
+Route::post('/messages', [MessageController::class, 'sendMessage']);
+Route::get('/messages/{userId}', [MessageController::class, 'getMessages']);
 
 });
 //leaderboard
