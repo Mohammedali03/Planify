@@ -60,42 +60,63 @@ class StatsController extends Controller
    }
 
 
-   // public function monthlyStudyData()
-   // {
-   //     $start = Carbon::now()->startOfMonth();
-   //     $end = Carbon::now()->endOfMonth();
    
-   //     $studyData = Timer::where('user_id', auth()->id())
-   //         ->whereBetween('created_at', [$start, $end])
-   //         ->whereNotNull('time_spent')
-   //         ->get()
-   //         ->groupBy(fn ($timer) => $timer->created_at->day)
-   //         ->map(fn ($timers) => round($timers->sum('time_spent') / 3600, 2)); // convert to hours, rounded to 2 decimal places
-   
-   //     return response()->json([
-   //         'studyData' => $studyData
-   //     ], 200);
-   // }
-   public function monthlyStudyData() 
-{ 
-    $start = Carbon::now()->startOfMonth(); 
-    $end = Carbon::now()->endOfMonth(); 
+   // this month 
 
-    $studyData = Timer::where('user_id', auth()->id()) 
-        ->whereBetween('created_at', [$start, $end]) 
-        ->whereNotNull('time_spent') 
-        ->get() 
-        ->groupBy(fn ($timer) => $timer->created_at->day) 
-        ->map(function ($timers) {
-            $totalSeconds = $timers->sum('time_spent');
-            $hours = floor($totalSeconds / 3600);
-            $minutes = floor(($totalSeconds % 3600) / 60);
-            return sprintf('%d:%02d', $hours, $minutes); // Format: H:mm
-        });
+public function monthlyStudyData()
+{
+    $start = Carbon::now()->startOfMonth();
+    $end = Carbon::now()->endOfMonth();
 
-    return response()->json($studyData , 200); 
+    $studyData = Timer::where('user_id', auth()->id())
+        ->whereBetween('created_at', [$start, $end])
+        ->whereNotNull('time_spent')
+        ->get()
+        ->groupBy(function ($timer) {
+            return $timer->created_at->day;
+        })
+        ->map(function ($dayTimers, $day) {
+            $totalSeconds = $dayTimers->sum('time_spent');
+            $monthName = $dayTimers->first()->created_at->format('F'); // 'April'
+
+            return [
+                'date' => (string) $day,
+                'month' => $monthName,
+                'time' => $totalSeconds,
+            ];
+        })
+        ->values(); // Reset the keys to be sequential
+
+    return response()->json($studyData, 200);
 }
 
+// last 30 days 
+public function last30DaysStudyData() 
+{ 
+    $start = Carbon::now()->subDays(30); 
+    $end = Carbon::now(); 
+
+    $studyData = Timer::where('user_id', auth()->id())
+        ->whereBetween('created_at', [$start, $end])
+        ->whereNotNull('time_spent')
+        ->get()
+        ->groupBy(function ($timer) {
+            return $timer->created_at->day;
+        })
+        ->map(function ($dayTimers, $day) {
+            $totalSeconds = $dayTimers->sum('time_spent');
+            $monthName = $dayTimers->first()->created_at->format('F'); // 'April'
+
+            return [
+                'date' => (string) $day,
+                'month' => $monthName,
+                'time' => $totalSeconds,
+            ];
+        })
+        ->values(); // Reset the keys to be sequential
+
+    return response()->json($studyData, 200);
+}
 
    public function completedGoals(){
       $user = auth()->user();
