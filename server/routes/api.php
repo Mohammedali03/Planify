@@ -32,7 +32,10 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) 
     return Redirect::to('http://localhost:5173/login?verified=1');
 })->middleware(['signed'])->name('verification.verify');
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['token.check','auth:sanctum'])->group(function () {
+    Route::get('/check-token', function (Request $request) {
+        return response()->json(['status' => 'valid']);
+    });
 //user
 Route::get('/user', [AuthController::class, 'user']);
 Route::post('/logout', [AuthController::class, 'logout']);
