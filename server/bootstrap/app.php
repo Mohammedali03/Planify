@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\TokenCheckExpire;
 use App\Http\Middleware\UpdateLastVisit;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -8,6 +9,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -20,18 +22,27 @@ return Application::configure(basePath: dirname(__DIR__))
         // Enable global middleware
         $middleware->use([
             \Illuminate\Http\Middleware\HandleCors::class,
+            UpdateLastVisit::class,
+           // TokenCheckExpire::class, // Removed from global middleware
+         
         ]);
-        UpdateLastVisit::class;
+        
+        $middleware->alias([
+            'token.check' => TokenCheckExpire::class
+        ]);
 
         // Define API middleware group
-        // $middleware->group('api', [
-        //     EnsureFrontendRequestsAreStateful::class,
-        //     'throttle:api', // This was causing the issue
-        //     SubstituteBindings::class,
-        // ]);
+        $middleware->group('api', [
+            EnsureFrontendRequestsAreStateful::class,
+            'throttle:api',
+            SubstituteBindings::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })
     ->create();
+
+// Configure rate limiting
+
 
