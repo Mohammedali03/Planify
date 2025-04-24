@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Middleware\UpdateLastVisit;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -19,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->use([
             \Illuminate\Http\Middleware\HandleCors::class,
         ]);
+        UpdateLastVisit::class;
 
         // Define API middleware group
         // $middleware->group('api', [
