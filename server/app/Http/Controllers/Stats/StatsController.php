@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Room\GoalsController;
 use App\Models\User;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
@@ -91,32 +92,46 @@ public function monthlyStudyData()
 }
 
 // last 30 days 
+
+
+
+
 public function last30DaysStudyData() 
 { 
-    $start = Carbon::now()->subDays(30); 
-    $end = Carbon::now(); 
+    $start = Carbon::now()->subDays(29)->startOfDay(); // 30 days including today
+    $end = Carbon::now()->endOfDay();
 
-    $studyData = Timer::where('user_id', auth()->id())
+    // Fetch timers
+    $timers = Timer::where('user_id', auth()->id())
         ->whereBetween('created_at', [$start, $end])
         ->whereNotNull('time_spent')
-        ->get()
-        ->groupBy(function ($timer) {
-            return $timer->created_at->day;
-        })
-        ->map(function ($dayTimers, $day) {
-            $totalSeconds = $dayTimers->sum('time_spent');
-            $monthName = $dayTimers->first()->created_at->format('F'); // 'April'
+        ->get();
 
-            return [
-                'date' => (string) $day,
-                'month' => $monthName,
-                'time' => $totalSeconds,
-            ];
-        })
-        ->values(); // Reset the keys to be sequential
+    // Group by date string (e.g., "2025-04-22")
+    $grouped = $timers->groupBy(function ($timer) {
+        return $timer->created_at->format('Y-m-d');
+    });
 
-    return response()->json($studyData, 200);
+    // Create a 30-day period
+    $period = CarbonPeriod::create($start, $end);
+
+    // Build the final dataset
+    $studyData = collect();
+
+    foreach ($period as $date) {
+        $day = $date->format('Y-m-d');
+        $timersForDay = $grouped->get($day, collect());
+
+        $studyData->push([
+            'date' => $date->day, // Just the day number
+            'month' => $date->format('F'),
+            'time' => $timersForDay->sum('time_spent'),
+        ]);
+    }
+
+    return response()->json($studyData->values(), 200);
 }
+
 
    public function completedGoals(){
       $user = auth()->user();
