@@ -8,42 +8,47 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useFetch } from "../Hooks/useFetch";
 
 const Chart = () => {
   // Sample data - replace with actual data from backend later
-  const data = [
-    { date: "1", month: "April", time: 1800 },
-    { date: "2", month: "April", time: 7200 },
-    { date: "3", month: "April", time: 2700 },
-    { date: "4", month: "April", time: 5400 },
-    { date: "5", month: "April", time: 3600 },
-    { date: "6", month: "April", time: 10800 },
-    { date: "7", month: "April", time: 0 },
-    { date: "8", month: "April", time: 4500 },
-    { date: "9", month: "April", time: 9000 },
-    { date: "10", month: "April", time: 1800 },
-    { date: "11", month: "April", time: 3600 },
-    { date: "12", month: "April", time: 7200 },
-    { date: "13", month: "April", time: 5400 },
-    { date: "14", month: "April", time: 0 },
-    { date: "15", month: "April", time: 3600 },
-    { date: "16", month: "April", time: 9000 },
-    { date: "17", month: "April", time: 16000 },
-    { date: "18", month: "April", time: 7200 },
-    { date: "19", month: "April", time: 3600 },
-    { date: "20", month: "April", time: 5400 },
-    { date: "21", month: "April", time: 0 },
-    { date: "22", month: "April", time: 3600 },
-    { date: "23", month: "April", time: 7200 },
-    { date: "24", month: "April", time: 1800 },
-    { date: "25", month: "April", time: 9000 },
-    { date: "26", month: "April", time: 3600 },
-    { date: "27", month: "April", time: 5400 },
-    { date: "28", month: "April", time: 0 },
-    { date: "29", month: "April", time: 7200 },
-    { date: "30", month: "April", time: 12000 },
-    { date: "31", month: "April", time: 1800 },
-  ];
+  // const data = [
+  //   { date: "1", month: "April", time: 1800 },
+  //   { date: "2", month: "April", time: 7200 },
+  //   { date: "3", month: "April", time: 2700 },
+  //   { date: "4", month: "April", time: 5400 },
+  //   { date: "5", month: "April", time: 3600 },
+  //   { date: "6", month: "April", time: 10800 },
+  //   { date: "7", month: "April", time: 0 },
+  //   { date: "8", month: "April", time: 4500 },
+  //   { date: "9", month: "April", time: 9000 },
+  //   { date: "10", month: "April", time: 1800 },
+  //   { date: "11", month: "April", time: 3600 },
+  //   { date: "12", month: "April", time: 7200 },
+  //   { date: "13", month: "April", time: 5400 },
+  //   { date: "14", month: "April", time: 0 },
+  //   { date: "15", month: "April", time: 3600 },
+  //   { date: "16", month: "April", time: 9000 },
+  //   { date: "17", month: "April", time: 16000 },
+  //   { date: "18", month: "April", time: 7200 },
+  //   { date: "19", month: "April", time: 3600 },
+  //   { date: "20", month: "April", time: 5400 },
+  //   { date: "21", month: "April", time: 0 },
+  //   { date: "22", month: "April", time: 3600 },
+  //   { date: "23", month: "April", time: 7200 },
+  //   { date: "24", month: "April", time: 1800 },
+  //   { date: "25", month: "April", time: 9000 },
+  //   { date: "26", month: "April", time: 3600 },
+  //   { date: "27", month: "April", time: 5400 },
+  //   { date: "28", month: "April", time: 0 },
+  //   { date: "29", month: "April", time: 7200 },
+  //   { date: "30", month: "April", time: 12000 },
+  //   { date: "31", month: "April", time: 1800 },
+  // ];
+
+  const { data, isLoading } = useFetch(
+    "http://localhost:8000/api/stats/last_30_days_study_data"
+  );
 
   // Custom tooltip formatter to show time in hours, minutes, and seconds
   const formatTime = (seconds) => {

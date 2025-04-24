@@ -5,13 +5,12 @@ import {
   FireIcon,
   EyeIcon,
 } from "@heroicons/react/24/outline";
-import { useFetch } from "./CustomHooks/useFetch";
+import { useFetch } from "../Hooks/useFetch";
 
 const KeyStats = () => {
   const { data, isLoading } = useFetch(
     "http://localhost:8000/api/stats/user_month_stats"
   );
-  console.log(data);
 
   // Initialize with default values that match your data structure
   const [stats, setStats] = useState(() => [

@@ -24,7 +24,7 @@ const Dashboard = () => {
         <KeyStats />
         <div className="flex flex-col md:flex-row gap-5 mt-10">
           <Chart />
-          <PieChart />
+          {/* <PieChart /> */}
         </div>
       </div>
     </div>
