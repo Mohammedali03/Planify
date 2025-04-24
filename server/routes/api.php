@@ -86,6 +86,8 @@ Route::group(['prefix'=>'stats'],function(){
     Route::get('total_study_time',[StatsController::class,'getTotalStudyTime']);
     //monthly study data for graph  
     Route::get('monthly_study_data',[StatsController::class,'monthlyStudyData']);
+    //last 30 days study data for graph
+    Route::get('last_30_days_study_data',[StatsController::class,'last30DaysStudyData']);
     //completed goals     all time  
     Route::get('completed_goals',[StatsController::class,'completedGoals']);
     //number of sessions aka total timers all time
