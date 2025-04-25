@@ -4,16 +4,16 @@ import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./components/AuthProvider.jsx";
-import { AnimatePresence } from "framer-motion";
+import { LangProvider } from "./components/LangContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <AnimatePresence>
-        <AuthProvider>
+      <AuthProvider>
+        <LangProvider>
           <App />
-        </AuthProvider>
-      </AnimatePresence>
+        </LangProvider>
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>
 );
