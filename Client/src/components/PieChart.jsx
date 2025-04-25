@@ -7,22 +7,13 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import useFetch from "../hooks/useFetch";
 
-// Mock data for testing
-const mockData = [
-  { date: "1", month: "April", time: 1800 }, // 30 min
-  { date: "2", month: "April", time: 7200 }, // 2 hours
-  { date: "3", month: "April", time: 10800 }, // 3 hours
-  { date: "4", month: "April", time: 3600 }, // 1 hour
-  { date: "5", month: "April", time: 14400 }, // 4 hours
-  { date: "6", month: "April", time: 2700 }, // 45 min
-  { date: "7", month: "April", time: 9000 }, // 2.5 hours
-  { date: "8", month: "April", time: 5400 }, // 1.5 hours
-  { date: "9", month: "April", time: 18000 }, // 5 hours
-  { date: "10", month: "April", time: 3600 }, // 1 hour
-];
+const PieChart = ({}) => {
+  const { data, isLoading } = useFetch(
+    "http://localhost:8000/api/stats/last_30_days_study_data"
+  );
 
-const PieChart = ({ data = mockData }) => {
   // Analyze the data to categorize study sessions
   const analyzeData = (data) => {
     const categories = {
@@ -35,7 +26,7 @@ const PieChart = ({ data = mockData }) => {
       long: { name: "Long Sessions (> 60 mins)", value: 0, color: "#a78bfa" },
     };
 
-    data.forEach((item) => {
+    data?.forEach((item) => {
       const hours = item.time / 3600;
       if (hours < 1) {
         categories.short.value += item.time;
@@ -62,7 +53,7 @@ const PieChart = ({ data = mockData }) => {
 
   return (
     <div className="h-[400px] bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 ">
-      <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
+      <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 ">
         Study Time Distribution
       </h2>
       <div className="h-[350px]">
@@ -96,7 +87,7 @@ const PieChart = ({ data = mockData }) => {
               verticalAlign="bottom"
               height={36}
               formatter={(value) => (
-                <span className="text-sm text-gray-600 dark:text-gray-300">
+                <span className="text-sm flex  text-gray-600 dark:text-gray-300">
                   {value}
                 </span>
               )}

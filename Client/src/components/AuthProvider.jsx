@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -36,6 +37,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   async function fetchUser(currentToken) {
+    setLoading(true);
+
     try {
       const response = await axios.get("http://localhost:8000/api/user", {
         headers: {
@@ -45,6 +48,8 @@ export const AuthProvider = ({ children }) => {
       setUser(response.data);
     } catch (error) {
       console.error("Fetching user failed", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -82,6 +87,7 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated,
         login,
         logout,
+        loading,
         errorMessage,
         setErrorMessage,
       }}

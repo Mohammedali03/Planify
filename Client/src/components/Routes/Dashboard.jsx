@@ -6,11 +6,19 @@ import Chart from "../Chart";
 import PieChart from "../PieChart";
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     document.title = "Dashboard - Planify";
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen w-full">
@@ -22,9 +30,9 @@ const Dashboard = () => {
 
       <div className="bg-gray-100 p-4 min-h-screen">
         <KeyStats />
-        <div className="flex flex-col md:flex-row gap-5 mt-10">
+        <div className="flex flex-col 2xl:flex-row gap-5 mt-10">
           <Chart />
-          {/* <PieChart /> */}
+          <PieChart />
         </div>
       </div>
     </div>
