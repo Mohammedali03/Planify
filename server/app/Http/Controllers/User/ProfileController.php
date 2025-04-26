@@ -115,4 +115,11 @@ class ProfileController extends Controller
 
             return response()->json(['message' => 'Password updated successfully'], 200);
     }
+    public function updateLastActiveAt()
+    {
+        $user = auth()->user();
+        $user->last_active_at = now();
+        $user->save();
+        return response()->json(['message' => 'Last active at updated successfully'], 200);
+    }
 }
