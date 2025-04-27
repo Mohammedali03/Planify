@@ -195,7 +195,7 @@ const ProfileSettings = () => {
               <img
                 src={user?.profile_picture_url}
                 alt="Profile picture"
-                className="rounded-full "
+                className="rounded-full size-full"
               />
             )}
           </div>

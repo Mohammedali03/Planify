@@ -152,7 +152,11 @@ const Header = () => {
                 {user?.name[0]}
               </span>
             ) : (
-              <img src={user?.profile_picture_url} alt="Profile picture" />
+              <img
+                src={user?.profile_picture_url}
+                alt="Profile picture"
+                className="size-full"
+              />
             )}
           </div>
           {showDropdown ? (
