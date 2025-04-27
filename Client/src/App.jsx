@@ -33,6 +33,12 @@ const App = () => {
           path="/login"
           element={!isAuthenticated ? <Lazy.Login /> : <Navigate to="/login" />}
         />
+        <Route
+          path="/confirm-email"
+          element={
+            isAuthenticated ? <Lazy.Dashboard /> : <Lazy.ConfirmEmailPage />
+          }
+        />
         <Route element={<Layout />}>
           <Route
             path="/dashboard"

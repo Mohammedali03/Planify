@@ -68,7 +68,7 @@ const SignupForm = ({ setErrorMessage, setSuccessMessage }) => {
       setSuccessMessage(
         "Created account successfully! Redirecting to Login..."
       );
-      setTimeout(() => location("/login"), 3000);
+      setTimeout(() => location("/confirm-email"), 3000);
     } catch (error) {
       console.error("an error has occured", error);
       setErrorMessage(

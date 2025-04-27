@@ -9,6 +9,9 @@ export const StudyRoom = React.lazy(() => import("./Routes/StudyRoom"));
 export const Leaderboard = React.lazy(() => import("./Routes/Leaderboard"));
 export const StudyGoals = React.lazy(() => import("./Routes/StudyGoals"));
 export const Settings = React.lazy(() => import("./Routes/Settings"));
+export const ConfirmEmailPage = React.lazy(() =>
+  import("./Routes/ConfimEmailPage")
+);
 
 // Settings Components
 export const ProfileSettings = React.lazy(() =>
