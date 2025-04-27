@@ -20,12 +20,17 @@ export const AuthProvider = ({ children }) => {
         "http://localhost:8000/api/login",
         data
       );
-      const token = response.data.token;
+      const data = response.data;
+      const token = data.token;
       setToken(token);
-
       localStorage.setItem("token", response.data.token);
-      await fetchUser(token);
-      navigate("/dashboard");
+
+      if (data.user.verified === 1) {
+        await fetchUser(token);
+        navigate("/dashboard");
+      } else if (data.user.verified === 0) {
+        navigate("/confirm-email");
+      }
     } catch (error) {
       console.error("Login failed", error);
 

@@ -74,7 +74,7 @@ const LoginForm = () => {
           Sign in to your account
         </h2>
       </div>
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-5 mt-5">
         <div>
           <label
             htmlFor="email"
@@ -130,7 +130,7 @@ const LoginForm = () => {
         </div>
       </form>
 
-      <p className="mt-10 text-center text-sm/6 text-gray-500">
+      <p className="mt-7 text-center text-sm/6 text-gray-500">
         Don't have an account?{" "}
         <Link
           to="/signup"
