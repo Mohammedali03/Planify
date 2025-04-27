@@ -115,9 +115,7 @@ $test ="false";
 
         return response()->json([
             'token' => $token,
-            'user' => $user,
-            "ress"=>$ress,
-            "test"=>$test
+            'user' => ["userId" => $user->id, "userEmail" => $user->email, "verified" =>$user->email_verified_at? 1:0]
         ]);
     }
 
