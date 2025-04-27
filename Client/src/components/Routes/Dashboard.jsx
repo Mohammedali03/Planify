@@ -30,9 +30,13 @@ const Dashboard = () => {
 
       <div className="bg-gray-100 p-4 min-h-screen">
         <KeyStats />
-        <div className="flex flex-col 2xl:flex-row gap-5 mt-10">
-          <Chart />
-          <PieChart />
+        <div className="grid grid-cols-1 xl:grid-cols-3 space-y-5 xl:space-x-5 xl:space-y-0 mt-10">
+          <div className="col-span-2">
+            <Chart />
+          </div>
+          <div>
+            <PieChart />
+          </div>
         </div>
       </div>
     </div>

@@ -28,9 +28,9 @@ const PieChart = ({}) => {
 
     data?.forEach((item) => {
       const hours = item.time / 3600;
-      if (hours < 1) {
+      if (hours < 0.5) {
         categories.short.value += item.time;
-      } else if (hours <= 3) {
+      } else if (hours <= 1) {
         categories.medium.value += item.time;
       } else {
         categories.long.value += item.time;
@@ -52,12 +52,12 @@ const PieChart = ({}) => {
   };
 
   return (
-    <div className="h-[400px] bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 ">
-      <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 ">
+    <div className="w-full bg-white h-[400px] dark:bg-gray-800 rounded-xl shadow-lg p-4">
+      <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
         Study Time Distribution
       </h2>
-      <div className="h-[350px]">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="flex justify-center items-center py-4">
+        <ResponsiveContainer height={300}>
           <RechartsPieChart>
             <Pie
               data={pieData}
@@ -85,9 +85,9 @@ const PieChart = ({}) => {
             />
             <Legend
               verticalAlign="bottom"
-              height={36}
+              wrapperStyle={{ marginTop: "10px" }}
               formatter={(value) => (
-                <span className="text-sm flex  text-gray-600 dark:text-gray-300">
+                <span className="text-sm text-gray-600 dark:text-gray-300">
                   {value}
                 </span>
               )}

@@ -8,7 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { useFetch } from "../Hooks/useFetch";
+import { useFetch } from "../hooks/useFetch";
 
 const Chart = () => {
   const { data, isLoading } = useFetch(
@@ -26,7 +26,7 @@ const Chart = () => {
   };
 
   return (
-    <div className="w-full 2xl:w-2/3 h-[400px] bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 ">
+    <div className="w-full h-[400px] bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 ">
       <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
         Monthly Study Time
       </h2>
