@@ -32,6 +32,16 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) 
     return Redirect::to('http://localhost:5173/login?verified=1');
 })->middleware(['signed'])->name('verification.verify');
 
+Route::post('/email/resend', function (Request $request) {
+    if ($request->user()->hasVerifiedEmail()) {
+        return response()->json(['message' => 'Email already verified.'], 200);
+    }
+
+    $request->user()->sendEmailVerificationNotification();
+
+    return response()->json(['message' => 'Verification link sent!'], 200);
+})->middleware(['auth:sanctum']);
+
 Route::middleware(['token.check','auth:sanctum'])->group(function () {
     Route::get('/check-token', function (Request $request) {
         return response()->json(['status' => 'valid']);
