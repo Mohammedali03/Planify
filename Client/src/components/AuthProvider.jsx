@@ -14,22 +14,23 @@ export const AuthProvider = ({ children }) => {
 
   const isAuthenticated = !!token;
 
-  const login = async (data) => {
+  const login = async (data2) => {
     try {
       const response = await axios.post(
         "http://localhost:8000/api/login",
-        data
+        data2
       );
       const data = response.data;
-      const token = data.token;
-      setToken(token);
-      localStorage.setItem("token", response.data.token);
 
-      if (data.user.verified === 1) {
+      if (data.user.verified == 0) {
+        navigate("/confirm-email");
+      } else if (data.user.verified == 1) {
+        const token = data.token;
+        setToken(token);
+
+        localStorage.setItem("token", data.token);
         await fetchUser(token);
         navigate("/dashboard");
-      } else if (data.user.verified === 0) {
-        navigate("/confirm-email");
       }
     } catch (error) {
       console.error("Login failed", error);
