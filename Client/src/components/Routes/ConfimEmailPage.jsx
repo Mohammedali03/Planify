@@ -11,7 +11,15 @@ export default function ConfirmEmailPage() {
     if (cooldown > 0) return;
 
     try {
-      await axios.post("http://localhost:8000/api/email/resend");
+      await axios.post(
+        "http://localhost:8000/api/email/resend",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       setResent(true);
       setCooldown(60);
     } catch (e) {
