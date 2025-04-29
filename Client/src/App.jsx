@@ -4,9 +4,12 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./components/AuthProvider";
 import Layout from "./components/Layout";
 import * as Lazy from "./components/lazy";
+import useUserActivity from "./hooks/useUserActivity";
 
 const App = () => {
   const { isAuthenticated } = useAuth();
+
+  useUserActivity();
 
   return (
     <Suspense
