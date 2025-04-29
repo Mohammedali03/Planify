@@ -6,6 +6,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [isVerified, setIsVerified] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,14 +22,18 @@ export const AuthProvider = ({ children }) => {
         data2
       );
       const data = response.data;
+      const token = data.token;
+      const verifiedStatus = data.user.verified;
 
-      if (data.user.verified == 0) {
+      setToken(token);
+      localStorage.setItem("token", data.token);
+      setIsVerified(data.user.verified);
+
+      if (verifiedStatus === 0) {
         navigate("/confirm-email");
-      } else if (data.user.verified == 1) {
-        const token = data.token;
-        setToken(token);
+      }
 
-        localStorage.setItem("token", data.token);
+      if (verifiedStatus === 1) {
         await fetchUser(token);
         navigate("/dashboard");
       }
@@ -41,6 +46,10 @@ export const AuthProvider = ({ children }) => {
       );
     }
   };
+
+  // useEffect(() => {
+  //   console.log(isVerified);
+  // }, [isVerified]);
 
   async function fetchUser(currentToken) {
     setLoading(true);
@@ -91,6 +100,7 @@ export const AuthProvider = ({ children }) => {
         user,
         token,
         isAuthenticated,
+        isVerified,
         login,
         logout,
         loading,

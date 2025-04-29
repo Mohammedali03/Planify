@@ -7,7 +7,7 @@ import * as Lazy from "./components/lazy";
 import useUserActivity from "./hooks/useUserActivity";
 
 const App = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isVerified } = useAuth();
 
   useUserActivity();
 
@@ -34,19 +34,43 @@ const App = () => {
         />
         <Route
           path="/login"
-          element={!isAuthenticated ? <Lazy.Login /> : <Navigate to="/login" />}
+          element={
+            !isAuthenticated ? (
+              <Lazy.Login />
+            ) : isVerified === 1 ? (
+              <Navigate to="/dashboard" />
+            ) : isVerified === 0 ? (
+              <Navigate to="/confirm-email" />
+            ) : null
+          }
         />
         <Route
           path="/confirm-email"
           element={
-            isAuthenticated ? <Lazy.Dashboard /> : <Lazy.ConfirmEmailPage />
+            isAuthenticated ? (
+              isVerified === 1 ? (
+                <Navigate to="/dashboard" />
+              ) : (
+                <Lazy.ConfirmEmailPage />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
           }
         />
         <Route element={<Layout />}>
           <Route
             path="/dashboard"
             element={
-              isAuthenticated ? <Lazy.Dashboard /> : <Navigate to="/login" />
+              isAuthenticated ? (
+                isVerified === 1 ? (
+                  <Lazy.Dashboard />
+                ) : (
+                  <Lazy.ConfirmEmailPage />
+                )
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
