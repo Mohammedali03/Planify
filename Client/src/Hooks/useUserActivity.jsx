@@ -10,6 +10,9 @@ const updateLastActive = () => {
   clearTimeout(timeout);
 
   timeout = setTimeout(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
     axios.post(
       `${BASE_URL}/update_last_active_at`,
       {},
@@ -24,6 +27,8 @@ const updateLastActive = () => {
 
 const useUserActivity = () => {
   useEffect(() => {
+    if (!token) return;
+
     const events = ["scroll", "click", "mousemove", "keydown"];
     events.forEach((event) => {
       window.addEventListener(event, updateLastActive);
