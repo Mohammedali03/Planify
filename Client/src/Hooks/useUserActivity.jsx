@@ -27,6 +27,7 @@ const updateLastActive = () => {
 
 const useUserActivity = () => {
   useEffect(() => {
+    const token = localStorage.getItem("token");
     if (!token) return;
 
     const events = ["scroll", "click", "mousemove", "keydown"];
