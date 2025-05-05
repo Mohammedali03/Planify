@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import axios from "axios";
+import { addGoal, updateGoal } from "./GoalsServices";
 
 const ManipulateGoals = ({
   isDarkMode,
@@ -34,18 +34,10 @@ const ManipulateGoals = ({
     setError(null);
 
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/goals",
-        {
-          description: newGoal,
-          startDate: selectedDate.toISOString().split("T")[0],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const res = await addGoal({
+        description: newGoal,
+        startDate: selectedDate.toISOString().split("T")[0],
+      });
 
       setGoals((prevGoals) => [res.data.goal, ...prevGoals]);
       setShowAddModal(false);
@@ -71,18 +63,10 @@ const ManipulateGoals = ({
     setError(null);
 
     try {
-      const res = await axios.patch(
-        `http://localhost:8000/api/goals/${editingGoal.id}`,
-        {
-          description: newGoal,
-          startDate: selectedDate.toISOString().split("T")[0],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const res = await updateGoal({
+        description: newGoal,
+        startDate: selectedDate.toISOString().split("T")[0],
+      });
 
       setGoals((prevGoals) =>
         prevGoals.map((goal) =>

@@ -1,78 +1,24 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiCalendar, FiCheck, FiTrash, FiEdit2 } from "react-icons/fi";
 import Button from "../ui/Button";
-import axios from "axios";
 import ManipulateGoals from "../ManipulateGoals";
+import { useGoals } from "../../hooks/useGoals";
+import Goal from "../Goal";
 
 const StudyGoals = () => {
-  const [goals, setGoals] = useState([]);
-  const [editingGoal, setEditingGoal] = useState(null);
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [isDarkMode] = useState(localStorage.getItem("theme") === "dark");
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // Fetch goals
-  useEffect(() => {
-    const fetchGoals = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const res = await axios.get("http://localhost:8000/api/goals", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        setGoals(res.data.goals);
-        console.log(res.data.goals);
-      } catch (e) {
-        setError("Failed to fetch goals. Please try again later.");
-        console.error("error fetching data", e);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchGoals();
-  }, []);
-
-  const handleToggleComplete = async (id) => {
-    try {
-      const res = await axios.post(
-        `http://localhost:8000/api/goals/${id}/complete`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      console.log(res.data);
-      setGoals(
-        goals.map((goal) =>
-          goal.id === id ? { ...goal, ...res.data.goal } : goal
-        )
-      );
-    } catch (e) {
-      console.error("toggling goal failed", e);
-    }
-  };
-
-  const handleDeleteGoal = async (id) => {
-    try {
-      const res = await axios.delete(`http://localhost:8000/api/goals/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      console.log(res.data);
-      // Remove the deleted goal from the state (will be replaced by optimistic UI later)
-      setGoals(goals.filter((goal) => goal.id !== res.data.goal.id));
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  const {
+    goals,
+    setGoals,
+    editingGoal,
+    setEditingGoal,
+    showAddModal,
+    setShowAddModal,
+    isDarkMode,
+    isLoading,
+    error,
+    handleDeleteGoal,
+    handleToggleComplete,
+  } = useGoals();
 
   useEffect(() => {
     document.title = "Study Goals - Planify";
@@ -144,74 +90,14 @@ const StudyGoals = () => {
                       : "bg-white hover:bg-gray-50"
                   } ${goal.status ? "opacity-75" : ""}`}
                 >
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-start space-x-3">
-                      <button
-                        onClick={() => handleToggleComplete(goal.id)}
-                        className={`size-5 aspect-square rounded-full border-2 flex items-center justify-center cursor-pointer cursro-pointer ${
-                          goal.status
-                            ? "bg-green-500 border-green-500"
-                            : isDarkMode
-                            ? "border-gray-600"
-                            : "border-gray-300"
-                        } mt-1.5`}
-                      >
-                        {goal.status == 1 && <FiCheck className="text-white" />}
-                      </button>
-                      <div>
-                        <h3
-                          className={`text-lg font-semibold ${
-                            goal.status
-                              ? "line-through text-gray-500"
-                              : isDarkMode
-                              ? "text-gray-200"
-                              : "text-gray-900"
-                          }`}
-                        >
-                          {goal.description}
-                        </h3>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <FiCalendar
-                            className={
-                              isDarkMode ? "text-gray-500" : "text-gray-400"
-                            }
-                          />
-                          <span
-                            className={`text-sm ${
-                              isDarkMode ? "text-gray-400" : "text-gray-500"
-                            }`}
-                          >
-                            {goal.startDate}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => {
-                          setEditingGoal(goal);
-                          setShowAddModal(true);
-                        }}
-                        className={`p-1 cursor-pointer ${
-                          isDarkMode
-                            ? "text-gray-400 hover:text-indigo-400"
-                            : "text-gray-500 hover:text-indigo-600"
-                        }`}
-                      >
-                        <FiEdit2 />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteGoal(goal.id)}
-                        className={`p-1 cursor-pointer ${
-                          isDarkMode
-                            ? "text-gray-400 hover:text-red-400"
-                            : "text-gray-500 hover:text-red-600"
-                        }`}
-                      >
-                        <FiTrash />
-                      </button>
-                    </div>
-                  </div>
+                  <Goal
+                    goal={goal}
+                    isDarkMode={isDarkMode}
+                    handleDeleteGoal={handleDeleteGoal}
+                    handleToggleComplete={handleToggleComplete}
+                    setEditingGoal={setEditingGoal}
+                    setShowAddModal={setShowAddModal}
+                  />
                 </motion.div>
               ))}
             </AnimatePresence>
