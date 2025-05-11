@@ -5,10 +5,11 @@ import { useAuth } from "./components/AuthProvider";
 import Layout from "./components/Layout";
 import * as Lazy from "./components/lazy";
 import useUserActivity from "./hooks/useUserActivity";
+import ProtectedRoute from "./components/ProtectedRoute";
+import UnverifiedRedirect from "./components/UnverifiedRedirect";
 
 const App = () => {
-  const { isAuthenticated, isVerified } = useAuth();
-
+  const { isAuthenticated } = useAuth();
   useUserActivity();
 
   return (
@@ -20,84 +21,43 @@ const App = () => {
       }
     >
       <Routes>
+        {/* Public Routes */}
         <Route
           path="/"
           element={
             !isAuthenticated ? <Lazy.Home /> : <Navigate to="/dashboard" />
           }
         />
-        <Route
-          path="/signup"
-          element={
-            !isAuthenticated ? <Lazy.Signup /> : <Navigate to="/dashboard" />
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            !isAuthenticated ? (
-              <Lazy.Login />
-            ) : isVerified === 1 ? (
-              <Navigate to="/dashboard" />
-            ) : isVerified === 0 ? (
-              <Navigate to="/confirm-email" />
-            ) : null
-          }
-        />
+        <Route element={<UnverifiedRedirect />}>
+          <Route path="/signup" element={<Lazy.Signup />} />
+          <Route path="/login" element={<Lazy.Login />} />
+        </Route>
+
+        {/* Confirm Email */}
         <Route
           path="/confirm-email"
           element={
             isAuthenticated ? (
-              isVerified === 1 ? (
-                <Navigate to="/dashboard" />
-              ) : (
-                <Lazy.ConfirmEmailPage />
-              )
+              <Lazy.ConfirmEmailPage />
             ) : (
               <Navigate to="/login" />
             )
           }
         />
-        <Route element={<Layout />}>
-          <Route
-            path="/dashboard"
-            element={
-              isAuthenticated ? (
-                isVerified === 1 ? (
-                  <Lazy.Dashboard />
-                ) : (
-                  <Lazy.ConfirmEmailPage />
-                )
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route
-            path="/study-room"
-            element={
-              isAuthenticated ? <Lazy.StudyRoom /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/study-goals"
-            element={
-              isAuthenticated ? <Lazy.StudyGoals /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/leaderboard"
-            element={
-              isAuthenticated ? <Lazy.Leaderboard /> : <Navigate to="/login" />
-            }
-          />
+
+        {/* Protected Routes (Authenticated & Verified Only) */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<Layout />}>
+            <Route path="/dashboard" element={<Lazy.Dashboard />} />
+            <Route path="/study-room" element={<Lazy.StudyRoom />} />
+            <Route path="/study-goals" element={<Lazy.StudyGoals />} />
+            <Route path="/leaderboard" element={<Lazy.Leaderboard />} />
+            <Route path="/settings" element={<Lazy.Settings />} />
+          </Route>
         </Route>
-        <Route
-          path="/settings"
-          element={
-            isAuthenticated ? <Lazy.Settings /> : <Navigate to="/login" />
-          }
-        />
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Suspense>
   );
