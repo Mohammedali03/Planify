@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { deleteGoal, getGoals, toggleGoal } from "../components/GoalsServices";
 
 export const useGoals = () => {
@@ -29,7 +29,7 @@ export const useGoals = () => {
     fetchGoals();
   }, []);
 
-  const handleToggleComplete = async (id) => {
+  const handleToggleComplete = useCallback(async (id) => {
     try {
       const res = await toggleGoal(id);
       setGoals(
@@ -40,9 +40,9 @@ export const useGoals = () => {
     } catch (e) {
       console.error("toggling goal failed", e);
     }
-  };
+  }, []);
 
-  const handleDeleteGoal = async (id) => {
+  const handleDeleteGoal = useCallback(async (id) => {
     try {
       const res = await deleteGoal(id);
       // Remove the deleted goal from the state (will be replaced by optimistic UI later)
@@ -50,7 +50,7 @@ export const useGoals = () => {
     } catch (e) {
       console.log(e);
     }
-  };
+  }, []);
 
   return {
     goals,
