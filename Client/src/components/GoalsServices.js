@@ -19,7 +19,11 @@ export const updateGoal = async (id, data) => {
 };
 
 export const toggleGoal = async (id) => {
-  return axios.delete(`${API}/${id}/complete`, getAuthHeader());
+  return axios.post(
+    `http://localhost:8000/api/goals/${id}/complete`,
+    {},
+    getAuthHeader()
+  );
 };
 
 export const deleteGoal = async (id) => {

@@ -62,11 +62,12 @@ const ManipulateGoals = ({
     setLoading(true);
     setError(null);
 
+    const data = {
+      description: newGoal,
+      startDate: selectedDate.toISOString().split("T")[0],
+    };
     try {
-      const res = await updateGoal({
-        description: newGoal,
-        startDate: selectedDate.toISOString().split("T")[0],
-      });
+      const res = await updateGoal(editingGoal.id, data);
 
       setGoals((prevGoals) =>
         prevGoals.map((goal) =>
