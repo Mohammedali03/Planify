@@ -103,6 +103,16 @@ const ManipulateGoals = ({
     setError(null);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      if (editingGoal) {
+        handleUpdateGoal();
+      } else {
+        handleAddGoal();
+      }
+    }
+  };
+
   const today = new Date().toISOString().split("T")[0];
 
   return (
@@ -147,6 +157,7 @@ const ManipulateGoals = ({
               <input
                 type="text"
                 value={newGoal}
+                onKeyDown={handleKeyDown}
                 onChange={(e) => setNewGoal(e.target.value)}
                 className={`w-full px-4 py-2 rounded-lg border ${
                   isDarkMode
