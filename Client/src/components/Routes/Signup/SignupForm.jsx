@@ -4,6 +4,7 @@ import Input from "../../ui/Input";
 import SecondaryButton from "../../ui/SecondaryButton";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../../AuthProvider";
 import Logo from "../../Logo";
 
 const REGISTER_URL = "http://localhost:8000/api/register";
@@ -37,6 +38,7 @@ const SignupForm = ({ setErrorMessage, setSuccessMessage }) => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const location = useNavigate();
+  const { setToken } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,11 +66,16 @@ const SignupForm = ({ setErrorMessage, setSuccessMessage }) => {
     setLoading(true);
 
     try {
-      await submitFormData(formData);
-      setSuccessMessage(
-        "Created account successfully! Redirecting to Login..."
-      );
-      setTimeout(() => location("/confirm-email"), 3000);
+      const res = await submitFormData(formData);
+      setSuccessMessage("Created account successfully! Logging in...");
+
+      const data = res.data;
+      if (data.token) {
+        setToken(data.token);
+        localStorage.setItem("token", data.token);
+      }
+
+      setTimeout(() => location("/dashboard"), 3000);
     } catch (error) {
       console.error("an error has occured", error);
       setErrorMessage(
@@ -94,7 +101,7 @@ const SignupForm = ({ setErrorMessage, setSuccessMessage }) => {
           Sign up to your account
         </h2>
       </div>
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-5 mt-5">
         <div>
           <label
             htmlFor="first-name"

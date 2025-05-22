@@ -6,7 +6,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isVerified, setIsVerified] = useState(null);
+
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,20 +23,12 @@ export const AuthProvider = ({ children }) => {
       );
       const data = response.data;
       const token = data.token;
-      const verifiedStatus = data.user.verified;
 
       setToken(token);
       localStorage.setItem("token", data.token);
-      setIsVerified(data.user.verified);
 
-      if (verifiedStatus === 0) {
-        navigate("/confirm-email");
-      }
-
-      if (verifiedStatus === 1) {
-        await fetchUser(token);
-        navigate("/dashboard");
-      }
+      await fetchUser(token);
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login failed", error);
 
@@ -46,10 +38,6 @@ export const AuthProvider = ({ children }) => {
       );
     }
   };
-
-  // useEffect(() => {
-  //   console.log(isVerified);
-  // }, [isVerified]);
 
   async function fetchUser(currentToken) {
     setLoading(true);
@@ -99,8 +87,8 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         token,
+        setToken,
         isAuthenticated,
-        isVerified,
         login,
         logout,
         loading,
