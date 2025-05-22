@@ -33,8 +33,10 @@ class AuthController extends Controller
         $user->sendEmailVerificationNotification();
         Mail::to($user->email)->send(new SignupMail($user->name));
 
+        $token = $user->createToken('auth_token', ['*'], now()->addHours(24))->plainTextToken;
+
         return response()->json([
-            // 'token' => $user->createToken('auth_token')->plainTextToken,
+            'token' => $token,
             'user' => ['name'=>$user["name"],
             'email_verified' => $user->hasVerifiedEmail(),]
         ], 201);
