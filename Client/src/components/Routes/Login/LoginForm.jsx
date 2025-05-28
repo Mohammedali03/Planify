@@ -1,24 +1,74 @@
-import { useState } from "react";
+import { useState, useCallback, memo } from "react";
 import Loader from "../../ui/Loader";
 import Input from "../../ui/Input";
 import SecondaryButton from "../../ui/SecondaryButton";
 import { useAuth } from "../../AuthProvider";
 import Logo from "../../Logo";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const validateForm = (formData) => {
   const errors = {};
 
-  if (!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
-    errors.email = true;
+  if (!formData.email.trim()) {
+    errors.email = "Email is required";
+  } else if (!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+    errors.email = "Please enter a valid email address";
   }
 
-  if (formData.password === "") {
-    errors.password = true;
+  if (!formData.password.trim()) {
+    errors.password = "Password is required";
   }
 
   return errors;
 };
+
+const FormField = memo(
+  ({ label, id, name, type = "text", errors, onChange, children }) => (
+    <div>
+      <div className="flex items-center justify-between">
+        <label
+          htmlFor={id}
+          className="block text-sm/6 font-medium text-gray-900"
+        >
+          {label}
+        </label>
+        {children}
+      </div>
+      <div className="mt-2">
+        <Input
+          id={id}
+          name={name}
+          type={type}
+          onChange={onChange}
+          errors={errors}
+        />
+      </div>
+      {errors[name] && (
+        <motion.div
+          initial={{ opacity: 0, y: -5 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="error text-red-500 text-sm mt-1.5 flex items-center gap-1.5 bg-red-50 px-3 py-1.5 rounded-md border border-red-100"
+        >
+          <svg
+            className="w-4 h-4 flex-shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span>{errors[name]}</span>
+        </motion.div>
+      )}
+    </div>
+  )
+);
 
 const LoginForm = () => {
   const [data, setData] = useState({
@@ -30,42 +80,61 @@ const LoginForm = () => {
 
   const { login, setErrorMessage } = useAuth();
 
-  const handleChange = (e) => {
-    const { value, name } = e.target;
+  const handleChange = useCallback(
+    (e) => {
+      const { value, name } = e.target;
+      setData((prev) => ({ ...prev, [name]: value }));
 
-    setData({ ...data, [name]: value });
+      if (errors[name]) {
+        setErrors((prev) => {
+          const updated = { ...prev };
+          delete updated[name];
+          return updated;
+        });
+      }
+    },
+    [errors]
+  );
 
-    if (errors[name]) {
-      const updatedErrors = { ...errors };
-      delete updatedErrors[name];
-      setErrors(updatedErrors);
-    }
-  };
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setErrorMessage(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrorMessage(null);
+      const validationErrors = validateForm(data);
+      setErrors(validationErrors);
 
-    const errors = validateForm(data);
-    setErrors(errors);
+      if (Object.keys(validationErrors).length > 0) {
+        // Scroll to the first error
+        const firstErrorField = document.querySelector(".error");
+        if (firstErrorField) {
+          firstErrorField.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+        return;
+      }
 
-    if (Object.keys(errors).length > 0) {
-      return;
-    }
+      setLoading(true);
 
-    setLoading(true);
-
-    try {
-      await login(data);
-    } catch (error) {
-      console.error("Login failed", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+        await login(data);
+      } catch (error) {
+        console.error("Login failed", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [data, login, setErrorMessage]
+  );
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="sm:mx-auto sm:w-full sm:max-w-sm flex flex-col items-center">
         <Link to="/">
           <Logo className="cursor-pointer" />
@@ -75,53 +144,32 @@ const LoginForm = () => {
         </h2>
       </div>
       <form onSubmit={handleSubmit} className="space-y-5 mt-5">
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm/6 font-medium text-gray-900"
-          >
-            Email address
-          </label>
-          <div className="mt-2">
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              onChange={handleChange}
-              errors={errors}
-            />
-          </div>
-          {errors.email && <div className="error">Invalid email address</div>}
-        </div>
+        <FormField
+          label="Email address"
+          id="email"
+          name="email"
+          type="email"
+          errors={errors}
+          onChange={handleChange}
+        />
 
-        <div>
-          <div className="flex items-center justify-between">
-            <label
-              htmlFor="password"
-              className="block text-sm/6 font-medium text-gray-900"
+        <FormField
+          label="Password"
+          id="password"
+          name="password"
+          type="password"
+          errors={errors}
+          onChange={handleChange}
+        >
+          <div className="text-sm">
+            <Link
+              to="/forgot-password"
+              className="font-semibold text-indigo-600 hover:text-indigo-500"
             >
-              Password
-            </label>
-            <div className="text-sm">
-              <Link
-                to="/forgot-password"
-                className="font-semibold text-indigo-600 hover:text-indigo-500"
-              >
-                Forgot password?
-              </Link>
-            </div>
+              Forgot password?
+            </Link>
           </div>
-          <div className="mt-2">
-            <Input
-              id="password"
-              name="password"
-              onChange={handleChange}
-              type="password"
-              errors={errors}
-            />
-          </div>
-          {errors.password && <div className="error">Password is required</div>}
-        </div>
+        </FormField>
 
         <div>
           <SecondaryButton loading={loading}>
@@ -139,8 +187,8 @@ const LoginForm = () => {
           Sign up
         </Link>
       </p>
-    </>
+    </motion.div>
   );
 };
 
-export default LoginForm;
+export default memo(LoginForm);
