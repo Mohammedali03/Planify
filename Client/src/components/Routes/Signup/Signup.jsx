@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { motion } from "framer-motion";
 import SignupForm from "./SignupForm";
 import ErrorMessage from "./ErrorMessage";
@@ -13,35 +13,45 @@ const Signup = () => {
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      setErrorMessage(null);
-    }, 4000);
+    let timeoutId;
+    if (errorMessage) {
+      timeoutId = setTimeout(() => {
+        setErrorMessage("");
+      }, 4000);
+    }
 
-    clearTimeout();
-
-    return () => clearTimeout();
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [errorMessage]);
 
-  return (
-    <>
-      <motion.div
-        className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        {successMessage && <SuccesMessage successMessage={successMessage} />}
-        {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
+  const handleSetErrorMessage = useCallback((message) => {
+    setErrorMessage(message);
+  }, []);
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <SignupForm
-            setErrorMessage={setErrorMessage}
-            setSuccessMessage={setSuccessMessage}
-          />
-        </div>
-      </motion.div>
-    </>
+  const handleSetSuccessMessage = useCallback((message) => {
+    setSuccessMessage(message);
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      {successMessage && <SuccesMessage successMessage={successMessage} />}
+      {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
+
+      <div>
+        <SignupForm
+          setErrorMessage={handleSetErrorMessage}
+          setSuccessMessage={handleSetSuccessMessage}
+        />
+      </div>
+    </motion.div>
   );
 };
 
-export default Signup;
+export default memo(Signup);

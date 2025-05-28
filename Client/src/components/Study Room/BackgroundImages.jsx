@@ -1,44 +1,30 @@
-import React, { useEffect, useState } from "react";
 import { motion, spring } from "framer-motion";
-import axios from "axios";
 import lights from "../../images/lights.avif";
+import casa from "../../images/casa.webp";
+import bridge from "../../images/bridge.webp";
+import coast from "../../images/coast.webp";
+import coloredsky from "../../images/coloredsky.webp";
+import parachute from "../../images/parachute.webp";
+import ocean from "../../images/ocean.webp";
+import palms from "../../images/palms.webp";
+import lightening from "../../images/lightening.webp";
 
 const BackgroundImages = ({ setBackground }) => {
-  const [Pictures, setPictures] = useState([]);
-
-  // const images = [
-  //   { id: 1, image: mountain, alt: "Mountain" },
-  //   { id: 2, image: lake, alt: "Lake" },
-  //   { id: 3, image: donwtown, alt: "Downtown" },
-  //   { id: 4, image: bridge, alt: "Bridge" },
-  //   { id: 5, image: love, alt: "Love" },
-  //   { id: 6, image: ice, alt: "Ice" },
-  //   { id: 7, image: trees, alt: "Trees" },
-  //   { id: 8, image: river, alt: "River" },
-  //   { id: 9, image: lights, alt: "Lights" },
-  // ];
-
-  // Fetch Available images
-  // useEffect(() => {
-  //   const fetchPictures = async () => {
-  //     try {
-  //       const response = await axios.get("http//:localhost:8000/api/images", {
-  //         headers: {
-  //           Authorization: `Bearer, ${localStorage.getItem("token")}`,
-  //         },
-  //       });
-  //       setPictures(response.data);
-  //     } catch (e) {
-  //       console.error("an error has occured", e);
-  //     }
-  //   };
-
-  //   fetchPictures();
-  // }, []);
+  const images = [
+    { id: 1, image: casa, alt: "la casa de papel" },
+    { id: 2, image: coast, alt: "coast" },
+    { id: 3, image: coloredsky, alt: "colored sky" },
+    { id: 4, image: parachute, alt: "Parachute" },
+    { id: 5, image: ocean, alt: "Ocean" },
+    { id: 6, image: bridge, alt: "bridg" },
+    { id: 7, image: palms, alt: "palms" },
+    { id: 8, image: lightening, alt: "Lightening" },
+    { id: 9, image: lights, alt: "Lights" },
+  ];
 
   return (
     <div className="p-4 overflow-y-scroll h-[400px]">
-      {/* <h2 className="font-semibold text-lg mb-2">Featured Images</h2>
+      <h2 className="font-semibold text-lg mb-2">Featured Images</h2>
       <ul className="grid grid-cols-2 gap-3 flex-wrap">
         {images.map((image) => {
           return (
@@ -60,7 +46,7 @@ const BackgroundImages = ({ setBackground }) => {
             </div>
           );
         })}
-      </ul> */}
+      </ul>
     </div>
   );
 };
