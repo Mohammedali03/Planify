@@ -21,16 +21,13 @@ class StatsController extends Controller
          'streak' => $streak
       ]);
    }
-
    public function max_streak(){
       $user = auth()->user();
       $max_streak = $user->max_streak;
       return response()->json([
          'max_streak' => $max_streak
       ]);
-
    }
-
    public function last_visit(){
       $user = auth()->user();
       $last_visit = $user->last_visit_at;
@@ -38,7 +35,6 @@ class StatsController extends Controller
          'last_visit' => $last_visit
       ]);
    }
-
    public function getTotalStudyTime()
    {
        $user = Auth::user();
@@ -59,9 +55,6 @@ class StatsController extends Controller
            'total_seconds' => $totalSeconds
        ]);
    }
-
-
-   
    // this month 
 
 public function monthlyStudyData()
