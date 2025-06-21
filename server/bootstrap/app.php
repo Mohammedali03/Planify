@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\HandleCors;
 use App\Http\Middleware\TokenCheckExpire;
 use App\Http\Middleware\UpdateLastVisit;
 use Illuminate\Foundation\Application;
@@ -21,7 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // Enable global middleware
         $middleware->use([
-            \Illuminate\Http\Middleware\HandleCors::class,
+            HandleCors::class,
             UpdateLastVisit::class,
            // TokenCheckExpire::class, // Removed from global middleware
          
