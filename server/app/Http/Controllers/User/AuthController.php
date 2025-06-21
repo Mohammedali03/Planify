@@ -33,7 +33,7 @@ class AuthController extends Controller
         $user->sendEmailVerificationNotification();
         Mail::to($user->email)->send(new SignupMail($user->name));
 
-        $token = $user->createToken('auth_token', ['*'], now()->addHours(24))->plainTextToken;
+        $token = $user->createToken('auth_token', ['*'])->plainTextToken;
 
         return response()->json([
             'token' => $token,
@@ -89,8 +89,8 @@ class AuthController extends Controller
         // $tomorrow = Carbon::now()->startOfDay()->addDays(3);
         // $lastVisit = $user->last_visit_at ? Carbon::parse($user->last_visit_at)->startOfDay() : null;
         $lastVisit = Carbon::parse($user->last_visit_at) ;
-$ress = $lastVisit->diffInDays($today);
-$test ="false";
+        $ress = $lastVisit->diffInDays($today);
+// $test ="false";
         if (!$lastVisit || $lastVisit->lt($today)) {
             // First login today
             if ($ress ==1) {
@@ -113,7 +113,7 @@ $test ="false";
         }
 
     // ===  Create Token ===
-    $token = $user->createToken('auth_token', ['*'], now()->addHours(24))->plainTextToken;
+    $token = $user->createToken('auth_token', ['*'])->plainTextToken;
 
         return response()->json([
             'token' => $token,
