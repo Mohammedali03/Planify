@@ -10,37 +10,24 @@ use App\Http\Controllers\Room\VideoController;
 use App\Http\Controllers\Stats\StatsController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\User\MailsController;
 use App\Models\Timer;
 
 use Illuminate\Http\Request ;
 use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
+//login and registration
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
-    $user = User::findOrFail($id);
 
-    if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
-        return response()->json(['message' => 'Invalid verification link'], 400);
-    }
-
-    if (!$user->hasVerifiedEmail()) {
-        $user->markEmailAsVerified();
-    }
-
-    return Redirect::to('http://localhost:5173/login?verified=1');
-})->middleware(['signed'])->name('verification.verify');
-
-Route::post('/email/resend', function (Request $request) {
-    if ($request->user()->hasVerifiedEmail()) {
-        return response()->json(['message' => 'Email already verified.'], 200);
-    }
-
-    $request->user()->sendEmailVerificationNotification();
-
-    return response()->json(['message' => 'Verification link sent!'], 200);
-})->middleware(['auth:sanctum']);
+//mails section of verification user
+Route::get('/email/verify/{id}/{hash}', [MailsController::class,"verify"])
+->middleware(['signed'])
+->name('verification.verify');
+//resend mail of verification
+Route::post('/email/resend', [MailsController::class,"resend"])
+->middleware(['auth:sanctum']);
 
 Route::middleware(['token.check','auth:sanctum'])->group(function () {
     Route::get('/check-token', function (Request $request) {
@@ -58,11 +45,6 @@ Route::post('/update_last_active_at',[ProfileController::class,'updateLastActive
 
 //Goals
 
-// Route::get('/goals', [GoalsController::class, 'index']);
-// Route::post('/goals', [GoalsController::class, 'store']);
-// Route::get('/goals/{goal}', [GoalsController::class, 'show']);
-
-
 Route::post('goals/{goal}/complete',[GoalsController::class,'complete']);
 Route::get('goals/today',[GoalsController::class,'todayGoals']);
 Route::apiResource('goals', GoalsController::class);
@@ -76,15 +58,7 @@ Route::group(['prefix'=>'timer'],function(){
         Route::delete('delete','delete');
     });
 });
-    // Route::get('status',[TimerController::class,'status']);
-    // Route::post('start',[TimerController::class,'start']);
-    // Route::post('pause/{pause}',[TimerController::class,'pause']);
-    // Route::post('end/{end?}',[TimerController::class,'end']);
-
-
     //background and favorites
-
-
 
 // Route::post('timer/start',[TimerController::class,'start']);
 // Route::post('timer/pause/{pause}',[TimerController::class,'pause']);
@@ -113,21 +87,9 @@ Route::group(['prefix'=>'stats'],function(){
     //general monthly stats this api return all the stats of the user in a month 
     Route::get('user_month_stats',[StatsController::class,'getUserMonthStats']);
 });
-
-
 });
 //leaderboard
 Route::get('leaderboard',[StatsController::class,'leaderboard']);
-
-
-
-// Route::middleware('auth:sanctum')->group(function () {
-//     Route::post('/rooms', [RoomController::class, 'store']);
-//     Route::post('/rooms/{room}/start', [RoomController::class, 'startSession']);
-//     Route::post('/rooms/{room}/pause', [RoomController::class, 'pauseSession']);
-//     Route::post('/rooms/{room}/end', [RoomController::class, 'endSession']);
-// });
-
 Route::group(['prefix'=>'background' ],function(){
     //images
     Route::get('images',[ImageController::class,'images']);
