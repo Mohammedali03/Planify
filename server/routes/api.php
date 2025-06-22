@@ -40,7 +40,10 @@ Route::post('/profile_pic',[ProfileController::class,'Profile_Picture']);
 Route::post('/profile',[ProfileController::class,'profile']);
 Route::delete('/profile_pic',[ProfileController::class,'deleteProfilePicture']);
 Route::post('/update_password',[ProfileController::class,'update_password']);
-Route::post('/update_last_active_at',[ProfileController::class,'updateLastActiveAt']);
+
+//update Streak and last_active_at
+Route::post('/update_last_active_at',[ProfileController::class,'updateLastActiveAt'])
+->middleware('update.Streak');
 // Route::get('profile_pic',[ProfileController::class,'pic']);
 
 //Goals
