@@ -3,6 +3,7 @@
 use App\Http\Middleware\HandleCors;
 use App\Http\Middleware\TokenCheckExpire;
 use App\Http\Middleware\UpdateLastVisit;
+use App\Http\Middleware\UpdateStreak;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -29,7 +30,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         
         $middleware->alias([
-            'token.check' => TokenCheckExpire::class
+            'token.check' => TokenCheckExpire::class,
+            'update.Streak'=>UpdateStreak::class
         ]);
 
         // Define API middleware group
