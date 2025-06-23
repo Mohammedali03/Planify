@@ -17,6 +17,7 @@ export const useGoals = () => {
       setError(null);
       try {
         const res = await getGoals();
+        console.log(res.data);
         setGoals(res.data.goals);
       } catch (e) {
         setError("Failed to fetch goals. Please try again later.");
@@ -29,9 +30,10 @@ export const useGoals = () => {
     fetchGoals();
   }, []);
 
-  const handleToggleComplete = useCallback(async (id) => {
+  const handleToggleComplete = async (id) => {
     try {
       const res = await toggleGoal(id);
+      console.log(res.data.goal);
       setGoals(
         goals.map((goal) =>
           goal.id === id ? { ...goal, ...res.data.goal } : goal
@@ -40,17 +42,20 @@ export const useGoals = () => {
     } catch (e) {
       console.error("toggling goal failed", e);
     }
-  }, []);
+  };
 
-  const handleDeleteGoal = useCallback(async (id) => {
+  const handleDeleteGoal = async (id) => {
     try {
       const res = await deleteGoal(id);
+
+      console.log(res.data);
       // Remove the deleted goal from the state (will be replaced by optimistic UI later)
       setGoals(goals.filter((goal) => goal.id !== res.data.goal.id));
+      console.log(goals);
     } catch (e) {
       console.log(e);
     }
-  }, []);
+  };
 
   return {
     goals,
