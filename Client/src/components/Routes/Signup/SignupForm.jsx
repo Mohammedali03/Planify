@@ -81,53 +81,52 @@ const SignupForm = ({ setErrorMessage, setSuccessMessage }) => {
     [errors]
   );
 
-  const submitFormData = useCallback(async (data) => {
+  const submitFormData = async (data) => {
     try {
-      const response = await axios.post(REGISTER_URL, data);
+      const response = await axios.post(REGISTER_URL, data, {
+        withCredentials: true,
+      });
       return response;
     } catch (error) {
       throw error;
     }
-  }, []);
+  };
 
-  const handleSubmit = useCallback(
-    async (e) => {
-      e.preventDefault();
-      setErrorMessage(null);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage(null);
 
-      const validationErrors = validateForm(formData);
-      setErrors(validationErrors);
+    const validationErrors = validateForm(formData);
+    setErrors(validationErrors);
 
-      if (Object.keys(validationErrors).length > 0) {
-        return;
-      }
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
 
-      setLoading(true);
+    setLoading(true);
 
-      try {
-        // First register the user
-        await submitFormData(formData);
-        setSuccessMessage("Account created successfully! Logging you in...");
+    try {
+      // First register the user
+      await submitFormData(formData);
+      setSuccessMessage("Account created successfully! Logging you in...");
 
-        // Then attempt to log them in using the AuthProvider's login function
-        await login({
-          email: formData.email,
-          password: formData.password,
-        });
+      // Then attempt to log them in using the AuthProvider's login function
+      // await login({
+      //   email: formData.email,
+      //   password: formData.password,
+      // });
+      alert("user registered successfully");
 
-        // The login function from AuthProvider will handle the navigation
-      } catch (error) {
-        console.error("Registration failed:", error);
-        setErrorMessage(
-          error.response?.data?.message ||
-            "Email address is already registered!"
-        );
-      } finally {
-        setLoading(false);
-      }
-    },
-    [formData, setErrorMessage, setSuccessMessage, submitFormData, login]
-  );
+      // The login function from AuthProvider will handle the navigation
+    } catch (error) {
+      console.error("Registration failed:", error);
+      setErrorMessage(
+        error.response?.data?.message || "Email address is already registered!"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-gray-50 to-gray-100">
